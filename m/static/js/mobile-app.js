@@ -442,7 +442,7 @@ function setupLibraryFilters() {
     clearBtn.addEventListener('click', () => {
       if (searchInput) {
         searchInput.value = '';
-        searchInput.focus();
+        searchInput.blur();
       }
       state.librarySearchQuery = '';
       clearBtn.style.display = 'none';
@@ -719,8 +719,8 @@ function renderGlossaryShelves() {
   Object.keys(grouped).forEach(k => {
     grouped[k].sort((a, b) => {
       if (sortBy === 'relevance') {
-        const countA = a.mentions_count !== undefined ? a.mentions_count : (a.mention_count || 0);
-        const countB = b.mentions_count !== undefined ? b.mentions_count : (b.mention_count || 0);
+        const countA = Number(a.mentions || a.mentions_count || a.mention_count || 0);
+        const countB = Number(b.mentions || b.mentions_count || b.mention_count || 0);
         if (countB !== countA) return countB - countA;
         return (a.name || '').localeCompare(b.name || '');
       } else if (sortBy === 'alpha') {
@@ -754,7 +754,7 @@ function renderGlossaryShelves() {
       const badgeClass = getCategoryBadgeClass(normCat);
       const affilText = char.affiliation || char.sect_or_affiliation || '';
       const summaryText = char.summary || char.notes || '';
-      const mentions = char.mentions_count !== undefined ? char.mentions_count : (char.mention_count || 0);
+      const mentions = Number(char.mentions || char.mentions_count || char.mention_count || 0);
 
       let allAliases = Array.isArray(char.aliases) ? [...char.aliases] : [];
       if (char.pinyin_or_chinese && !allAliases.some(a => (a || '').toLowerCase() === char.pinyin_or_chinese.toLowerCase())) {
@@ -2018,11 +2018,15 @@ function setupBookViewControls() {
     });
   }
 
-  // Chapter filter input
+  // Chapter filter input & clear button
   const inputSearch = document.getElementById('input-chapter-search');
+  const btnClearChapter = document.getElementById('btn-clear-chapter-search');
   if (inputSearch) {
     inputSearch.addEventListener('input', () => {
       const q = inputSearch.value.trim().toLowerCase();
+      if (btnClearChapter) {
+        btnClearChapter.style.display = inputSearch.value ? 'flex' : 'none';
+      }
       if (!q) {
         renderChaptersList(state.chapters);
       } else {
@@ -2033,6 +2037,17 @@ function setupBookViewControls() {
         });
         renderChaptersList(filtered);
       }
+    });
+  }
+
+  if (btnClearChapter) {
+    btnClearChapter.addEventListener('click', () => {
+      if (inputSearch) {
+        inputSearch.value = '';
+        inputSearch.blur();
+      }
+      btnClearChapter.style.display = 'none';
+      renderChaptersList(state.chapters);
     });
   }
 
@@ -2050,9 +2065,25 @@ function setupBookViewControls() {
 
   // Glossary Search & Filter inputs
   const inputGlossarySearch = document.getElementById('input-glossary-search');
+  const btnClearGlossary = document.getElementById('btn-clear-glossary-search');
   if (inputGlossarySearch) {
     inputGlossarySearch.addEventListener('input', () => {
       state.glossarySearchQuery = inputGlossarySearch.value;
+      if (btnClearGlossary) {
+        btnClearGlossary.style.display = inputGlossarySearch.value ? 'flex' : 'none';
+      }
+      renderGlossaryShelves();
+    });
+  }
+
+  if (btnClearGlossary) {
+    btnClearGlossary.addEventListener('click', () => {
+      if (inputGlossarySearch) {
+        inputGlossarySearch.value = '';
+        inputGlossarySearch.blur();
+      }
+      state.glossarySearchQuery = '';
+      btnClearGlossary.style.display = 'none';
       renderGlossaryShelves();
     });
   }
@@ -2184,6 +2215,11 @@ function openSearchOverlay(initialScope = null) {
   window.scrollTo(0, 0);
   if (document.body) document.body.scrollTop = 0;
 
+  const btnClear = document.getElementById('btn-mobile-search-clear');
+  if (btnClear && input) {
+    btnClear.style.display = input.value.trim().length > 0 ? 'flex' : 'none';
+  }
+
   if (input && input.value.trim().length >= 2) {
     executeSearch(input.value.trim(), searchState.scope);
   }
@@ -2229,11 +2265,7 @@ function setupSearch() {
     btnClear.addEventListener('click', () => {
       if (input) {
         input.value = '';
-        try {
-          input.focus({ preventScroll: true });
-        } catch (e) {
-          input.focus();
-        }
+        input.blur();
       }
       btnClear.style.display = 'none';
       searchState.query = '';
@@ -2245,7 +2277,7 @@ function setupSearch() {
   if (input) {
     input.addEventListener('input', () => {
       const q = input.value.trim();
-      if (btnClear) btnClear.style.display = q.length > 0 ? 'block' : 'none';
+      if (btnClear) btnClear.style.display = q.length > 0 ? 'flex' : 'none';
 
       if (searchState.debounceTimer) clearTimeout(searchState.debounceTimer);
 

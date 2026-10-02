@@ -166,6 +166,21 @@ class OfflineDB {
     });
   }
 
+  async getAllChapters(bookId) {
+    const db = await this.init();
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction('chapters', 'readonly');
+      const index = tx.objectStore('chapters').index('book_id');
+      const req = index.getAll(IDBKeyRange.only(bookId));
+      req.onsuccess = () => {
+        const list = req.result || [];
+        list.sort((a, b) => a.chapter_number - b.chapter_number);
+        resolve(list);
+      };
+      req.onerror = () => reject(req.error);
+    });
+  }
+
   async deleteChapter(bookId, chapterNum) {
     const db = await this.init();
     return new Promise((resolve) => {
