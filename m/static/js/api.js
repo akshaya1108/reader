@@ -63,7 +63,13 @@ export const api = {
               shared_glossary_id: sharedId
             };
           });
-          await offlineDB.saveBooks(normalized);
+          try {
+            if (normalized.length > 0) {
+              await offlineDB.saveBooks(normalized);
+            }
+          } catch (storageErr) {
+            console.warn('Storage cache notice:', storageErr);
+          }
           lastSyncTimestamp = new Date();
           return normalized;
         }

@@ -2423,7 +2423,7 @@ function locateAndHighlightParagraph(paragraphIndex) {
 // --- Service Worker Registration ---
 function registerServiceWorker() {
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/m/sw.js')
+    navigator.serviceWorker.register('sw.js')
       .then(reg => {
         reg.addEventListener('updatefound', () => {
           const newWorker = reg.installing;

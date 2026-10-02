@@ -67,6 +67,7 @@ class OfflineDB {
 
   // --- Books ---
   async saveBooks(books) {
+    if (!books || books.length === 0) return;
     const db = await this.init();
     return new Promise((resolve, reject) => {
       const tx = db.transaction('books', 'readwrite');
@@ -265,7 +266,7 @@ class OfflineDB {
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
-  },
+  }
 
   async deleteGlossaryEntry(bookId, charId) {
     const db = await this.init();
@@ -275,7 +276,7 @@ class OfflineDB {
       tx.oncomplete = () => resolve();
       tx.onerror = () => resolve();
     });
-  },
+  }
 
   // --- Downloads Registry ---
   async getDownloadStatus(bookId) {
