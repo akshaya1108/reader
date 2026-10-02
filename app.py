@@ -404,20 +404,45 @@ def load_glossary(book_id, sync_remote=True):
                         continue
 
                     match = local_by_id.get(rid) or local_by_name.get(rname.lower())
+                    if not match and rname:
+                        rslug = slugify(rname)
+                        match = next((c for c in data if slugify(c.get("name", "")) == rslug or slugify(c.get("id", "")) == rslug), None)
+
                     if match:
                         r_updated = rentry.get("updated_at") or ""
                         m_updated = match.get("updated_at") or ""
-                        if (r_updated and r_updated > m_updated) or not match.get("summary"):
-                            if rentry.get("summary"):
-                                match["summary"] = rentry.get("summary")
+                        if r_updated and m_updated and r_updated > m_updated:
+                            if rentry.get("name"):
+                                match["name"] = rentry.get("name").strip()
                             if rentry.get("category"):
-                                match["category"] = rentry.get("category")
+                                match["category"] = normalize_category(rentry.get("category"))
+                            if rentry.get("aliases") is not None:
+                                r_aliases = rentry.get("aliases")
+                                match["aliases"] = r_aliases if isinstance(r_aliases, list) else [r_aliases]
+                            if rentry.get("pinyin_or_chinese") is not None:
+                                match["pinyin_or_chinese"] = rentry.get("pinyin_or_chinese")
                             aff = rentry.get("affiliation") or rentry.get("sect_or_affiliation")
-                            if aff:
+                            if aff is not None:
                                 match["affiliation"] = aff
                                 match["sect_or_affiliation"] = aff
-                            match["updated_at"] = r_updated or now.isoformat()
+                            if rentry.get("summary") is not None:
+                                match["summary"] = rentry.get("summary")
+                            match["updated_at"] = r_updated
                             changed = True
+                        elif not m_updated and r_updated:
+                            match["updated_at"] = r_updated
+                            if not match.get("summary") and rentry.get("summary"):
+                                match["summary"] = rentry.get("summary")
+                                changed = True
+                            if not match.get("aliases") and rentry.get("aliases"):
+                                r_aliases = rentry.get("aliases")
+                                match["aliases"] = r_aliases if isinstance(r_aliases, list) else [r_aliases]
+                                changed = True
+                            if not match.get("affiliation") and (rentry.get("affiliation") or rentry.get("sect_or_affiliation")):
+                                aff = rentry.get("affiliation") or rentry.get("sect_or_affiliation")
+                                match["affiliation"] = aff
+                                match["sect_or_affiliation"] = aff
+                                changed = True
                     else:
                         new_item = {
                             "id": rid,
@@ -516,6 +541,7 @@ def push_glossary_to_supabase_async(book_id, entries):
                     cluster_bids.add(b["id"])
 
             payload = []
+            now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
             for item in entries:
                 gid = item.get("id") or item.get("name", "").lower().strip().replace(" ", "-")
                 if not gid:
@@ -533,7 +559,8 @@ def push_glossary_to_supabase_async(book_id, entries):
                     "affiliation": item.get("affiliation") or item.get("sect_or_affiliation", ""),
                     "sect_or_affiliation": item.get("sect_or_affiliation") or item.get("affiliation", ""),
                     "summary": item.get("summary", ""),
-                    "mentions": int(item.get("mentions") or 0)
+                    "mentions": int(item.get("mentions") or 0),
+                    "updated_at": item.get("updated_at") or now_iso
                 })
 
             # Push in chunks of 50 to avoid request size limits
@@ -628,6 +655,8 @@ def save_glossary(book_id, glossary, push_remote=True):
             cand_id = f"{base_id}-{counter}"
             counter += 1
         entry["id"] = cand_id
+        if not entry.get("updated_at"):
+            entry["updated_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         seen_ids.add(cand_id)
         cleaned_glossary.append(entry)
 
@@ -2350,7 +2379,7 @@ def add_or_update_character(book_id):
     if not name:
         return jsonify({"error": "Character name is required"}), 400
         
-    glossary = load_glossary(book_id)
+    glossary = load_glossary(book_id, sync_remote=False)
     char_id = data.get("id")
     
     aliases = data.get("aliases", [])
@@ -2358,6 +2387,7 @@ def add_or_update_character(book_id):
         aliases = [a.strip() for a in aliases.split(",") if a.strip()]
 
     affiliation = (data.get("affiliation") or data.get("sect_or_affiliation") or "").strip()
+    now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()
 
     target_existing = None
     if char_id:
@@ -2382,6 +2412,7 @@ def add_or_update_character(book_id):
         target_existing["sect_or_affiliation"] = affiliation
         if "summary" in data:
             target_existing["summary"] = data.get("summary", "")
+        target_existing["updated_at"] = now_iso
         save_glossary(book_id, glossary)
         return jsonify({"success": True, "glossary": glossary})
 
@@ -2393,7 +2424,9 @@ def add_or_update_character(book_id):
         "aliases": aliases,
         "affiliation": affiliation,
         "sect_or_affiliation": affiliation,
-        "summary": data.get("summary", "")
+        "summary": data.get("summary", ""),
+        "created_at": now_iso,
+        "updated_at": now_iso
     }
     glossary.append(new_char)
     save_glossary(book_id, glossary)

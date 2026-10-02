@@ -2555,9 +2555,19 @@ async function saveCharacterForm() {
       body: JSON.stringify(payload)
     });
     if (res.ok) {
+      const data = await res.json();
+      if (data && data.glossary) {
+        state.glossary = data.glossary;
+        state._cachedNovelText = null;
+        renderGlossary();
+        if (elements.readerOverlay.style.display !== 'none' && state.activeChapter) {
+          renderReaderContent(state.activeChapter.content);
+        }
+      } else {
+        await loadGlossary(state.activeBookId);
+      }
       showToast(`Saved "${name}"!`);
       elements.charEditPanel.style.display = 'none';
-      await loadGlossary(state.activeBookId);
     }
   } catch (err) {
     console.error('Error saving entry:', err);
@@ -3164,9 +3174,16 @@ async function saveSearchLoreForm() {
     });
 
     if (res.ok) {
+      const data = await res.json();
+      if (data && data.glossary) {
+        state.glossary = data.glossary;
+        state._cachedNovelText = null;
+        renderGlossary();
+      } else {
+        await loadGlossary(state.activeBookId);
+      }
       showToast(`Saved "${name}" to glossary!`);
       closeSearchLoreForm();
-      await loadGlossary(state.activeBookId);
       if (state.activeChapter) {
         renderReaderContent(state.activeChapter.content);
       }
