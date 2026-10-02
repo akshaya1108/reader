@@ -33,6 +33,68 @@ os.makedirs(TRASH_CHAPTERS_DIR, exist_ok=True)
 os.makedirs(TRASH_BOOKS_DIR, exist_ok=True)
 
 
+SUPABASE_URL = "https://giqhugtncggxansflxaz.supabase.co"
+SUPABASE_KEY = "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ"
+
+def push_books_to_supabase_async(books):
+    import threading
+    def _run():
+        try:
+            import requests
+            url = f"{SUPABASE_URL}/rest/v1/books"
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "Content-Type": "application/json",
+                "Prefer": "resolution=merge-duplicates"
+            }
+            payload = []
+            for b in books:
+                bid = b.get("id")
+                if not bid:
+                    continue
+                ch_dir = os.path.join(CHAPTERS_DIR, bid)
+                actual_ch_count = 0
+                if os.path.exists(ch_dir):
+                    ch_files = [f for f in os.listdir(ch_dir) if f.endswith(".json")]
+                    actual_ch_count = len(ch_files)
+                last_read_at = b.get("last_read_at")
+                if last_read_at and ("T" not in str(last_read_at) or len(str(last_read_at)) < 10):
+                    last_read_at = None
+                row = {
+                    "id": bid,
+                    "title": b.get("title", "Untitled"),
+                    "author": b.get("author", "Unknown"),
+                    "genre": b.get("genre", ""),
+                    "total_chapters": actual_ch_count or b.get("chapters_count") or 0,
+                    "word_count": b.get("total_words") or 0,
+                    "cover_image": b.get("cover") or b.get("cover_image") or "",
+                    "last_read_chapter": b.get("last_read_chapter") or 1,
+                    "last_read_at": last_read_at,
+                    "bookmark": b.get("bookmark") or None,
+                    "enable_glossary": b.get("enable_glossary", True)
+                }
+                payload.append(row)
+            if payload:
+                requests.post(url, headers=headers, json=payload, timeout=6)
+        except Exception as e:
+            print(f"Background Supabase books push notice: {e}")
+    threading.Thread(target=_run, daemon=True).start()
+
+def push_chapters_to_supabase_async(book_id):
+    import threading
+    def _run():
+        try:
+            import sys
+            scripts_path = os.path.join(BASE_DIR, "scripts")
+            if scripts_path not in sys.path:
+                sys.path.insert(0, scripts_path)
+            from sync_to_supabase import sync_chapters
+            sync_chapters(book_id)
+        except Exception as e:
+            print(f"Background Supabase chapters push notice: {e}")
+    threading.Thread(target=_run, daemon=True).start()
+
 def load_books():
     if not os.path.exists(BOOKS_FILE):
         return []
@@ -42,6 +104,7 @@ def load_books():
 def save_books(books):
     with open(BOOKS_FILE, "w", encoding="utf-8") as f:
         json.dump(books, f, indent=2, ensure_ascii=False)
+    push_books_to_supabase_async(books)
 
 def resolve_glossary_book_id(book_id):
     books = load_books()
@@ -1189,6 +1252,7 @@ def import_epub_endpoint():
 
             books.append(new_book)
             save_books(books)
+            push_chapters_to_supabase_async(book_id)
 
             return jsonify({
                 "success": True,
@@ -1309,6 +1373,7 @@ def save_chapter(book_id):
     }
     with open(filepath, "w", encoding="utf-8") as f:
         json.dump(chapter_data, f, indent=2, ensure_ascii=False)
+    push_chapters_to_supabase_async(book_id)
         
     # Run Gemini Character extraction if requested and enabled
     new_characters = []

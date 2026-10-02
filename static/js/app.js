@@ -409,6 +409,18 @@ function setupDesktopSyncPopover() {
     }
   });
 
+  // Automatic silent sync on launch
+  setTimeout(async () => {
+    try {
+      const res = await fetch('/api/sync-supabase', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        lastSync = new Date();
+        updateDisplay();
+      }
+    } catch (_) {}
+  }, 1000);
+
   if (btnSync) {
     btnSync.addEventListener('click', async () => {
       btnSync.textContent = 'Syncing...';
