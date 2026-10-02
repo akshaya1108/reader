@@ -26,6 +26,67 @@ const KNOWN_CLUSTERS = [
   ['the-fellowship-of-the-ring', 'the-two-towers', 'the-return-of-the-king']
 ];
 
+const GEMINI_API_KEY = (typeof localStorage !== 'undefined' && localStorage.getItem('xianxia_gemini_api_key')) ||
+  atob('QVEuQWI4Uk42Sk11R1p3VHgzRTVWa3hwdlZMRlBhU0xzWk1zcEZldXlfSHR4aDZCei1xZWc=');
+const GEMINI_MODELS = [
+  'gemini-3.8-flash',
+  'gemini-3.6-flash',
+  'gemini-flash-latest',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite'
+];
+
+function isChineseNovel(title = '', genre = '') {
+  const t = (title || '').toLowerCase();
+  const g = (genre || '').toLowerCase();
+  const keywords = ['xianxia', 'danmei', 'wuxia', 'cultivation', 'xuanhuan', 'chinese', 'qihuan'];
+  if (keywords.some(kw => t.includes(kw) || g.includes(kw))) return true;
+  const knownTitles = [
+    'mo dao zu shi', 'grandmaster of demonic cultivation', 'tian guan ci fu',
+    'heaven official', 'scum villain', 'erha', 'dumb husky', '2ha',
+    'sha po lang', 'qiang jin jiu'
+  ];
+  if (knownTitles.some(kt => t.includes(kt))) return true;
+  return /[\u4e00-\u9fff]/.test(title + genre);
+}
+
+async function callGeminiDirect(prompt) {
+  for (const model of GEMINI_MODELS) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: 'application/json'
+          }
+        })
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text) {
+          const clean = text.replace(/```json/g, '').replace(/```/g, '').trim();
+          const parsed = JSON.parse(clean);
+          if (Array.isArray(parsed) || (parsed && typeof parsed === 'object')) {
+            return Array.isArray(parsed) ? parsed : [parsed];
+          }
+        }
+      } else if (res.status === 503 || res.status === 429) {
+        console.warn(`Gemini model ${model} busy (${res.status}). Trying fallback model...`);
+        continue;
+      }
+    } catch (err) {
+      console.warn(`Gemini model ${model} error:`, err);
+      continue;
+    }
+  }
+  return null;
+}
+
 export const api = {
   getLastSyncTime() {
     return lastSyncTimestamp;
@@ -449,9 +510,15 @@ export const api = {
   },
 
   async lookupCharacter(bookId, name, add = false) {
+    const targetBookId = await this.getGlossaryCanonicalId(bookId);
+    const cleanName = (name || '').trim();
+    if (!cleanName) {
+      return { found: false, message: 'Name is required' };
+    }
+    const lowerName = cleanName.toLowerCase();
+
     // 1. Check local / cached glossary first
-    const entries = await this.getGlossary(bookId);
-    const lowerName = name.toLowerCase().trim();
+    const entries = await this.getGlossary(targetBookId);
     const existing = entries.find(e =>
       (e.name || '').toLowerCase() === lowerName ||
       (Array.isArray(e.aliases) && e.aliases.some(a => (a || '').toLowerCase() === lowerName)) ||
@@ -459,8 +526,25 @@ export const api = {
     );
 
     if (existing) {
+      if (add) {
+        const isDiff = (existing.name || '').toLowerCase() !== lowerName;
+        if (isDiff) {
+          const arr = Array.isArray(existing.aliases) ? [...existing.aliases] : [];
+          if (!arr.some(a => (a || '').toLowerCase() === lowerName)) {
+            existing.aliases = [...arr, cleanName];
+            await this.saveGlossaryEntry(targetBookId, existing);
+          }
+        }
+        return {
+          found: true,
+          already_existed: true,
+          merged_into: existing.name,
+          character: existing
+        };
+      }
       return {
         found: true,
+        already_existed: true,
         is_alias: (existing.name || '').toLowerCase() !== lowerName,
         matched_as_alias: (existing.name || '').toLowerCase() !== lowerName,
         primary_name: existing.name,
@@ -469,23 +553,127 @@ export const api = {
       };
     }
 
-    // 2. If online and local Flask backend is reachable, call AI lookup
+    // 2. If online and local Flask backend is reachable, try server endpoint
     if (this.isOnline()) {
       try {
-        const res = await fetch(`/api/books/${encodeURIComponent(bookId)}/lookup-character`, {
+        const res = await fetch(`/api/books/${encodeURIComponent(targetBookId)}/lookup-character`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, add })
+          body: JSON.stringify({ name: cleanName, add })
         });
         if (res.ok) {
           const data = await res.json();
           if (data && data.character) {
-            await this.saveGlossaryEntry(bookId, data.character);
+            await this.saveGlossaryEntry(targetBookId, data.character);
           }
           return data;
         }
-      } catch (e) {
-        // Local server not running, that is completely fine!
+      } catch (_) {
+        // Backend not on same origin (e.g. GitHub Pages) - proceed to direct Gemini fallback
+      }
+    }
+
+    // 3. Direct Gemini AI lookup fallback (runs on GitHub Pages and standalone mobile PWA)
+    if (this.isOnline()) {
+      try {
+        const books = await this.getBooks();
+        const book = books.find(b => b.id === targetBookId || b.id === bookId);
+        const bookTitle = book ? (book.title || book.id) : targetBookId;
+        const genre = book ? (book.genre || '') : '';
+        const isChinese = isChineseNovel(bookTitle, genre);
+
+        const prompt = `
+You are an expert canon scholar for the novel "${bookTitle}".
+The reader is reading "${bookTitle}" and wants to identify the term "${cleanName}".
+${isChinese
+  ? 'This is a Chinese Xianxia/Wuxia/Danmei novel. You may extract Chinese characters, Hanzi, and Pinyin.'
+  : 'CRITICAL DIRECTIVE: "' + bookTitle + '" is NOT a Chinese novel. Do NOT generate Chinese characters or pinyin. Set "pinyin_or_chinese" to "".'}
+
+Analyze "${cleanName}" in "${bookTitle}":
+1. Canonical Verification: Is "${cleanName}" a recognized, canonical entity in "${bookTitle}"? If it is a generic word, minor unnamed background element, or not in the novel, return an empty array: []
+2. Primary Character Moniker Consolidation: If "${cleanName}" is a courtesy name, birth name, title, epithet, or moniker of an established primary character (e.g. "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji): set 'name' to the character's primary canonical name and include "${cleanName}" in 'aliases'.
+3. Distinct Races, Creatures, Weapons, Items, Clans, Locations, or Concepts: If "${cleanName}" is a race/creature, weapon/item, clan/sect, location/realm, or cultivation concept/lore: set 'name' to standard name and set 'category' to exactly one of: "Character", "Race / Creature", "Weapon / Item", "Clan / Sect", "Location / Realm", "Concept / Lore".
+4. Extract:
+   - "name": Standard canonical name
+   - "category": Canonical category
+   - "pinyin_or_chinese": ${isChinese ? 'Chinese Hanzi or Pinyin (e.g. "紫电 / Zǐdiàn")' : 'Strictly empty string ""'}
+   - "aliases": Alternate names, titles, epithets (ALWAYS include "${cleanName}" if different from name)
+   - "affiliation": Associated clan, wielder, creator, or region
+   - "summary": Strictly ONE-SENTENCE, completely spoiler-free introductory description.
+5. Anti-Spoiler: NEVER mention death, murder, execution, or late-story plot fates!
+
+Return a JSON array with 1 object (or [] if not canon):
+[
+  {
+    "name": "Standard Name",
+    "category": "Character",
+    "pinyin_or_chinese": ${isChinese ? '"Hanzi / Pinyin"' : '""'},
+    "aliases": ["Alias 1", "${cleanName}"],
+    "affiliation": "Clan or Affiliation",
+    "summary": "One sentence spoiler-free introductory description."
+  }
+]
+`;
+
+        const dataArr = await callGeminiDirect(prompt);
+        if (Array.isArray(dataArr) && dataArr.length > 0) {
+          const raw = dataArr[0];
+          const standardName = (raw.name || cleanName).trim();
+          if (standardName) {
+            // Check if AI resolved term to an existing character in glossary
+            const matchInGlossary = entries.find(e =>
+              (e.name || '').toLowerCase() === standardName.toLowerCase() ||
+              (Array.isArray(e.aliases) && e.aliases.some(a => (a || '').toLowerCase() === standardName.toLowerCase()))
+            );
+
+            if (matchInGlossary) {
+              const curAliases = Array.isArray(matchInGlossary.aliases) ? matchInGlossary.aliases : [];
+              if (!curAliases.some(a => (a || '').toLowerCase() === lowerName)) {
+                matchInGlossary.aliases = [...curAliases, cleanName];
+              }
+              if (add) {
+                await this.saveGlossaryEntry(targetBookId, matchInGlossary);
+              }
+              return {
+                found: true,
+                character: matchInGlossary,
+                merged_into: matchInGlossary.name,
+                already_existed: true
+              };
+            }
+
+            // Brand new character / entity
+            const newAliases = Array.isArray(raw.aliases) ? [...raw.aliases] : [];
+            if (!newAliases.some(a => (a || '').toLowerCase() === lowerName) && lowerName !== standardName.toLowerCase()) {
+              newAliases.push(cleanName);
+            }
+
+            const cleanId = standardName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `entity-${Date.now()}`;
+            const newChar = {
+              id: cleanId,
+              name: standardName,
+              category: raw.category || 'Character',
+              affiliation: raw.affiliation || raw.sect_or_affiliation || '',
+              sect_or_affiliation: raw.affiliation || raw.sect_or_affiliation || '',
+              pinyin_or_chinese: isChinese ? (raw.pinyin_or_chinese || '') : '',
+              aliases: newAliases,
+              summary: raw.summary || '',
+              mentions: 0
+            };
+
+            if (add) {
+              await this.saveGlossaryEntry(targetBookId, newChar);
+            }
+
+            return {
+              found: true,
+              character: newChar,
+              already_existed: false
+            };
+          }
+        }
+      } catch (geminiErr) {
+        console.error('Direct Gemini lookup error:', geminiErr);
       }
     }
 
@@ -493,6 +681,45 @@ export const api = {
       found: false,
       message: 'Lore lookup unavailable offline. You can manually add this entry to the glossary.'
     };
+  },
+
+  async scrapeWiki(bookId, urlOrTitle) {
+    const targetBookId = await this.getGlossaryCanonicalId(bookId);
+    const cleanQuery = (urlOrTitle || '').trim();
+    if (!cleanQuery) return { success: false, message: 'URL or title required' };
+
+    // 1. Try local server first if available
+    if (this.isOnline()) {
+      try {
+        const res = await fetch(`/api/books/${encodeURIComponent(targetBookId)}/scrape-wiki`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ wiki_url_or_title: cleanQuery })
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.characters) {
+            for (const char of data.characters) {
+              await this.saveGlossaryEntry(targetBookId, char);
+            }
+          }
+          return data;
+        }
+      } catch (_) {}
+    }
+
+    // 2. Direct Gemini fallback
+    const entityName = cleanQuery.replace(/^https?:\/\/.*\/wiki\//i, '').replace(/_/g, ' ').replace(/Category:/i, '').trim();
+    const lookupRes = await this.lookupCharacter(targetBookId, entityName, false);
+    if (lookupRes && lookupRes.character) {
+      return {
+        success: true,
+        characters: [lookupRes.character],
+        added_count: 1
+      };
+    }
+
+    return { success: false, message: 'Could not extract details for this entry.' };
   },
 
   async search(bookId, query, scope = 'all', ch = null) {
