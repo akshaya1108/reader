@@ -760,7 +760,7 @@ function renderGlossaryShelves() {
       if (char.pinyin_or_chinese && !allAliases.some(a => (a || '').toLowerCase() === char.pinyin_or_chinese.toLowerCase())) {
         allAliases.push(char.pinyin_or_chinese);
       }
-      const aliasesHtml = allAliases.slice(0, 3)
+      const aliasesHtml = allAliases
         .map(a => `<span class="alias-pill">${escapeHtml(a)}</span>`)
         .join('');
 
@@ -1430,7 +1430,9 @@ function openLoreSheet(charName, asCenteredModal = false) {
   if (isCurrentBookChinese() && entry.pinyin_or_chinese && !['n/a', 'none', 'null', (entry.name || '').toLowerCase()].includes(entry.pinyin_or_chinese.toLowerCase().trim()) && !aliasesList.includes(entry.pinyin_or_chinese)) {
     aliasesList.unshift(entry.pinyin_or_chinese);
   }
-  const aliasesText = aliasesList.join(', ');
+  const aliasesHtml = aliasesList
+    .map(a => `<span class="alias-pill">${escapeHtml(a)}</span>`)
+    .join('');
   const summary = entry.summary || entry.notes || '';
 
   if (content) {
@@ -1440,7 +1442,7 @@ function openLoreSheet(charName, asCenteredModal = false) {
         <span class="card-cat-badge ${badgeClass}">${escapeHtml(normCat)}</span>
       </div>
       ${affil ? `<div class="lore-card-affiliation">${escapeHtml(affil)}</div>` : ''}
-      ${aliasesText ? `<div class="lore-card-aliases"><strong>Aliases:</strong> ${escapeHtml(aliasesText)}</div>` : ''}
+      ${aliasesHtml ? `<div class="lore-card-aliases"><span class="lore-card-aliases-label">Aliases:</span> <div class="card-aliases-row" style="margin-top: 4px;">${aliasesHtml}</div></div>` : ''}
       <div class="lore-card-summary-box">${escapeHtml(summary || 'No description provided.')}</div>
     `;
   }
@@ -2474,8 +2476,11 @@ function renderMobileSearchResults(data, query, scope) {
         ${aff ? `<div class="search-lore-sect">${escapeHtml(aff)}</div>` : ''}
         ${allAliases.length > 0 ? `
           <div class="search-lore-aliases">
-            <strong>Aliases:</strong> ${escapeHtml(allAliases.join(', '))}
-            ${item.matched_alias ? `<span style="color: var(--bookmark-color); font-weight: 600;"> (Matched: "${escapeHtml(item.matched_alias)}")</span>` : ''}
+            <span class="lore-card-aliases-label">Aliases:</span>
+            <div class="card-aliases-row" style="margin-top: 4px;">
+              ${allAliases.map(a => `<span class="alias-pill">${escapeHtml(a)}</span>`).join('')}
+            </div>
+            ${item.matched_alias ? `<div style="color: var(--bookmark-color); font-weight: 600; font-size: 0.76rem; margin-top: 4px;">(Matched: "${escapeHtml(item.matched_alias)}")</div>` : ''}
           </div>
         ` : ''}
         ${item.summary ? `<div class="search-lore-summary">${escapeHtml(item.summary)}</div>` : ''}
