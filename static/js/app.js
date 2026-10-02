@@ -159,6 +159,8 @@ const elements = {
   searchLoreCategory: document.getElementById('search-lore-category'),
   searchLoreName: document.getElementById('search-lore-name'),
   searchLorePinyin: document.getElementById('search-lore-pinyin'),
+  searchLoreAliasContainer: document.getElementById('search-lore-alias-container'),
+  searchLoreAliasList: document.getElementById('search-lore-alias-list'),
   searchLoreAliases: document.getElementById('search-lore-aliases'),
   searchLoreSect: document.getElementById('search-lore-sect'),
   searchLoreSummary: document.getElementById('search-lore-summary'),
@@ -244,6 +246,8 @@ const elements = {
   charFormName: document.getElementById('char-form-name'),
   btnAiAutofillChar: document.getElementById('btn-ai-autofill-char'),
   charFormPinyin: document.getElementById('char-form-pinyin'),
+  charAliasContainer: document.getElementById('char-alias-container'),
+  charAliasList: document.getElementById('char-alias-list'),
   charFormAliases: document.getElementById('char-form-aliases'),
   charFormSect: document.getElementById('char-form-sect'),
   charFormSummary: document.getElementById('char-form-summary'),
@@ -277,6 +281,135 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+// --- Interactive Alias Tag Manager ---
+let charAliasManager = null;
+let searchLoreAliasManager = null;
+
+function createAliasTagManager({ container, list, input, onAliasesChanged }) {
+  let aliases = [];
+
+  function render() {
+    if (!list) return;
+    list.innerHTML = '';
+    aliases.forEach((alias, idx) => {
+      const pill = document.createElement('span');
+      pill.className = 'alias-pill';
+
+      const textSpan = document.createElement('span');
+      textSpan.className = 'alias-pill-text';
+      textSpan.textContent = alias;
+      pill.appendChild(textSpan);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'alias-pill-remove';
+      removeBtn.innerHTML = '&times;';
+      removeBtn.title = 'Remove alias';
+      removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        removeAlias(idx);
+      });
+      pill.appendChild(removeBtn);
+
+      list.appendChild(pill);
+    });
+
+    if (onAliasesChanged) onAliasesChanged([...aliases]);
+  }
+
+  function addAlias(str) {
+    if (!str) return;
+    const parts = str.split(',').map(s => s.trim()).filter(Boolean);
+    let changed = false;
+    for (const part of parts) {
+      const lower = part.toLowerCase();
+      if (!aliases.some(a => a.toLowerCase() === lower)) {
+        aliases.push(part);
+        changed = true;
+      }
+    }
+    if (changed) render();
+  }
+
+  function removeAlias(idx) {
+    if (idx >= 0 && idx < aliases.length) {
+      aliases.splice(idx, 1);
+      render();
+    }
+  }
+
+  function setAliases(arr) {
+    aliases = [];
+    if (Array.isArray(arr)) {
+      for (const item of arr) {
+        if (typeof item === 'string') {
+          addAlias(item);
+        }
+      }
+    } else if (typeof arr === 'string') {
+      addAlias(arr);
+    }
+    if (input) input.value = '';
+    render();
+  }
+
+  function getAliases() {
+    if (input && input.value && input.value.trim()) {
+      addAlias(input.value);
+      input.value = '';
+    }
+    return [...aliases];
+  }
+
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.keyCode === 13 || e.key === ',') {
+        e.preventDefault();
+        e.stopPropagation();
+        const val = input.value.trim();
+        if (val) {
+          addAlias(val);
+          input.value = '';
+        }
+      } else if (e.key === 'Backspace' && input.value === '' && aliases.length > 0) {
+        removeAlias(aliases.length - 1);
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      const val = input.value.trim();
+      if (val) {
+        addAlias(val);
+        input.value = '';
+      }
+    });
+
+    input.addEventListener('input', () => {
+      if (input.value.includes(',')) {
+        addAlias(input.value);
+        input.value = '';
+      }
+    });
+  }
+
+  if (container) {
+    container.addEventListener('click', (e) => {
+      if (input && e.target !== input && !e.target.closest('.alias-pill-remove')) {
+        input.focus();
+      }
+    });
+  }
+
+  return {
+    getAliases,
+    setAliases,
+    addAlias,
+    removeAlias,
+    render
+  };
 }
 
 // Load persisted settings
@@ -421,29 +554,65 @@ function setupDesktopSyncPopover() {
     } catch (_) {}
   }, 1000);
 
-  if (btnSync) {
-    btnSync.addEventListener('click', async () => {
+  const performFullSync = async ({ silent = false } = {}) => {
+    if (btnSync && !silent) {
       btnSync.textContent = 'Syncing...';
       btnSync.disabled = true;
-      try {
-        const res = await fetch('/api/sync-supabase', { method: 'POST' });
-        const data = await res.json();
-        if (data.success) {
-          lastSync = new Date();
-          updateDisplay();
-          showToast(`Synced with Supabase successfully.`);
-          await loadBooks();
-        } else {
-          showToast('Sync error: ' + (data.error || 'Failed'));
+    }
+    try {
+      const res = await fetch('/api/sync-supabase', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        lastSync = new Date();
+        updateDisplay();
+        if (!silent) showToast('Synced with Supabase successfully.');
+        await loadBooks();
+        if (state.activeBookId) {
+          await loadChapters(state.activeBookId);
+          await loadGlossary(state.activeBookId);
+          const currentBook = state.books.find(b => b.id === state.activeBookId);
+          if (currentBook) {
+            const lastRead = currentBook.last_read_chapter || 1;
+            if (elements.btnContinueReading) {
+              elements.btnContinueReading.innerHTML = `${ICONS.book} <span>Continue (Ch ${lastRead})</span>`;
+              elements.btnContinueReading.onclick = () => openReader(lastRead);
+            }
+            updateBookmarkButton();
+          }
         }
-      } catch (err) {
-        showToast('Sync network error');
-      } finally {
+      } else if (!silent) {
+        showToast('Sync error: ' + (data.error || 'Failed'));
+      }
+    } catch (err) {
+      if (!silent) showToast('Sync network error');
+    } finally {
+      if (btnSync && !silent) {
         btnSync.textContent = 'Sync Now';
         btnSync.disabled = false;
       }
-    });
+    }
+  };
+
+  if (btnSync) {
+    btnSync.addEventListener('click', () => performFullSync({ silent: false }));
   }
+
+  // Auto-sync when window gains focus or tab becomes active
+  window.addEventListener('focus', () => {
+    performFullSync({ silent: true });
+  });
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      performFullSync({ silent: true });
+    }
+  });
+
+  // Periodic heartbeat sync every 45s while active
+  setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      performFullSync({ silent: true });
+    }
+  }, 45000);
 }
 
 // --- Data Fetching ---
@@ -2287,7 +2456,7 @@ function renderGlossary(filterText = null) {
       `;
 
       card.querySelector('.btn-edit-char').onclick = () => openEditCharacterModal(char);
-      card.querySelector('.btn-del-char').onclick = () => deleteCharacter(char.id);
+      card.querySelector('.btn-del-char').onclick = () => deleteCharacter(char.id || char.name);
       track.appendChild(card);
     });
 
@@ -2316,7 +2485,11 @@ function openEditCharacterModal(char) {
     if (isCurrentBookChinese() && char.pinyin_or_chinese && !['n/a', 'none', 'null'].includes(char.pinyin_or_chinese.toLowerCase().trim()) && !allAliases.some(a => a.toLowerCase() === char.pinyin_or_chinese.toLowerCase())) {
       allAliases.push(char.pinyin_or_chinese);
     }
-    elements.charFormAliases.value = allAliases.join(', ');
+    if (charAliasManager) {
+      charAliasManager.setAliases(allAliases);
+    } else if (elements.charFormAliases) {
+      elements.charFormAliases.value = allAliases.join(', ');
+    }
     elements.charFormSect.value = char.affiliation || char.sect_or_affiliation || '';
     elements.charFormSummary.value = char.summary || '';
   } else {
@@ -2325,7 +2498,11 @@ function openEditCharacterModal(char) {
     if (elements.charFormCategory) elements.charFormCategory.value = 'Character';
     elements.charFormName.value = '';
     if (elements.charFormPinyin) elements.charFormPinyin.value = '';
-    elements.charFormAliases.value = '';
+    if (charAliasManager) {
+      charAliasManager.setAliases([]);
+    } else if (elements.charFormAliases) {
+      elements.charFormAliases.value = '';
+    }
     elements.charFormSect.value = '';
     elements.charFormSummary.value = '';
   }
@@ -2358,13 +2535,14 @@ async function saveCharacterForm() {
 
   const sectVal = elements.charFormSect ? elements.charFormSect.value.trim() : '';
   const pinyinVal = elements.charFormPinyin ? elements.charFormPinyin.value.trim() : '';
+  const aliases = charAliasManager ? charAliasManager.getAliases() : (elements.charFormAliases ? elements.charFormAliases.value.split(',').map(s => s.trim()).filter(Boolean) : []);
 
   const payload = {
     id: elements.charFormId.value || undefined,
     name: name,
     category: elements.charFormCategory ? elements.charFormCategory.value : 'Character',
     pinyin_or_chinese: pinyinVal,
-    aliases: elements.charFormAliases.value.split(',').map(s => s.trim()).filter(Boolean),
+    aliases: aliases,
     affiliation: sectVal,
     sect_or_affiliation: sectVal,
     summary: elements.charFormSummary.value.trim()
@@ -2389,7 +2567,7 @@ async function saveCharacterForm() {
 async function deleteCharacter(charId) {
   if (!confirm('Are you sure you want to remove this entry from the glossary?')) return;
   try {
-    const res = await fetch(`/api/books/${state.activeBookId}/glossary/${charId}`, {
+    const res = await fetch(`/api/books/${state.activeBookId}/glossary/${encodeURIComponent(charId)}`, {
       method: 'DELETE'
     });
     if (res.ok) {
@@ -2431,10 +2609,9 @@ async function autoFillCharacterWithAI() {
       }
       
       // Preserve and UNION existing form aliases so user manual additions are NEVER erased
-      const currentAliases = (elements.charFormAliases.value || '')
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
+      const currentAliases = charAliasManager
+        ? charAliasManager.getAliases()
+        : (elements.charFormAliases.value || '').split(',').map(s => s.trim()).filter(Boolean);
       const seenAliases = new Set(currentAliases.map(a => a.toLowerCase()));
       const primaryLower = (c.name || name).toLowerCase();
 
@@ -2453,7 +2630,9 @@ async function autoFillCharacterWithAI() {
           }
         }
       }
-      if (currentAliases.length > 0) {
+      if (charAliasManager) {
+        charAliasManager.setAliases(currentAliases);
+      } else if (currentAliases.length > 0) {
         elements.charFormAliases.value = currentAliases.join(', ');
       }
 
@@ -2911,7 +3090,11 @@ function openSearchLoreForm(initialName = '', editCharData = null) {
     if (isCurrentBookChinese() && editCharData.pinyin_or_chinese && !['n/a', 'none', 'null'].includes(editCharData.pinyin_or_chinese.toLowerCase().trim()) && !allAliases.some(a => a.toLowerCase() === editCharData.pinyin_or_chinese.toLowerCase())) {
       allAliases.push(editCharData.pinyin_or_chinese);
     }
-    if (elements.searchLoreAliases) elements.searchLoreAliases.value = allAliases.join(', ');
+    if (searchLoreAliasManager) {
+      searchLoreAliasManager.setAliases(allAliases);
+    } else if (elements.searchLoreAliases) {
+      elements.searchLoreAliases.value = allAliases.join(', ');
+    }
     if (elements.searchLoreSect) elements.searchLoreSect.value = editCharData.affiliation || editCharData.sect_or_affiliation || '';
     if (elements.searchLoreSummary) elements.searchLoreSummary.value = editCharData.summary || '';
   } else {
@@ -2920,7 +3103,11 @@ function openSearchLoreForm(initialName = '', editCharData = null) {
     if (elements.searchLoreCategory) elements.searchLoreCategory.value = 'Character';
     if (elements.searchLoreName) elements.searchLoreName.value = initialName || '';
     if (elements.searchLorePinyin) elements.searchLorePinyin.value = '';
-    if (elements.searchLoreAliases) elements.searchLoreAliases.value = '';
+    if (searchLoreAliasManager) {
+      searchLoreAliasManager.setAliases([]);
+    } else if (elements.searchLoreAliases) {
+      elements.searchLoreAliases.value = '';
+    }
     if (elements.searchLoreSect) elements.searchLoreSect.value = '';
     if (elements.searchLoreSummary) elements.searchLoreSummary.value = '';
   }
@@ -2951,8 +3138,10 @@ async function saveSearchLoreForm() {
   const charId = elements.searchLoreId ? elements.searchLoreId.value.trim() : '';
   const category = elements.searchLoreCategory ? elements.searchLoreCategory.value : 'Character';
   const pinyin = elements.searchLorePinyin ? elements.searchLorePinyin.value.trim() : '';
-  const aliasesStr = elements.searchLoreAliases ? elements.searchLoreAliases.value.trim() : '';
-  const aliases = aliasesStr ? aliasesStr.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const aliases = searchLoreAliasManager
+    ? searchLoreAliasManager.getAliases()
+    : ((elements.searchLoreAliases ? elements.searchLoreAliases.value.trim() : '')
+        .split(',').map(s => s.trim()).filter(Boolean));
   const sect = elements.searchLoreSect ? elements.searchLoreSect.value.trim() : '';
   const summary = elements.searchLoreSummary ? elements.searchLoreSummary.value.trim() : '';
 
@@ -3023,10 +3212,9 @@ async function autoFillSearchLoreWithAI() {
       }
       
       // Preserve and UNION existing form aliases so user manual additions are NEVER erased
-      const currentAliases = (elements.searchLoreAliases ? elements.searchLoreAliases.value : '')
-        .split(',')
-        .map(s => s.trim())
-        .filter(Boolean);
+      const currentAliases = searchLoreAliasManager
+        ? searchLoreAliasManager.getAliases()
+        : (elements.searchLoreAliases ? elements.searchLoreAliases.value : '').split(',').map(s => s.trim()).filter(Boolean);
       const seenAliases = new Set(currentAliases.map(a => a.toLowerCase()));
       const primaryLower = (c.name || name).toLowerCase();
 
@@ -3045,7 +3233,9 @@ async function autoFillSearchLoreWithAI() {
           }
         }
       }
-      if (elements.searchLoreAliases && currentAliases.length > 0) {
+      if (searchLoreAliasManager) {
+        searchLoreAliasManager.setAliases(currentAliases);
+      } else if (elements.searchLoreAliases && currentAliases.length > 0) {
         elements.searchLoreAliases.value = currentAliases.join(', ');
       }
 
@@ -4152,6 +4342,22 @@ function setupEventListeners() {
   }
   if (elements.btnAiAutofillSearchLore) {
     elements.btnAiAutofillSearchLore.addEventListener('click', autoFillSearchLoreWithAI);
+  }
+
+  // Initialize interactive alias tag managers
+  if (elements.charAliasContainer && elements.charAliasList && elements.charFormAliases) {
+    charAliasManager = createAliasTagManager({
+      container: elements.charAliasContainer,
+      list: elements.charAliasList,
+      input: elements.charFormAliases
+    });
+  }
+  if (elements.searchLoreAliasContainer && elements.searchLoreAliasList && elements.searchLoreAliases) {
+    searchLoreAliasManager = createAliasTagManager({
+      container: elements.searchLoreAliasContainer,
+      list: elements.searchLoreAliasList,
+      input: elements.searchLoreAliases
+    });
   }
 
   elements.btnOpenAddCharForm.addEventListener('click', () => openEditCharacterModal(null));

@@ -2213,6 +2213,75 @@ body.theme-dark .form-label {
   box-shadow: 0 0 0 1.5px var(--primary);
 }
 
+/* Interactive Alias Tag Container on Mobile */
+.alias-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  min-height: 42px;
+  padding: 6px 10px;
+  background-color: var(--bg-surface);
+  border-radius: 8px;
+  cursor: text;
+  transition: box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.alias-tags-container:focus-within {
+  background-color: var(--bg-card);
+  box-shadow: 0 0 0 1.5px var(--primary);
+}
+
+.alias-tags-list {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.alias-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.alias-pill-remove {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  margin: 0;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--text-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alias-pill-remove:active {
+  color: var(--primary);
+}
+
+.alias-tag-input {
+  flex: 1 1 110px;
+  min-width: 110px;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 3px 2px !important;
+  font-size: 0.88rem !important;
+  color: var(--text-main) !important;
+}
+
 .form-actions-row {
   display: flex;
   align-items: center;

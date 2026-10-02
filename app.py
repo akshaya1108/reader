@@ -2359,43 +2359,43 @@ def add_or_update_character(book_id):
 
     affiliation = (data.get("affiliation") or data.get("sect_or_affiliation") or "").strip()
 
-    # If an explicit char_id was passed (e.g. from editing an existing card in the drawer), update it
+    target_existing = None
     if char_id:
-        existing = next((c for c in glossary if c.get("id") == char_id), None)
-        if existing:
-            existing["name"] = name
-            existing["category"] = normalize_category(data.get("category", existing.get("category", "Character")))
-            if "pinyin_or_chinese" in data:
-                existing["pinyin_or_chinese"] = data.get("pinyin_or_chinese", "")
-            existing["aliases"] = aliases
-            existing["affiliation"] = affiliation
-            existing["sect_or_affiliation"] = affiliation
-            existing["summary"] = data.get("summary", existing.get("summary", ""))
-            save_glossary(book_id, glossary)
-            return jsonify({"success": True, "glossary": glossary})
+        char_id_str = str(char_id).strip()
+        target_existing = next((c for c in glossary if str(c.get("id", "")).strip() == char_id_str), None)
+        if not target_existing:
+            cid_slug = slugify(char_id_str)
+            target_existing = next((c for c in glossary if slugify(str(c.get("id", ""))) == cid_slug or slugify(str(c.get("name", ""))) == cid_slug), None)
 
-    books = load_books()
-    book = next((b for b in books if b["id"] == book_id), None)
-    is_chinese = is_chinese_novel(book.get("title", ""), book.get("genre", "")) if book else False
+    if not target_existing:
+        name_lower = name.lower()
+        name_slug = slugify(name)
+        target_existing = next((c for c in glossary if (str(c.get("name", "")).strip().lower() == name_lower) or (slugify(str(c.get("name", ""))) == name_slug) or (str(c.get("id", "")).strip() == name_slug)), None)
 
-    # Otherwise, check if this character / alias already exists in the glossary
-    existing = find_matching_glossary_entry(glossary, name, incoming_item={"name": name, "aliases": aliases})
-    if existing:
-        # Merge aliases into existing character without erasing existing summary
-        merge_glossary_entry(existing, {"name": name, "aliases": aliases, "affiliation": affiliation, "sect_or_affiliation": affiliation, "summary": data.get("summary", ""), "category": normalize_category(data.get("category", "Character"))}, query_name=name, is_chinese=is_chinese)
-    else:
-        new_char = {
-            "id": slugify(name),
-            "name": name,
-            "category": normalize_category(data.get("category", "Character")),
-            "pinyin_or_chinese": data.get("pinyin_or_chinese", ""),
-            "aliases": aliases,
-            "affiliation": affiliation,
-            "sect_or_affiliation": affiliation,
-            "summary": data.get("summary", "")
-        }
-        glossary.append(new_char)
-        
+    if target_existing:
+        target_existing["name"] = name
+        target_existing["category"] = normalize_category(data.get("category", target_existing.get("category", "Character")))
+        if "pinyin_or_chinese" in data:
+            target_existing["pinyin_or_chinese"] = data.get("pinyin_or_chinese", "")
+        target_existing["aliases"] = aliases
+        target_existing["affiliation"] = affiliation
+        target_existing["sect_or_affiliation"] = affiliation
+        if "summary" in data:
+            target_existing["summary"] = data.get("summary", "")
+        save_glossary(book_id, glossary)
+        return jsonify({"success": True, "glossary": glossary})
+
+    new_char = {
+        "id": slugify(name),
+        "name": name,
+        "category": normalize_category(data.get("category", "Character")),
+        "pinyin_or_chinese": data.get("pinyin_or_chinese", ""),
+        "aliases": aliases,
+        "affiliation": affiliation,
+        "sect_or_affiliation": affiliation,
+        "summary": data.get("summary", "")
+    }
+    glossary.append(new_char)
     save_glossary(book_id, glossary)
     return jsonify({"success": True, "glossary": glossary})
 

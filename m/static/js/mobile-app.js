@@ -1479,6 +1479,134 @@ function setupLoreSheet() {
   }
 }
 
+// --- Interactive Alias Tag Manager for Mobile ---
+let mobileAliasTagManager = null;
+
+function createMobileAliasTagManager({ container, list, input, onAliasesChanged }) {
+  let aliases = [];
+
+  function render() {
+    if (!list) return;
+    list.innerHTML = '';
+    aliases.forEach((alias, idx) => {
+      const pill = document.createElement('span');
+      pill.className = 'alias-pill';
+
+      const textSpan = document.createElement('span');
+      textSpan.className = 'alias-pill-text';
+      textSpan.textContent = alias;
+      pill.appendChild(textSpan);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'alias-pill-remove';
+      removeBtn.innerHTML = '&times;';
+      removeBtn.title = 'Remove alias';
+      removeBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        removeAlias(idx);
+      });
+      pill.appendChild(removeBtn);
+
+      list.appendChild(pill);
+    });
+
+    if (onAliasesChanged) onAliasesChanged([...aliases]);
+  }
+
+  function addAlias(str) {
+    if (!str) return;
+    const parts = str.split(',').map(s => s.trim()).filter(Boolean);
+    let changed = false;
+    for (const part of parts) {
+      const lower = part.toLowerCase();
+      if (!aliases.some(a => a.toLowerCase() === lower)) {
+        aliases.push(part);
+        changed = true;
+      }
+    }
+    if (changed) render();
+  }
+
+  function removeAlias(idx) {
+    if (idx >= 0 && idx < aliases.length) {
+      aliases.splice(idx, 1);
+      render();
+    }
+  }
+
+  function setAliases(arr) {
+    aliases = [];
+    if (Array.isArray(arr)) {
+      for (const item of arr) {
+        if (typeof item === 'string') {
+          addAlias(item);
+        }
+      }
+    } else if (typeof arr === 'string') {
+      addAlias(arr);
+    }
+    if (input) input.value = '';
+    render();
+  }
+
+  function getAliases() {
+    if (input && input.value && input.value.trim()) {
+      addAlias(input.value);
+      input.value = '';
+    }
+    return [...aliases];
+  }
+
+  if (input) {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.keyCode === 13 || e.key === ',') {
+        e.preventDefault();
+        e.stopPropagation();
+        const val = input.value.trim();
+        if (val) {
+          addAlias(val);
+          input.value = '';
+        }
+      } else if (e.key === 'Backspace' && input.value === '' && aliases.length > 0) {
+        removeAlias(aliases.length - 1);
+      }
+    });
+
+    input.addEventListener('blur', () => {
+      const val = input.value.trim();
+      if (val) {
+        addAlias(val);
+        input.value = '';
+      }
+    });
+
+    input.addEventListener('input', () => {
+      if (input.value.includes(',')) {
+        addAlias(input.value);
+        input.value = '';
+      }
+    });
+  }
+
+  if (container) {
+    container.addEventListener('click', (e) => {
+      if (input && e.target !== input && !e.target.closest('.alias-pill-remove')) {
+        input.focus();
+      }
+    });
+  }
+
+  return {
+    getAliases,
+    setAliases,
+    addAlias,
+    removeAlias,
+    render
+  };
+}
+
 // --- Add / Edit Lore Sheet (With Web Autofill & AI Lookup) ---
 function openEditLoreSheet(entry = null, defaultName = '') {
   const backdrop = document.getElementById('sheet-backdrop-edit');
@@ -1506,7 +1634,11 @@ function openEditLoreSheet(entry = null, defaultName = '') {
     if (isCurrentBookChinese() && entry.pinyin_or_chinese && !['n/a', 'none', 'null', (entry.name || '').toLowerCase()].includes(entry.pinyin_or_chinese.toLowerCase().trim()) && !allAliases.includes(entry.pinyin_or_chinese)) {
       allAliases.unshift(entry.pinyin_or_chinese);
     }
-    if (aliasesInput) aliasesInput.value = allAliases.join(', ');
+    if (mobileAliasTagManager) {
+      mobileAliasTagManager.setAliases(allAliases);
+    } else if (aliasesInput) {
+      aliasesInput.value = allAliases.join(', ');
+    }
     if (summaryInput) summaryInput.value = entry.summary || entry.notes || '';
     if (wikiInput) wikiInput.value = '';
     if (btnDelete) btnDelete.style.display = 'block';
@@ -1517,7 +1649,11 @@ function openEditLoreSheet(entry = null, defaultName = '') {
     if (nameInput) nameInput.value = defaultName || '';
     if (catInput) catInput.value = 'Character';
     if (affilInput) affilInput.value = '';
-    if (aliasesInput) aliasesInput.value = '';
+    if (mobileAliasTagManager) {
+      mobileAliasTagManager.setAliases([]);
+    } else if (aliasesInput) {
+      aliasesInput.value = '';
+    }
     if (summaryInput) summaryInput.value = '';
     if (wikiInput) wikiInput.value = '';
     if (btnDelete) btnDelete.style.display = 'none';
@@ -1534,6 +1670,18 @@ function setupEditLoreSheet() {
   const btnDelete = document.getElementById('btn-edit-delete');
   const btnAiFill = document.getElementById('btn-ai-fill');
   const btnWikiImport = document.getElementById('btn-wiki-import');
+
+  // Initialize interactive alias tag manager on mobile
+  const aliasContainer = document.getElementById('edit-lore-alias-container');
+  const aliasList = document.getElementById('edit-lore-alias-list');
+  const aliasesInput = document.getElementById('edit-lore-aliases');
+  if (aliasContainer && aliasList && aliasesInput) {
+    mobileAliasTagManager = createMobileAliasTagManager({
+      container: aliasContainer,
+      list: aliasList,
+      input: aliasesInput
+    });
+  }
 
   if (!backdrop) return;
 
@@ -1572,7 +1720,9 @@ function setupEditLoreSheet() {
           if (isCurrentBookChinese() && c.pinyin_or_chinese && !['n/a', 'none', 'null', (c.name || '').toLowerCase()].includes(c.pinyin_or_chinese.toLowerCase().trim()) && !aliasesArr.includes(c.pinyin_or_chinese)) {
             aliasesArr.unshift(c.pinyin_or_chinese);
           }
-          if (aliasesArr.length > 0) {
+          if (mobileAliasTagManager) {
+            mobileAliasTagManager.setAliases(aliasesArr);
+          } else if (aliasesArr.length > 0) {
             document.getElementById('edit-lore-aliases').value = aliasesArr.join(', ');
           }
           if (c.summary) document.getElementById('edit-lore-summary').value = c.summary;
@@ -1615,7 +1765,9 @@ function setupEditLoreSheet() {
           if (isCurrentBookChinese() && c.pinyin_or_chinese && !['n/a', 'none', 'null', (c.name || '').toLowerCase()].includes(c.pinyin_or_chinese.toLowerCase().trim()) && !aliasesArr.includes(c.pinyin_or_chinese)) {
             aliasesArr.unshift(c.pinyin_or_chinese);
           }
-          if (aliasesArr.length > 0) {
+          if (mobileAliasTagManager) {
+            mobileAliasTagManager.setAliases(aliasesArr);
+          } else if (aliasesArr.length > 0) {
             document.getElementById('edit-lore-aliases').value = aliasesArr.join(', ');
           }
           if (c.summary) document.getElementById('edit-lore-summary').value = c.summary;
@@ -1681,7 +1833,9 @@ function setupEditLoreSheet() {
         return;
       }
 
-      const aliases = aliasesRaw ? aliasesRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+      const aliases = mobileAliasTagManager
+        ? mobileAliasTagManager.getAliases()
+        : (aliasesRaw ? aliasesRaw.split(',').map(s => s.trim()).filter(Boolean) : []);
 
       const entry = {
         name,

@@ -790,8 +790,11 @@
               <input type="text" id="char-form-name" class="form-input" placeholder="e.g. Zidian, Madam Jin, Cloud Recesses" style="margin-top: 6px;">
             </div>
             <div class="form-group">
-              <label class="form-label">Aliases (comma-separated)</label>
-              <input type="text" id="char-form-aliases" class="form-input" placeholder="e.g. Purple Lightning, Amethyst Ring, 紫电">
+              <label class="form-label">Aliases</label>
+              <div class="alias-tags-container" id="char-alias-container">
+                <div class="alias-tags-list" id="char-alias-list"></div>
+                <input type="text" id="char-form-aliases" class="alias-tag-input" placeholder="Type alias, press Enter...">
+              </div>
             </div>
             <div class="form-group">
               <label class="form-label">Affiliation</label>
@@ -802,8 +805,8 @@
               <textarea id="char-form-summary" class="form-textarea" rows="2" placeholder="e.g. A spiritual weapon or character description."></textarea>
             </div>
             <div class="char-form-btns">
-              <button class="btn btn-secondary btn-sm" id="btn-cancel-char-form">Cancel</button>
-              <button class="btn btn-rose btn-sm" id="btn-save-char-form">Save Entry</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn-cancel-char-form">Cancel</button>
+              <button type="button" class="btn btn-rose btn-sm" id="btn-save-char-form">Save Entry</button>
             </div>
           </div>
         </div>
@@ -880,8 +883,11 @@
           <input type="text" id="search-lore-name" class="form-input" placeholder="e.g. Wei Wuxian, Zidian, Cloud Recesses">
         </div>
         <div class="form-group">
-          <label class="form-label">Aliases (comma-separated)</label>
-          <input type="text" id="search-lore-aliases" class="form-input" placeholder="e.g. Yiling Patriarch, Wei Ying, A-Xian">
+          <label class="form-label">Aliases</label>
+          <div class="alias-tags-container" id="search-lore-alias-container">
+            <div class="alias-tags-list" id="search-lore-alias-list"></div>
+            <input type="text" id="search-lore-aliases" class="alias-tag-input" placeholder="Type alias, press Enter...">
+          </div>
         </div>
         <div class="form-group">
           <label class="form-label">Affiliation</label>
