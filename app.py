@@ -335,6 +335,8 @@ def sync_supabase_endpoint():
         headers = {
             "apikey": SUPABASE_KEY,
             "Authorization": f"Bearer {SUPABASE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "resolution=merge-duplicates"
         }
         books = load_books()
         synced_glossary = 0
@@ -363,6 +365,21 @@ def sync_supabase_endpoint():
                     if rb.get("last_read_at"):
                         lb["last_read_at"] = rb["last_read_at"]
             save_books(local_books)
+
+        # Background sync of books and chapters to Supabase
+        def _bg_push():
+            try:
+                import sys
+                scripts_path = os.path.join(BASE_DIR, "scripts")
+                if scripts_path not in sys.path:
+                    sys.path.insert(0, scripts_path)
+                from sync_to_supabase import sync_books as push_all_books, sync_chapters as push_all_chapters
+                push_all_books()
+                push_all_chapters()
+            except Exception as ex:
+                print(f"Background Supabase full push notice: {ex}")
+        import threading
+        threading.Thread(target=_bg_push, daemon=True).start()
 
         return jsonify({
             "success": True,
