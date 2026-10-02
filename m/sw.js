@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianxia-mobile-v18';
+const CACHE_NAME = 'xianxia-mobile-v19';
 const STATIC_ASSETS = [
   './',
   './manifest.json',
@@ -37,11 +37,23 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
 
-  // APIs always fetch fresh from server to guarantee sync with Mac edits
-  if (url.pathname.startsWith('/api/') || url.hostname.includes('supabase.co')) {
+  // External APIs (Supabase) bypass the service worker completely
+  if (url.hostname.includes('supabase.co')) {
+    return;
+  }
+
+  // Cache chapter illustration images on-demand for offline reading
+  if (url.pathname.includes('/images/') && (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.svg'))) {
     event.respondWith(
-      fetch(event.request, { cache: 'no-store' })
-        .catch(() => caches.match(event.request))
+      caches.match(event.request).then((cached) => {
+        return cached || fetch(event.request).then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        }).catch(() => cached);
+      })
     );
     return;
   }

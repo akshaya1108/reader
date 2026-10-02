@@ -34,117 +34,6 @@
   },
   {
     "book_id": "the-two-towers",
-    "id": "shire",
-    "name": "Shire",
-    "category": "Location / Realm",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "The Shire"
-    ],
-    "affiliation": "Hobbits",
-    "sect_or_affiliation": "Hobbits",
-    "summary": "The Shire is the peaceful, rural homeland of the hobbits, located in the northwestern region of Middle-earth.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "drogo-baggins",
-    "name": "Drogo Baggins",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [],
-    "affiliation": "Hobbits of the Shire",
-    "sect_or_affiliation": "Hobbits of the Shire",
-    "summary": "Drogo Baggins is a Hobbit of the Shire and the father of Frodo Baggins.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.473484+00:00",
-    "updated_at": "2026-10-02T11:23:24.473484+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "sackville-bagginses",
-    "name": "Sackville-Bagginses",
-    "category": "Clan / Sect",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Sackville-Baggins Family",
-      "Sackville-Baggins"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A wealthy and ambitious branch of the Hobbit Baggins family residing in the Shire, known for their persistent rivalry with Bilbo Baggins over the ownership of Bag End.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "the-old-took",
-    "name": "the Old Took",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Old Took"
-    ],
-    "affiliation": "Took Clan",
-    "sect_or_affiliation": "Took Clan",
-    "summary": "The legendary patriarch of the Took family and former Thain of the Shire, famous for his exceptionally long life and his longstanding friendship with the wizard Gandalf.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "bywater",
-    "name": "Bywater",
-    "category": "Location / Realm",
-    "pinyin_or_chinese": "",
-    "aliases": [],
-    "affiliation": "The Shire (Westfarthing)",
-    "sect_or_affiliation": "The Shire (Westfarthing)",
-    "summary": "A peaceful village in the Westfarthing of the Shire, situated alongside a wide pool and home to well-known establishments such as the Green Dragon and the Ivy Bush.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "dwarf",
-    "name": "Dwarf",
-    "category": "Race / Creature",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Dwarves"
-    ],
-    "affiliation": "Middle-earth",
-    "sect_or_affiliation": "Middle-earth",
-    "summary": "An ancient, sturdy race of miners and craftsmen renowned for their skill in working stone and metal.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "hamfast-gamgee",
-    "name": "Hamfast Gamgee",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Ham Gamgee",
-      "The Gaffer",
-      "Master Hamfast"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "Ham Gamgee, commonly known as the Gaffer, is an elderly hobbit of the Shire and the father of Samwise Gamgee.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.473484+00:00",
-    "updated_at": "2026-10-02T11:23:24.473484+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
     "id": "adelard-took",
     "name": "Adelard Took",
     "category": "Character",
@@ -174,234 +63,6 @@
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.177356+00:00",
     "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "frodo-baggins",
-    "name": "Frodo Baggins",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Ring-bearer",
-      "Frodo",
-      "Nine-fingered Frodo"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A young, studious hobbit of the Shire and nephew to Bilbo Baggins.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "beregond",
-    "name": "Beregond",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Captain Beregond"
-    ],
-    "affiliation": "Gondor",
-    "sect_or_affiliation": "Gondor",
-    "summary": "A dedicated guard and soldier serving in the Citadel of Minas Tirith.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gamling",
-    "name": "Gamling",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "The Old"
-    ],
-    "affiliation": "Rohan",
-    "sect_or_affiliation": "Rohan",
-    "summary": "An elderly, experienced warrior and counsellor loyal to the king of Rohan.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "owyn",
-    "name": "Éowyn",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Shieldmaiden of Rohan"
-    ],
-    "affiliation": "Rohan",
-    "sect_or_affiliation": "Rohan",
-    "summary": "A noblewoman of Rohan with a yearning for martial glory and freedom.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "faramir",
-    "name": "Faramir",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Captain of the Rangers"
-    ],
-    "affiliation": "Gondor",
-    "sect_or_affiliation": "Gondor",
-    "summary": "A scholarly and gentle captain of the Gondorian rangers, and younger brother to Boromir.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "samwise-gamgee",
-    "name": "Samwise Gamgee",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Sam",
-      "Sam Gamgee"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A steadfast and loyal hobbit gardener of the Shire serving Frodo Baggins.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gh-n-buri-gh-n",
-    "name": "Ghân-buri-Ghân",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Chieftain of the Wúfwen"
-    ],
-    "affiliation": "Drúadan Forest",
-    "sect_or_affiliation": "Drúadan Forest",
-    "summary": "A chieftain of the wild, forest-dwelling Drúedain people.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gildor-inglorion",
-    "name": "Gildor Inglorion",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "House of Finrod"
-    ],
-    "affiliation": "Exiled Noldor Elves",
-    "sect_or_affiliation": "Exiled Noldor Elves",
-    "summary": "A noble and wise wanderer among the wandering Elven companies of the Shire.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gorbag",
-    "name": "Gorbag",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [],
-    "affiliation": "Minas Morgul Orcs",
-    "sect_or_affiliation": "Minas Morgul Orcs",
-    "summary": "A cynical Orc captain stationed in the garrison of Minas Morgul.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "holman-greenhand",
-    "name": "Holman Greenhand",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "old holman"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A Hobbit of the Shire and the former master gardener at Bag End who taught the gardening trade to Hamfast Gamgee.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.473484+00:00",
-    "updated_at": "2026-10-02T11:23:24.473484+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "old-forest",
-    "name": "Old Forest",
-    "category": "Location / Realm",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "The Old Forest"
-    ],
-    "affiliation": "Buckland",
-    "sect_or_affiliation": "Buckland",
-    "summary": "An ancient, enigmatic woodland situated just east of Buckland, notorious among hobbits for its dense, shifting paths and seemingly conscious, treacherous trees.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.473484+00:00",
-    "updated_at": "2026-10-02T11:23:24.473484+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "elladan-and-elrohir",
-    "name": "Elladan and Elrohir",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "The Twin Sons of Elrond"
-    ],
-    "affiliation": "Elves of Rivendell",
-    "sect_or_affiliation": "Elves of Rivendell",
-    "summary": "Prowling Elven warrior brothers from Rivendell who frequently ride against wild adversaries.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "omer",
-    "name": "Éomer",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Third Marshal of the Riddermark"
-    ],
-    "affiliation": "Rohan",
-    "sect_or_affiliation": "Rohan",
-    "summary": "A fierce and loyal equestrian commander of Rohan's martial forces.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gandalf",
-    "name": "Gandalf",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Gandalf the Wizard",
-      "Gandalf the Grey",
-      "Mithrandir",
-      "The Grey Pilgrim"
-    ],
-    "affiliation": "Fellowship of the Ring",
-    "sect_or_affiliation": "Fellowship of the Ring",
-    "summary": "A wise and powerful Wizard of the Istari order who guides Frodo Baggins on his perilous quest concerning the One Ring.",
-    "mentions": 0,
-    "created_at": "2026-10-02T12:17:51.14279+00:00",
-    "updated_at": "2026-10-02T12:17:51.14279+00:00"
   },
   {
     "book_id": "the-two-towers",
@@ -584,6 +245,56 @@
   },
   {
     "book_id": "the-two-towers",
+    "id": "frodo-baggins",
+    "name": "Frodo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ring-bearer",
+      "Frodo",
+      "Nine-fingered Frodo"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A young, studious hobbit of the Shire and nephew to Bilbo Baggins.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "beregond",
+    "name": "Beregond",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain Beregond"
+    ],
+    "affiliation": "Gondor",
+    "sect_or_affiliation": "Gondor",
+    "summary": "A dedicated guard and soldier serving in the Citadel of Minas Tirith.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "shire",
+    "name": "Shire",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Shire"
+    ],
+    "affiliation": "Hobbits",
+    "sect_or_affiliation": "Hobbits",
+    "summary": "The Shire is the peaceful, rural homeland of the hobbits, located in the northwestern region of Middle-earth.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
     "id": "brandybuck-family",
     "name": "Brandybuck Family",
     "category": "Clan / Sect",
@@ -596,6 +307,20 @@
     "affiliation": "Buckland",
     "sect_or_affiliation": "Buckland",
     "summary": "A prominent and wealthy family of Hobbits who rule Buckland from Brandy Hall, known among Shire-folk for their unusually adventurous spirit and fondness for boating.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.473484+00:00",
+    "updated_at": "2026-10-02T11:23:24.473484+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "drogo-baggins",
+    "name": "Drogo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "affiliation": "Hobbits of the Shire",
+    "sect_or_affiliation": "Hobbits of the Shire",
+    "summary": "Drogo Baggins is a Hobbit of the Shire and the father of Frodo Baggins.",
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.473484+00:00",
     "updated_at": "2026-10-02T11:23:24.473484+00:00"
@@ -712,6 +437,119 @@
   },
   {
     "book_id": "the-two-towers",
+    "id": "sackville-bagginses",
+    "name": "Sackville-Bagginses",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sackville-Baggins Family",
+      "Sackville-Baggins"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A wealthy and ambitious branch of the Hobbit Baggins family residing in the Shire, known for their persistent rivalry with Bilbo Baggins over the ownership of Bag End.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "the-old-took",
+    "name": "the Old Took",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Old Took"
+    ],
+    "affiliation": "Took Clan",
+    "sect_or_affiliation": "Took Clan",
+    "summary": "The legendary patriarch of the Took family and former Thain of the Shire, famous for his exceptionally long life and his longstanding friendship with the wizard Gandalf.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "bywater",
+    "name": "Bywater",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "affiliation": "The Shire (Westfarthing)",
+    "sect_or_affiliation": "The Shire (Westfarthing)",
+    "summary": "A peaceful village in the Westfarthing of the Shire, situated alongside a wide pool and home to well-known establishments such as the Green Dragon and the Ivy Bush.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "dwarf",
+    "name": "Dwarf",
+    "category": "Race / Creature",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Dwarves"
+    ],
+    "affiliation": "Middle-earth",
+    "sect_or_affiliation": "Middle-earth",
+    "summary": "An ancient, sturdy race of miners and craftsmen renowned for their skill in working stone and metal.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "hamfast-gamgee",
+    "name": "Hamfast Gamgee",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ham Gamgee",
+      "The Gaffer",
+      "Master Hamfast"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "Ham Gamgee, commonly known as the Gaffer, is an elderly hobbit of the Shire and the father of Samwise Gamgee.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.473484+00:00",
+    "updated_at": "2026-10-02T11:23:24.473484+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "holman-greenhand",
+    "name": "Holman Greenhand",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "old holman"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A Hobbit of the Shire and the former master gardener at Bag End who taught the gardening trade to Hamfast Gamgee.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.473484+00:00",
+    "updated_at": "2026-10-02T11:23:24.473484+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "old-forest",
+    "name": "Old Forest",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Old Forest"
+    ],
+    "affiliation": "Buckland",
+    "sect_or_affiliation": "Buckland",
+    "summary": "An ancient, enigmatic woodland situated just east of Buckland, notorious among hobbits for its dense, shifting paths and seemingly conscious, treacherous trees.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.473484+00:00",
+    "updated_at": "2026-10-02T11:23:24.473484+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
     "id": "rowlie-appledore",
     "name": "Rowlie Appledore",
     "category": "Character",
@@ -752,6 +590,117 @@
     "affiliation": "Cirith Ungol Orcs",
     "sect_or_affiliation": "Cirith Ungol Orcs",
     "summary": "A brutish Uruk captain commanding the tower garrison of Cirith Ungol.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gamling",
+    "name": "Gamling",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Old"
+    ],
+    "affiliation": "Rohan",
+    "sect_or_affiliation": "Rohan",
+    "summary": "An elderly, experienced warrior and counsellor loyal to the king of Rohan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "owyn",
+    "name": "Éowyn",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Shieldmaiden of Rohan"
+    ],
+    "affiliation": "Rohan",
+    "sect_or_affiliation": "Rohan",
+    "summary": "A noblewoman of Rohan with a yearning for martial glory and freedom.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "faramir",
+    "name": "Faramir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain of the Rangers"
+    ],
+    "affiliation": "Gondor",
+    "sect_or_affiliation": "Gondor",
+    "summary": "A scholarly and gentle captain of the Gondorian rangers, and younger brother to Boromir.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "samwise-gamgee",
+    "name": "Samwise Gamgee",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sam",
+      "Sam Gamgee"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A steadfast and loyal hobbit gardener of the Shire serving Frodo Baggins.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gh-n-buri-gh-n",
+    "name": "Ghân-buri-Ghân",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Chieftain of the Wúfwen"
+    ],
+    "affiliation": "Drúadan Forest",
+    "sect_or_affiliation": "Drúadan Forest",
+    "summary": "A chieftain of the wild, forest-dwelling Drúedain people.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gildor-inglorion",
+    "name": "Gildor Inglorion",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "House of Finrod"
+    ],
+    "affiliation": "Exiled Noldor Elves",
+    "sect_or_affiliation": "Exiled Noldor Elves",
+    "summary": "A noble and wise wanderer among the wandering Elven companies of the Shire.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gorbag",
+    "name": "Gorbag",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "affiliation": "Minas Morgul Orcs",
+    "sect_or_affiliation": "Minas Morgul Orcs",
+    "summary": "A cynical Orc captain stationed in the garrison of Minas Morgul.",
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.177356+00:00",
     "updated_at": "2026-10-02T11:23:24.177356+00:00"
@@ -994,5 +943,52 @@
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.177356+00:00",
     "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "elladan-and-elrohir",
+    "name": "Elladan and Elrohir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Twin Sons of Elrond"
+    ],
+    "affiliation": "Elves of Rivendell",
+    "sect_or_affiliation": "Elves of Rivendell",
+    "summary": "Prowling Elven warrior brothers from Rivendell who frequently ride against wild adversaries.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "omer",
+    "name": "Éomer",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Third Marshal of the Riddermark"
+    ],
+    "affiliation": "Rohan",
+    "sect_or_affiliation": "Rohan",
+    "summary": "A fierce and loyal equestrian commander of Rohan's martial forces.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "id": "gandalf",
+    "name": "Gandalf",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Gandalf the Wizard",
+      "Gandalf the Grey",
+      "Mithrandir",
+      "The Grey Pilgrim"
+    ],
+    "sect_or_affiliation": "Fellowship of the Ring",
+    "affiliation": "Fellowship of the Ring",
+    "summary": "A wise and powerful Wizard of the Istari order who guides Frodo Baggins on his perilous quest concerning the One Ring."
   }
 ]

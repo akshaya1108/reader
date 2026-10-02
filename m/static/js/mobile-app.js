@@ -343,7 +343,15 @@ function renderLibrary() {
     let coverHtml = '';
     if (b.cover) {
       coverHtml = `
-        <img src="${b.cover}" alt="${escapeHtml(b.title)} cover" class="book-cover-img">
+        <img src="${b.cover}" alt="${escapeHtml(b.title)} cover" class="book-cover-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+        <div class="empty-cover-placeholder" style="display: none;">
+          <div class="empty-cover-icon" style="background: ${color}18; color: ${color};">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+        </div>
       `;
     } else {
       coverHtml = `
@@ -913,6 +921,25 @@ function renderReaderText(rawHtml) {
     el.removeAttribute('style');
     el.removeAttribute('color');
     el.removeAttribute('face');
+  });
+
+  // Resolve chapter images for portable hosting (GitHub Pages, mobile)
+  temp.querySelectorAll('img').forEach(img => {
+    const rawSrc = img.getAttribute('src') || '';
+    if (rawSrc.startsWith('/api/books/')) {
+      const match = rawSrc.match(/\/api\/books\/([^\/]+)\/images\/(.+)$/);
+      if (match) {
+        const bookId = match[1];
+        const filename = match[2];
+        const isGithub = window.location.hostname.includes('github.io');
+        const isSubpath = window.location.pathname.includes('/m');
+        if (isGithub || isSubpath) {
+          img.setAttribute('src', `../data/chapters/${bookId}/images/${filename}`);
+        }
+      }
+    }
+    img.classList.add('reader-image');
+    img.setAttribute('loading', 'lazy');
   });
 
   // 2. Check if <p> tags exist; if not, extract leaf divs (critical for MDZS)
