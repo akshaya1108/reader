@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Library Home - Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-serif: 'Lora', Georgia, 'Noto Serif SC', serif;
+      --font-sans: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+      --bg-page: #fbf8f2;
+      --bg-card: #ffffff;
+      --border-subtle: #eae1d2;
+      --text-main: #2b231c;
+      --text-muted: #7d7265;
+      --color-rose: #ba6d78;
+      --color-green: #5c8672;
+      --color-blue: #647b9a;
+      --color-amber: #c4884d;
+      --color-purple: #8c6b96;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: #f7ede8;
+      color: var(--color-rose);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .brand-name {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: var(--text-main);
+    }
+
+    .nav-search {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fbf8f2;
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 7px 16px;
+      width: 320px;
+    }
+
+    .nav-search input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      color: var(--text-main);
+      width: 100%;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-primary {
+      background: var(--color-rose);
+      color: #ffffff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 0.88rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: #a85863;
+    }
+
+    /* Main Container - Clean shelf layout */
+    .main-container {
+      max-width: 1060px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 32px 24px 72px 24px;
+      flex: 1;
+    }
+
+    /* Library Header - Clean header matching user mockup */
+    .library-header {
+      margin-bottom: 28px;
+    }
+
+    .library-title-area h1 {
+      font-family: var(--font-serif);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .library-subtitle {
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* Books Box Grid - 4 books in a row with increased 36px spacing */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 36px;
+    }
+
+    @media (max-width: 960px) {
+      .books-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .books-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 22px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .books-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* Book Box Card */
+    .book-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      overflow: visible;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 14px rgba(43, 35, 28, 0.05), 0 1px 3px rgba(43, 35, 28, 0.03);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+
+    .book-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 22px rgba(43, 35, 28, 0.08);
+      border-color: #d6c6b2;
+    }
+
+    /* Book Cover Area - Shorter rectangle closer to square (approx 1:1.16) */
+    .book-cover-wrap {
+      position: relative;
+      aspect-ratio: 1 / 1.16;
+      background: #e4e2de;
+      border-top-left-radius: 11px;
+      border-top-right-radius: 11px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .book-cover-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Empty Cover Placeholder - Flat modern style */
+    .empty-cover-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: #e4e2de;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .empty-cover-placeholder:hover {
+      background: #ded9d1;
+    }
+
+    .empty-cover-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.65);
+      color: #6d6254;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-add-cover-pill {
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px dashed var(--border-subtle);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      transition: all 0.15s;
+    }
+
+    .empty-cover-placeholder:hover .btn-add-cover-pill {
+      border-color: var(--color-rose);
+      color: var(--color-rose);
+      background: #fffafa;
+    }
+
+    /* Card Top Overlay Actions */
+    .card-top-actions {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      z-index: 10;
+    }
+
+    .btn-card-dots {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-main);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-card-dots:hover {
+      background: #ffffff;
+      transform: scale(1.05);
+    }
+
+    /* 3-Dot Dropdown */
+    .card-dropdown {
+      position: absolute;
+      top: calc(100% + 6px);
+      right: 0;
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      min-width: 200px;
+      width: max-content;
+      padding: 6px;
+      display: none;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 50;
+      white-space: nowrap;
+    }
+
+    .card-dropdown.open {
+      display: flex;
+    }
+
+    .card-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      padding: 8px 12px;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: var(--text-main);
+      cursor: pointer;
+      text-align: left;
+      white-space: nowrap;
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .card-dropdown-item:hover {
+      background: #f5ede2;
+      color: #1f1b16;
+    }
+
+    .card-dropdown-item.item-danger {
+      color: #c0392b;
+    }
+
+    .card-dropdown-item.item-danger:hover {
+      background: #fdf0f0;
+      color: #a82315;
+    }
+
+    /* Category Pill */
+    .badge-category {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      padding: 2.5px 7px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(4px);
+      color: var(--text-main);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Card Details Body - Matches user's mockup layout */
+    .book-card-body {
+      padding: 10px 13px 10px 13px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      background: #ffffff;
+      border-bottom-left-radius: 11px;
+      border-bottom-right-radius: 11px;
+    }
+
+    .book-title {
+      font-family: var(--font-serif);
+      font-size: 0.94rem;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.28;
+      margin-bottom: 2px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      min-height: 2.56em;
+    }
+
+    .book-author {
+      font-family: var(--font-sans);
+      font-size: 0.74rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Card Footer with Stats & Circular Progress */
+    .card-footer {
+      margin-top: auto;
+      padding-top: 7px;
+      border-top: 1px solid #ede5d8;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .book-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5px;
+    }
+
+    .stat-ch-count {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #2b231c;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .stat-words {
+      font-size: 0.60rem;
+      font-weight: 600;
+      color: #8c8072;
+      letter-spacing: 0.25px;
+      text-transform: uppercase;
+    }
+
+    /* Circular Progress Bar - Even larger for maximum prominence */
+    .progress-circle-wrap {
+      display: flex;
+      align-items: center;
+    }
+
+    .circle-box {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .circle-box svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .circle-bg {
+      fill: none;
+      stroke: #eae2d5;
+      stroke-width: 3.8;
+    }
+
+    .circle-val {
+      fill: none;
+      stroke-width: 3.8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 0.6s ease;
+    }
+
+    .circle-label {
+      position: absolute;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    /* Modal Backdrop & Dialog */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 24, 18, 0.45);
+      backdrop-filter: blur(3px);
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .modal-dialog {
+      background: #ffffff;
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 500px;
+      padding: 24px 28px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+      font-family: var(--font-sans);
+      animation: modalFadeIn 0.16s ease-out;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-heading {
+      font-family: var(--font-sans);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border-subtle);
+      border-radius: 8px;
+      font-family: var(--font-sans);
+      font-size: 0.92rem;
+      color: var(--text-main);
+      outline: none;
+      background: #ffffff;
+    }
+
+    .form-input:focus {
+      border-color: var(--color-rose);
+    }
+
+    .color-picker-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .color-option {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .color-option input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .color-dot {
+      display: block;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .color-option input:checked + .color-dot {
+      transform: scale(1.15);
+      border-color: #2b231c;
+    }
+
+    .toggle-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 42px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background-color: #d1c7b8;
+      border-radius: 24px;
+      transition: 0.2s;
+    }
+
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      border-radius: 50%;
+      transition: 0.2s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: var(--color-green);
+    }
+
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(18px);
+    }
+
+    .toggle-label-title {
+      display: block;
+      font-weight: 600;
+      font-size: 0.92rem;
+      color: var(--text-main);
+    }
+
+    .toggle-label-desc {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .btn-secondary {
+      background: #efe8dc;
+      color: var(--text-main);
+      border: none;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      background: #e3dabf;
+    }
+
+    /* Hidden File Input */
+    #global-cover-file-input {
+      display: none;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #2b231c;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 200;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header class="top-nav">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+      </div>
+      <span class="brand-name">My Library</span>
+    </div>
+
+    <div class="nav-search">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+      <input type="text" placeholder="Search books, authors, genres...">
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn-primary" onclick="showToast('Mockup: Create new book')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>Start New Book</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <div class="library-header">
+      <div class="library-title-area">
+        <h1>Library Shelf</h1>
+        <p class="library-subtitle">5 books in your collection</p>
+      </div>
+    </div>
+
+    <!-- Books Box Grid -->
+    <div class="books-grid" id="books-grid">
+      <!-- Populated via JavaScript -->
+    </div>
+  </main>
+
+  <!-- Hidden File Input for Cover Upload -->
+  <input type="file" id="global-cover-file-input" accept="image/*">
+
+  <!-- EDIT BOOK DETAILS MODAL -->
+  <div class="modal-backdrop" id="modal-edit-book">
+    <div class="modal-dialog">
+      <h2 class="modal-heading">Edit Book Details</h2>
+      
+      <div class="form-group">
+        <label class="form-label" for="edit-book-title">BOOK TITLE *</label>
+        <input type="text" id="edit-book-title" class="form-input">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="edit-book-author">AUTHOR</label>
+        <input type="text" id="edit-book-author" class="form-input">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label" for="edit-book-genre">GENRE / CATEGORY</label>
+        <input type="text" id="edit-book-genre" class="form-input">
+      </div>
+      
+      <div class="form-group">
+        <label class="form-label">BOOK ACCENT COLOR</label>
+        <div class="color-picker-row">
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#ba6d78"><span class="color-dot" style="background:#ba6d78;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#5c8672"><span class="color-dot" style="background:#5c8672;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#c4884d"><span class="color-dot" style="background:#c4884d;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#647b9a"><span class="color-dot" style="background:#647b9a;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#8c6b96"><span class="color-dot" style="background:#8c6b96;"></span></label>
+        </div>
+      </div>
+      
+      <div class="form-group toggle-group">
+        <label class="toggle-row" for="edit-book-glossary-toggle">
+          <span class="toggle-switch">
+            <input type="checkbox" id="edit-book-glossary-toggle" checked>
+            <span class="toggle-slider"></span>
+          </span>
+          <span class="toggle-text-block">
+            <span class="toggle-label-title">Add Lore Glossary</span>
+            <span class="toggle-label-desc">Enable lore glossary, hover hints, and text-selection lookup for this book</span>
+          </span>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+        <button type="button" class="btn-primary" onclick="saveEditedBook()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast-el">Cover updated!</div>
+
+  <script>
+    // Initial Books Dataset representing current library state
+    let booksData = [
+      {
+        id: "the-fellowship-of-the-ring",
+        title: "The Fellowship of the Ring",
+        author: "J. R. R. Tolkien",
+        genre: "Epic Fantasy",
+        color: "#647b9a",
+        chapters_count: 33,
+        total_words: 195326,
+        last_read_chapter: 12,
+        cover: "",
+        enable_glossary: true
+      },
+      {
+        id: "the-two-towers",
+        title: "The Two Towers",
+        author: "J. R. R. Tolkien",
+        genre: "Epic Fantasy",
+        color: "#647b9a",
+        chapters_count: 29,
+        total_words: 159200,
+        last_read_chapter: 6,
+        cover: "",
+        enable_glossary: true
+      },
+      {
+        id: "the-return-of-the-king",
+        title: "The Return of the King",
+        author: "J. R. R. Tolkien",
+        genre: "Epic Fantasy",
+        color: "#8c6b96",
+        chapters_count: 34,
+        total_words: 207429,
+        last_read_chapter: 34,
+        cover: "",
+        enable_glossary: true
+      },
+      {
+        id: "mo-dao-zu-shi",
+        title: "Mo Dao Zu Shi (Grandmaster of Demonic Cultivation)",
+        author: "Mo Xiang Tong Xiu",
+        genre: "Xianxia Danmei",
+        color: "#5c8672",
+        chapters_count: 113,
+        total_words: 520000,
+        last_read_chapter: 42,
+        cover: "",
+        enable_glossary: true
+      },
+      {
+        id: "things-that-deserve-to-die",
+        title: "Things That Deserve to Die",
+        author: "Ahn Hyoseop",
+        genre: "Korean Web Novel",
+        color: "#ba6d78",
+        chapters_count: 110,
+        total_words: 240000,
+        last_read_chapter: 15,
+        cover: "",
+        enable_glossary: false
+      }
+    ];
+
+    let currentEditingBookId = null;
+    let targetCoverUploadBookId = null;
+
+    function renderBooksGrid() {
+      const grid = document.getElementById('books-grid');
+      grid.innerHTML = '';
+
+      booksData.forEach(book => {
+        const total = book.chapters_count || 1;
+        const current = book.last_read_chapter || 0;
+        const percent = Math.min(100, Math.round((current / total) * 100));
+
+        // SVG circle math: circumference for r=16 is 2 * PI * 16 = 100.53
+        const radius = 16;
+        const circumference = 2 * Math.PI * radius;
+        const strokeDashoffset = circumference - (percent / 100) * circumference;
+        const progressColor = percent === 100 ? '#5c8672' : (book.color || '#ba6d78');
+
+        const card = document.createElement('div');
+        card.className = 'book-card';
+        card.dataset.id = book.id;
+
+        // Cover HTML: empty cover with add button, or uploaded image
+        let coverHtml = '';
+        if (book.cover) {
+          coverHtml = `
+            <img src="${book.cover}" alt="${book.title} cover" class="book-cover-img">
+          `;
+        } else {
+          coverHtml = `
+            <div class="empty-cover-placeholder" onclick="triggerCoverUpload('${book.id}')" title="Click to upload cover image">
+              <div class="empty-cover-icon" style="background: ${book.color}18; color: ${book.color};">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                </svg>
+              </div>
+              <span class="btn-add-cover-pill">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+                Add Cover
+              </span>
+            </div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="book-cover-wrap">
+            <span class="badge-category" style="color: ${book.color};">${escapeHtml(book.genre || 'Novel')}</span>
+            ${coverHtml}
+            <div class="card-top-actions">
+              <button class="btn-card-dots" onclick="toggleDropdown(event, '${book.id}')" title="Book options">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <circle cx="12" cy="5" r="2"></circle>
+                  <circle cx="12" cy="12" r="2"></circle>
+                  <circle cx="12" cy="19" r="2"></circle>
+                </svg>
+              </button>
+              <div class="card-dropdown" id="dropdown-${book.id}">
+                <button type="button" class="card-dropdown-item" onclick="openEditModal('${book.id}')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                  </svg>
+                  <span>Edit details</span>
+                </button>
+                <button type="button" class="card-dropdown-item" onclick="triggerCoverUpload('${book.id}')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <span>${book.cover ? 'Change cover' : 'Add cover'}</span>
+                </button>
+                ${book.cover ? `
+                  <button type="button" class="card-dropdown-item item-danger" onclick="removeCover('${book.id}')">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    <span>Remove cover</span>
+                  </button>
+                ` : ''}
+              </div>
+            </div>
+          </div>
+
+          <div class="book-card-body">
+            <h3 class="book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</h3>
+            <p class="book-author">${escapeHtml(book.author || 'Unknown Author')}</p>
+
+            <div class="card-footer">
+              <div class="book-stats">
+                <span class="stat-ch-count">${book.chapters_count || 0} CHAPTERS</span>
+                <span class="stat-words">${formatWords(book.total_words || 0)} WORDS</span>
+              </div>
+
+              <div class="progress-circle-wrap" title="${percent === 100 ? 'Completed' : `Chapter ${current} of ${total} (${percent}%)`}">
+                <div class="circle-box">
+                  <svg viewBox="0 0 40 40">
+                    <circle class="circle-bg" cx="20" cy="20" r="${radius}"></circle>
+                    <circle class="circle-val" cx="20" cy="20" r="${radius}" 
+                            style="stroke: ${progressColor}; stroke-dasharray: ${circumference}; stroke-dashoffset: ${strokeDashoffset};"></circle>
+                  </svg>
+                  <span class="circle-label">${percent}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    // Dropdown Toggling
+    function toggleDropdown(e, bookId) {
+      e.stopPropagation();
+      const dropdown = document.getElementById(`dropdown-${bookId}`);
+      const isCurrentlyOpen = dropdown.classList.contains('open');
+      closeAllDropdowns();
+      if (!isCurrentlyOpen) {
+        dropdown.classList.add('open');
+      }
+    }
+
+    function closeAllDropdowns() {
+      document.querySelectorAll('.card-dropdown.open').forEach(el => el.classList.remove('open'));
+    }
+
+    document.addEventListener('click', closeAllDropdowns);
+
+    // Edit Modal Logic (Matches Reader Modal)
+    function openEditModal(bookId) {
+      closeAllDropdowns();
+      const book = booksData.find(b => b.id === bookId);
+      if (!book) return;
+
+      currentEditingBookId = bookId;
+      document.getElementById('edit-book-title').value = book.title;
+      document.getElementById('edit-book-author').value = book.author || '';
+      document.getElementById('edit-book-genre').value = book.genre || '';
+      document.getElementById('edit-book-glossary-toggle').checked = book.enable_glossary !== false;
+
+      const radios = document.querySelectorAll('input[name="edit-book-color"]');
+      radios.forEach(r => {
+        r.checked = (r.value === book.color);
+      });
+
+      document.getElementById('modal-edit-book').style.display = 'flex';
+    }
+
+    function closeEditModal() {
+      document.getElementById('modal-edit-book').style.display = 'none';
+      currentEditingBookId = null;
+    }
+
+    function saveEditedBook() {
+      if (!currentEditingBookId) return;
+      const book = booksData.find(b => b.id === currentEditingBookId);
+      if (!book) return;
+
+      const newTitle = document.getElementById('edit-book-title').value.trim();
+      if (!newTitle) {
+        alert('Book title cannot be empty.');
+        return;
+      }
+
+      book.title = newTitle;
+      book.author = document.getElementById('edit-book-author').value.trim() || 'Unknown Author';
+      book.genre = document.getElementById('edit-book-genre').value.trim() || 'Novel';
+      book.enable_glossary = document.getElementById('edit-book-glossary-toggle').checked;
+
+      const selectedColor = document.querySelector('input[name="edit-book-color"]:checked');
+      if (selectedColor) book.color = selectedColor.value;
+
+      closeEditModal();
+      renderBooksGrid();
+      showToast('Book details updated!');
+    }
+
+    // Cover Upload Trigger & Handler
+    function triggerCoverUpload(bookId) {
+      closeAllDropdowns();
+      targetCoverUploadBookId = bookId;
+      const input = document.getElementById('global-cover-file-input');
+      input.value = '';
+      input.click();
+    }
+
+    document.getElementById('global-cover-file-input').addEventListener('change', function(e) {
+      if (!targetCoverUploadBookId) return;
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const book = booksData.find(b => b.id === targetCoverUploadBookId);
+        if (book) {
+          book.cover = evt.target.result;
+          renderBooksGrid();
+          showToast(`Cover uploaded for "${book.title}"!`);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    function removeCover(bookId) {
+      closeAllDropdowns();
+      const book = booksData.find(b => b.id === bookId);
+      if (book) {
+        book.cover = '';
+        renderBooksGrid();
+        showToast('Cover removed.');
+      }
+    }
+
+    function formatWords(words) {
+      if (words >= 1000000) return (words / 1000000).toFixed(1) + 'M';
+      if (words >= 1000) return Math.round(words / 1000) + 'K';
+      return words.toString();
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast-el');
+      toast.textContent = msg;
+      toast.style.display = 'block';
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 2500);
+    }
+
+    // Initial render
+    renderBooksGrid();
+  </script>
+</body>
+</html>

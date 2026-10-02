@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>My Library</title>
+
+  <!-- PWA & Mobile Meta -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#fbf8f2" id="meta-theme-color" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Library" />
+  <link rel="apple-touch-icon" sizes="180x180" href="static/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/svg+xml" href="static/icons/icon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="static/icons/icon-192.png" />
+
+  <!-- Google Fonts: Lora, Lato, Cinzel, Noto Serif SC (Matching desktop app) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Mobile Styles -->
+  <link rel="stylesheet" href="static/css/mobile.css" />
+</head>
+<body class="theme-sepia font-serif">
+  <div id="app-root">
+
+    <!-- 1. LIBRARY VIEW -->
+    <section id="view-library" class="view-pane active">
+      <header class="app-header">
+        <div class="header-title-group">
+          <h1 class="header-page-title">My Library</h1>
+          <span class="header-count-badge" id="library-count-badge">0 Books</span>
+        </div>
+        <div class="header-actions">
+          <button class="status-wifi-btn" id="m-status-wifi-btn" title="Cloud &amp; Sync Status">
+            <span class="status-dot"></span>
+            <svg class="status-wifi-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+              <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="library-scroll-container">
+        <!-- Search and Sort Filter Bar -->
+        <div class="library-filter-bar">
+          <div class="library-search-wrap">
+            <svg class="library-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="library-search-input" class="library-search-input" placeholder="Search title or author..." />
+            <button type="button" id="btn-clear-library-search" class="btn-clear-library-search" title="Clear search" style="display: none;">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="library-sort-wrap">
+            <svg class="library-sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="4" y1="6" x2="20" y2="6"></line>
+              <line x1="4" y1="12" x2="14" y2="12"></line>
+              <line x1="4" y1="18" x2="8" y2="18"></line>
+            </svg>
+            <span class="library-sort-label" id="library-sort-label">Last Read...</span>
+            <select id="library-sort-select" class="library-sort-select" title="Sort books">
+              <option value="last_read" selected>Last Read...</option>
+              <option value="date_desc">Date Added...</option>
+              <option value="date_asc">Date Added (Oldest)...</option>
+              <option value="title_asc">Novel Name (A - Z)...</option>
+              <option value="title_desc">Novel Name (Z - A)...</option>
+              <option value="author_asc">Author Name (A - Z)...</option>
+              <option value="author_desc">Author Name (Z - A)...</option>
+              <option value="words_desc">Word Count (High - Low)...</option>
+              <option value="words_asc">Word Count (Low - High)...</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="library-books-list" id="library-books-list">
+          <!-- Populated dynamically with minimalist borderless book cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. BOOK OVERVIEW & CHAPTERS VIEW -->
+    <section id="view-book" class="view-pane">
+      <!-- Clean Top Bar with just Back to Library -->
+      <header class="app-header">
+        <button class="btn-header-back" id="btn-book-back" title="Back to Library">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Library</span>
+        </button>
+      </header>
+
+      <!-- Anchored Book Details Hero (Remains visible while scrolling chapters) -->
+      <section class="book-hero-section anchored" id="book-hero-section">
+        <h1 class="book-hero-title" id="book-hero-title">Book Title</h1>
+        <p class="book-hero-author" id="book-hero-author">by Author</p>
+
+        <div class="book-meta-row" id="book-hero-meta">
+          <span class="meta-tag" id="book-meta-genre">WEB NOVEL</span>
+          <span class="meta-dot">&bull;</span>
+          <span class="meta-tag" id="book-meta-chapters">0 CHAPTERS</span>
+          <span class="meta-dot">&bull;</span>
+          <span class="meta-tag" id="book-meta-words">0 WORDS</span>
+        </div>
+
+        <div class="book-actions-group">
+          <button class="btn-continue-reading" id="btn-book-continue">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            <span id="btn-book-continue-label">Continue — Chapter 1</span>
+          </button>
+
+          <!-- Compact Icon-Only Bookmark Button -->
+          <button class="btn-jump-bookmark-icon" id="btn-book-bookmark" style="display:none;" title="Jump to bookmark">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="#e67e22" stroke="#d35400" stroke-width="1">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
+
+          <!-- Download for Offline Reading Button -->
+          <button class="btn-book-action-icon" id="btn-book-download" title="Download book for offline reading">
+            <svg class="icon-download-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </button>
+
+          <!-- Search Button Next to Bookmark -->
+          <button class="btn-book-action-icon" id="btn-book-search" title="Search novel">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Scrollable Chapters Directory Underneath Anchored Hero -->
+      <div class="chapter-directory-scroll">
+        <section class="chapter-directory-wrapper">
+          <div class="directory-header-row">
+            <span class="directory-title">Chapters</span>
+            <span class="directory-count" id="book-ch-count-badge">0</span>
+          </div>
+
+          <div class="search-input-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="directory-search-input" id="input-chapter-search" placeholder="Filter chapters..." />
+          </div>
+
+          <div class="chapter-items-list" id="chapters-list-container">
+            <!-- Dynamically populated rows with green last-read highlight and orange bookmark symbol -->
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- 3. GLOSSARY SHELVES VIEW -->
+    <section id="view-glossary" class="view-pane">
+      <header class="app-header">
+        <button class="btn-header-back" id="btn-glossary-back" title="Back to Chapters">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+          <span>Chapters</span>
+        </button>
+
+        <div class="header-title-group" style="gap: 8px;">
+          <h1 class="header-page-title">Glossary</h1>
+          <span class="header-count-badge" id="glossary-total-badge">0</span>
+        </div>
+
+        <button class="btn-header-add" id="btn-glossary-add-lore" title="Add lore entry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          <span>Add</span>
+        </button>
+      </header>
+
+      <div class="glossary-scroll-container">
+        <!-- Controls: Search, Category Filter, and Sort -->
+        <div class="glossary-controls-section">
+          <div class="search-input-wrap" style="margin-bottom: 10px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" class="directory-search-input" id="input-glossary-search" placeholder="Search lore, aliases, Chinese..." />
+          </div>
+
+          <div class="glossary-dropdowns-row">
+            <select class="glossary-select" id="select-glossary-category">
+              <option value="all">All Categories</option>
+              <option value="Character">Characters</option>
+              <option value="Race / Creature">Races &amp; Creatures</option>
+              <option value="Weapon / Item">Weapons &amp; Items</option>
+              <option value="Clan / Sect">Clans &amp; Sects</option>
+              <option value="Location / Realm">Locations &amp; Realms</option>
+              <option value="Concept / Lore">Concepts &amp; Lore</option>
+            </select>
+
+            <select class="glossary-select" id="select-glossary-sort">
+              <option value="relevance">By Mentions</option>
+              <option value="alpha">A to Z</option>
+              <option value="time_newest">Newest Added</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 5 Category Horizontal Shelves Container -->
+        <div class="glossary-shelves-container" id="glossary-shelves-container">
+          <!-- Dynamically populated horizontal shelves -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. READER VIEW -->
+    <section id="view-reader" class="view-pane" style="padding-top:0; padding-bottom:0;">
+      <div class="reader-container">
+        <!-- Reading Progress Bar -->
+        <div class="reader-progress-line" id="reader-progress-line"></div>
+
+        <!-- Collapsible Reader Top Bar -->
+        <header class="reader-top-bar" id="reader-top-bar">
+          <button class="btn-reader-action" id="btn-reader-back" title="Back to Chapters">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+
+          <div class="reader-title-wrap">
+            <div class="reader-chapter-dropdown-wrap">
+              <span class="reader-chapter-name" id="reader-top-title">Chapter</span>
+              <svg class="reader-chapter-dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+              <select id="reader-chapter-select" class="reader-chapter-select" title="Jump to chapter">
+                <!-- Dynamically populated options -->
+              </select>
+            </div>
+          </div>
+
+          <div class="reader-actions-right">
+            <!-- Reader Search Button -->
+            <button class="btn-reader-action" id="btn-reader-search" title="Search novel">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+            </button>
+
+            <!-- Reader Settings Button -->
+            <button class="btn-reader-action" id="btn-reader-settings" title="Typography &amp; Theme">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+              </svg>
+            </button>
+          </div>
+        </header>
+
+        <!-- Reader Text Scroll Area -->
+        <main class="reader-scroll-canvas" id="reader-scroll-canvas">
+          <div class="reader-heading-block">
+            <span class="reader-ch-num" id="canvas-ch-num">CHAPTER 1</span>
+            <h1 class="reader-ch-title" id="canvas-ch-title">Prologue</h1>
+          </div>
+          <div class="reader-body-text" id="reader-body-text">
+            <!-- Chapter paragraphs rendered here -->
+          </div>
+        </main>
+
+        <!-- Floating Text Selection "+ Add to Glossary" Bubble -->
+        <div class="floating-selection-bubble" id="mobile-selection-bar" style="display:none;">
+          <button type="button" class="btn-selection-bubble" id="btn-selection-add-lore">
+            <span id="mobile-selection-btn-icon" style="display:inline-flex; align-items:center;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </span>
+            <span id="mobile-selection-btn-text">Add to Glossary</span>
+          </button>
+        </div>
+
+        <!-- Grounded Reader Bottom Stepper (Firmly pinned to bottom) -->
+        <footer class="reader-bottom-stepper" id="reader-bottom-stepper">
+          <button class="btn-step" id="btn-step-prev">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            <span>Prev</span>
+          </button>
+          <span class="reader-step-indicator" id="stepper-ch-label">Ch 1 / 1</span>
+          <button class="btn-step" id="btn-step-next">
+            <span>Next</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- Bottom Navigation Bar (Visible in Book and Glossary Views when Glossary is enabled) -->
+    <nav class="bottom-nav-bar" id="bottom-nav" style="display:none;">
+      <button class="nav-item active" id="nav-tab-chapters" data-tab="chapters">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="8" y1="6" x2="21" y2="6"></line>
+          <line x1="8" y1="12" x2="21" y2="12"></line>
+          <line x1="8" y1="18" x2="21" y2="18"></line>
+          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+        </svg>
+        <span>Chapters</span>
+      </button>
+
+      <button class="nav-item" id="nav-tab-glossary" data-tab="glossary" title="Glossary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+          <polyline points="2 17 12 22 22 17"></polyline>
+          <polyline points="2 12 12 17 22 12"></polyline>
+        </svg>
+        <span>Glossary</span>
+      </button>
+    </nav>
+
+    <!-- Bottom Sheet: Reader Typography & Theme Settings (No background blur) -->
+    <div class="sheet-backdrop" id="sheet-backdrop-settings">
+      <div class="sheet-card" id="sheet-card-settings">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h3 class="sheet-title">Reader Settings</h3>
+          <button class="btn-sheet-close" id="btn-settings-close" title="Close settings">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="settings-options-list">
+          <!-- Font Family -->
+          <div class="settings-row">
+            <label class="settings-label">Font Family</label>
+            <div class="segmented-control">
+              <button class="seg-btn active" id="btn-font-serif">Serif</button>
+              <button class="seg-btn" id="btn-font-sans">Sans</button>
+            </div>
+          </div>
+
+          <!-- Font Size -->
+          <div class="settings-row">
+            <label class="settings-label">Font Size</label>
+            <div class="segmented-control">
+              <button class="seg-btn" id="btn-size-dec">A-</button>
+              <button class="seg-btn" id="btn-size-inc">A+</button>
+            </div>
+          </div>
+
+          <!-- Theme -->
+          <div class="settings-row">
+            <label class="settings-label">Theme</label>
+            <div class="segmented-control">
+              <button class="seg-btn" id="btn-theme-light">Light</button>
+              <button class="seg-btn active" id="btn-theme-sepia">Sepia</button>
+              <button class="seg-btn" id="btn-theme-dark">Dark</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet: Lore Card Popup (Matched to Desktop Web App Layout) -->
+    <div class="sheet-backdrop" id="sheet-backdrop-lore">
+      <div class="sheet-card" id="sheet-card-lore">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <button class="btn-sheet-text-action" id="btn-sheet-lore-edit">Edit</button>
+          <button class="btn-sheet-close" id="btn-sheet-lore-close" title="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="lore-card-body" id="sheet-lore-content">
+          <!-- Populated dynamically with exact desktop layout -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet: Add / Edit Lore Entry (With Web Autofill & AI Lookup, No redundant Chinese input) -->
+    <div class="sheet-backdrop" id="sheet-backdrop-edit">
+      <div class="sheet-card" id="sheet-card-edit" style="max-height: 88vh;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h3 class="sheet-title" id="edit-sheet-heading">Add Lore Entry</h3>
+          <button type="button" class="btn-sheet-close" id="btn-edit-close" title="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Web Autofill / Wiki Scraper Panel -->
+        <div class="wiki-import-panel">
+          <label class="form-label">IMPORT FROM WEB LINK (WIKI)</label>
+          <div class="wiki-input-row">
+            <input type="text" class="form-input" id="edit-wiki-url" placeholder="Paste Fandom wiki URL or page title..." />
+            <button type="button" class="btn-wiki-scrape" id="btn-wiki-import">Import</button>
+          </div>
+        </div>
+
+        <form id="form-edit-lore" class="lore-edit-form">
+          <input type="hidden" id="edit-lore-id" value="" />
+
+          <div class="form-group">
+            <label class="form-label">TYPE / CATEGORY *</label>
+            <select class="form-select" id="edit-lore-category" required>
+              <option value="Character">Character</option>
+              <option value="Race / Creature">Race / Creature</option>
+              <option value="Weapon / Item">Weapon / Item</option>
+              <option value="Clan / Sect">Clan / Sect</option>
+              <option value="Location / Realm">Location / Realm</option>
+              <option value="Concept / Lore">Concept / Lore</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <div class="form-label-row">
+              <label class="form-label">PRIMARY NAME *</label>
+              <button type="button" class="btn-ai-autofill" id="btn-ai-fill">Autofill</button>
+            </div>
+            <input type="text" class="form-input" id="edit-lore-name" placeholder="e.g. Wei Wuxian" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">AFFILIATION</label>
+            <input type="text" class="form-input" id="edit-lore-affiliation" placeholder="e.g. Yunmeng Jiang Clan" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ALIASES (COMMA-SEPARATED)</label>
+            <input type="text" class="form-input" id="edit-lore-aliases" placeholder="e.g. Yiling Laozu, Wei Ying" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">1-LINE SPOILER-FREE SUMMARY</label>
+            <textarea class="form-textarea" id="edit-lore-summary" rows="3" placeholder="Brief introductory description..."></textarea>
+          </div>
+
+          <div class="form-actions-row">
+            <button type="button" class="btn-form-delete" id="btn-edit-delete" style="display:none;">Delete</button>
+            <div style="flex:1;"></div>
+            <button type="button" class="btn-form-cancel" id="btn-edit-cancel">Cancel</button>
+            <button type="submit" class="btn-form-save" id="btn-edit-save">Save Entry</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Full-Page Slide-Up Search View -->
+    <div class="mobile-search-overlay" id="mobile-search-overlay">
+      <header class="mobile-search-header">
+        <div class="mobile-search-title-row">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span class="mobile-search-header-title">Search</span>
+        </div>
+        <button class="btn-search-close" id="btn-search-close" title="Close search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+
+      <div class="mobile-search-bar-wrap">
+        <div class="mobile-search-input-box">
+          <svg class="search-box-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="mobile-search-input" class="mobile-search-input" placeholder="Search chapters, dialogue, lore..." autocomplete="off" autocorrect="off" autocapitalize="off" />
+          <button type="button" id="btn-mobile-search-clear" class="btn-search-clear" style="display:none;" title="Clear search">&times;</button>
+        </div>
+      </div>
+
+      <!-- Scope Filter Pills -->
+      <div class="mobile-search-pills" id="mobile-search-pills">
+        <button class="search-pill active" data-scope="all">All <span class="pill-count" id="m-count-all">0</span></button>
+        <button class="search-pill" data-scope="this_chapter" id="m-pill-this-chapter">This Chapter <span class="pill-count" id="m-count-this-chapter">0</span></button>
+        <button class="search-pill" data-scope="all_chapters">All Chapters <span class="pill-count" id="m-count-all-chapters">0</span></button>
+        <button class="search-pill" data-scope="lore" id="m-pill-lore">Lore Glossary <span class="pill-count" id="m-count-lore">0</span></button>
+      </div>
+
+      <!-- Scrollable Results Container -->
+      <div class="mobile-search-results-area" id="mobile-search-results-area">
+        <div class="search-empty-state" id="m-search-empty-state">
+          <p>Type at least 2 characters to search dialogue, scenes, character names, or lore across this novel.</p>
+        </div>
+        <div class="search-loading-state" id="m-search-loading-state" style="display: none;">
+          <span class="search-spinner"></span>
+          <span>Searching...</span>
+        </div>
+        <div class="mobile-search-results-list" id="m-search-results-list" style="display: none;">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Sync & Connection Status Popover Modal (Strictly Sans Font) -->
+    <div class="sheet-backdrop modal-mode" id="modal-sync-status" style="display: none;">
+      <div class="sheet-card sync-status-card">
+        <div class="sync-status-header">
+          <div class="sync-status-title-row">
+            <svg class="sync-status-wifi-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+              <line x1="12" y1="20" x2="12.01" y2="20"></line>
+            </svg>
+            <h3 class="sync-status-title">Connection &amp; Sync</h3>
+          </div>
+          <button class="btn-sheet-close" id="btn-close-sync-status" title="Close">&times;</button>
+        </div>
+        <div class="sync-status-body">
+          <div class="sync-info-row">
+            <span class="sync-label">Cloud Database</span>
+            <span class="sync-val" id="sync-val-cloud">Connected (Supabase)</span>
+          </div>
+          <div class="sync-info-row">
+            <span class="sync-label">Gemini AI</span>
+            <span class="sync-val" id="sync-val-gemini">Ready</span>
+          </div>
+          <div class="sync-info-row">
+            <span class="sync-label">Last Synced</span>
+            <span class="sync-val" id="sync-val-time">Just now</span>
+          </div>
+          <div class="sync-info-row">
+            <span class="sync-label">Offline Storage</span>
+            <span class="sync-val" id="sync-val-offline">IndexedDB Active</span>
+          </div>
+        </div>
+        <div class="sync-status-actions">
+          <button class="btn-sync-now" id="btn-sync-now-action">Sync Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subtle Toast Notification -->
+    <div class="mobile-toast" id="mobile-toast"></div>
+
+  </div>
+
+  <!-- JavaScript Module -->
+  <script type="module" src="static/js/mobile-app.js"></script>
+</body>
+</html>

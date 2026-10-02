@@ -1,0 +1,2735 @@
+[
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wei-wuxian",
+    "name": "Wei Wuxian",
+    "category": "Character",
+    "pinyin_or_chinese": "魏无羡",
+    "aliases": [
+      "Wei Ying",
+      "Yiling Patriarch",
+      "Yiling Laozu",
+      "A-Xian",
+      "A-Ying",
+      "Senior Wei",
+      "Wei-xiong",
+      "Young Master Mo",
+      "魏婴",
+      "夷陵老祖",
+      "魏无羡",
+      "Master Wei"
+    ],
+    "affiliation": "Yunmeng Jiang Sect",
+    "sect_or_affiliation": "Yunmeng Jiang Sect",
+    "summary": "An eccentric and brilliant cultivator known for his unconventional thinking, quick wit, and mastery over resentful energy.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:21:51.784483+00:00",
+    "updated_at": "2026-10-02T11:21:51.784483+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lan-wangji",
+    "name": "Lan Wangji",
+    "category": "Character",
+    "pinyin_or_chinese": "蓝忘机",
+    "aliases": [
+      "Lan Zhan",
+      "Hanguang-Jun",
+      "Second Young Master Lan",
+      "Second Master Lan",
+      "Wangji",
+      "Lan-er-gege",
+      "蓝湛",
+      "含光君",
+      "蓝忘机",
+      "Er-gege"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A remarkably righteous and austere cultivator renowned for his strict adherence to rules, exceptional musical talent, and icy demeanor.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jiang-cheng",
+    "name": "Jiang Cheng",
+    "category": "Character",
+    "pinyin_or_chinese": "江澄",
+    "aliases": [
+      "Jiang Wanyin",
+      "Sandu Shengshou",
+      "Sect Leader Jiang",
+      "Cheng-ge",
+      "江晚吟",
+      "三毒圣手",
+      "江澄",
+      "A-Cheng",
+      "Wanyin",
+      "江澄 (Jiāng Chéng)"
+    ],
+    "affiliation": "Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Yunmeng Jiang Clan",
+    "summary": "The fiery, sharp-tongued, and fiercely protective leader of the Yunmeng Jiang Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lan-xichen",
+    "name": "Lan Xichen",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Zewu-Jun",
+      "Lan Huan",
+      "First Young Master Lan",
+      "Sect Leader Lan",
+      "蓝涣",
+      "泽芜君",
+      "蓝曦臣",
+      "Ze-wu-Jun"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "The gentle, empathetic, and universally respected leader of the Gusu Lan Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-ling",
+    "name": "Jin Ling",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Jin Rulan",
+      "A-Ling",
+      "Young Mistress",
+      "Young Master Jin",
+      "金如兰",
+      "金凌"
+    ],
+    "affiliation": "Lanling Jin Clan / Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Lanling Jin Clan / Yunmeng Jiang Clan",
+    "summary": "A proud, short-tempered, and determined young cultivator of the Lanling Jin Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-ning",
+    "name": "Wen Ning",
+    "category": "Character",
+    "pinyin_or_chinese": "温宁",
+    "aliases": [
+      "Wen Qionglin",
+      "Ghost General",
+      "A-Ning",
+      "温琼林",
+      "鬼将军",
+      "温宁",
+      "General Ghost"
+    ],
+    "affiliation": "Qishan Wen Clan / Wei Wuxian",
+    "sect_or_affiliation": "Qishan Wen Clan / Wei Wuxian",
+    "summary": "A gentle and soft-spoken young cultivator from the Qishan Wen Clan skilled in archery and known for his fierce loyalty.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-guangyao",
+    "name": "Jin Guangyao",
+    "category": "Character",
+    "pinyin_or_chinese": "金光瑶",
+    "aliases": [
+      "Meng Yao",
+      "Lianfang-Zun",
+      "Chief Cultivator",
+      "A-Yao",
+      "孟瑶",
+      "敛芳尊",
+      "金光瑶",
+      "金光瑶 (Jīn Guāngyáo)"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "The polite, hardworking, and exceptionally tactful leader of the Lanling Jin Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "nie-huaisang",
+    "name": "Nie Huaisang",
+    "category": "Character",
+    "pinyin_or_chinese": "聂怀桑",
+    "aliases": [
+      "Head-Shaker",
+      "Sect Leader Nie",
+      "Nie-xiong",
+      "Nie Zong",
+      "聂怀桑",
+      "Head-Shaking Sect Leader",
+      "Huaisang",
+      "聂怀桑 (Niè Huáisāng)"
+    ],
+    "affiliation": "Qinghe Nie Clan",
+    "sect_or_affiliation": "Qinghe Nie Clan",
+    "summary": "A timid and seemingly inept cultivator who prefers collecting fans, birds, and painted scrolls over martial training.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "nie-mingjue",
+    "name": "Nie Mingjue",
+    "category": "Character",
+    "pinyin_or_chinese": "聂明玦",
+    "aliases": [
+      "Chifeng-Zun",
+      "Sect Leader Nie",
+      "赤锋尊",
+      "聂明玦",
+      "Nie Mingjiao"
+    ],
+    "affiliation": "Qinghe Nie Clan",
+    "sect_or_affiliation": "Qinghe Nie Clan",
+    "summary": "The strict, imposing, and uncompromising former leader of the Qinghe Nie Clan who wields the heavy saber Baxia.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jiang-yanli",
+    "name": "Jiang Yanli",
+    "category": "Character",
+    "pinyin_or_chinese": "江厌离",
+    "aliases": [
+      "A-Li",
+      "Shijie",
+      "Lady Jin",
+      "Young Mistress Jin",
+      "江厌离"
+    ],
+    "affiliation": "Yunmeng Jiang Clan / Lanling Jin Clan",
+    "sect_or_affiliation": "Yunmeng Jiang Clan / Lanling Jin Clan",
+    "summary": "A remarkably gentle, nurturing, and compassionate maiden of the Yunmeng Jiang Clan celebrated for her lotus and pork rib soup.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lan-sizhui",
+    "name": "Lan Sizhui",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lan Yuan",
+      "A-Yuan",
+      "思追",
+      "蓝愿",
+      "蓝思追",
+      "Sizhui"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A polite, sensible, and level-headed junior disciple of the Gusu Lan Clan renowned for his calm judgment.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lan-jingyi",
+    "name": "Lan Jingyi",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Jingyi",
+      "蓝景仪"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A spirited, outspoken, and quick-witted junior disciple of the Gusu Lan Clan who frequently speaks his mind.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-zixuan",
+    "name": "Jin Zixuan",
+    "category": "Character",
+    "pinyin_or_chinese": "金子轩",
+    "aliases": [
+      "Peacock",
+      "Young Master Jin",
+      "Zixuan",
+      "金子轩"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "The proud and aristocratic heir to the Lanling Jin Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-qing",
+    "name": "Wen Qing",
+    "category": "Character",
+    "pinyin_or_chinese": "温情",
+    "aliases": [
+      "Lady Wen",
+      "Doctor Wen",
+      "A-Qing (Wen)",
+      "温情"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "A proud, extraordinarily skilled physician and senior cultivator from a branch family of the Qishan Wen Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "xiao-xingchen",
+    "name": "Xiao Xingchen",
+    "category": "Character",
+    "pinyin_or_chinese": "晓星尘",
+    "aliases": [
+      "Daozhang",
+      "Bright Moon and Gentle Breeze",
+      "晓星尘"
+    ],
+    "affiliation": "Baixue Temple / Independent Cultivators",
+    "sect_or_affiliation": "Baixue Temple / Independent Cultivators",
+    "summary": "A compassionate, noble-hearted rogue cultivator who left his mountain hermitage to aid common mortals.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "song-lan",
+    "name": "Song Lan",
+    "category": "Character",
+    "pinyin_or_chinese": "宋岚",
+    "aliases": [
+      "Song Zichen",
+      "Distant Snow and Cold Frost",
+      "宋子琛",
+      "宋岚"
+    ],
+    "affiliation": "Baixue Temple / Independent Cultivators",
+    "sect_or_affiliation": "Baixue Temple / Independent Cultivators",
+    "summary": "A tall, austere Taoist cultivator from Baixue Temple and close companion of Xiao Xingchen.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "xue-yang",
+    "name": "Xue Yang",
+    "category": "Character",
+    "pinyin_or_chinese": "薛洋",
+    "aliases": [
+      "Xue Chengmei",
+      "Chengmei",
+      "薛成美",
+      "薛洋"
+    ],
+    "affiliation": "Kuizhou / Lanling Jin Clan (Guest)",
+    "sect_or_affiliation": "Kuizhou / Lanling Jin Clan (Guest)",
+    "summary": "A cunning, ruthless, and streetwise young rogue cultivator known for his wicked smile and candy addiction.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "mo-xuanyu",
+    "name": "Mo Xuanyu",
+    "category": "Character",
+    "pinyin_or_chinese": "莫玄羽",
+    "aliases": [
+      "Young Master Mo",
+      "A-Yu",
+      "莫玄羽"
+    ],
+    "affiliation": "Mo Village / Lanling Jin Clan (former)",
+    "sect_or_affiliation": "Mo Village / Lanling Jin Clan (former)",
+    "summary": "A troubled and eccentric former disciple of the Lanling Jin Clan residing within the secluded Mo estate.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "mo-ziyuan",
+    "name": "Mo Ziyuan",
+    "category": "Character",
+    "pinyin_or_chinese": "莫子渊",
+    "aliases": [
+      "Cousin Mo",
+      "莫子渊"
+    ],
+    "affiliation": "Mo Family Village",
+    "sect_or_affiliation": "Mo Family Village",
+    "summary": "Mo Xuanyu arrogant cousin who abuses him and steals his magical talismans.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "madam-yu",
+    "name": "Madam Yu",
+    "category": "Character",
+    "pinyin_or_chinese": "虞紫鸢",
+    "aliases": [
+      "Yu Ziyuan",
+      "Violet Spider",
+      "Madam Yu of Meishan",
+      "紫蜘蛛",
+      "虞夫人",
+      "虞紫鸢",
+      "San-niang",
+      "Yu San-niang",
+      "San-niangzi",
+      "Yu San-niangzi"
+    ],
+    "affiliation": "Yunmeng Jiang Clan / Meishan Yu Clan",
+    "sect_or_affiliation": "Yunmeng Jiang Clan / Meishan Yu Clan",
+    "summary": "The formidable, sharp-tongued, and fiercely proud mistress of Lotus Pier who wields the purple spiritual ring Zidian.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jiang-fengmian",
+    "name": "Jiang Fengmian",
+    "category": "Character",
+    "pinyin_or_chinese": "江枫眠",
+    "aliases": [
+      "Sect Leader Jiang (Former)",
+      "Uncle Jiang",
+      "江枫眠"
+    ],
+    "affiliation": "Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Yunmeng Jiang Clan",
+    "summary": "The calm, gentle, and open-minded former leader of the Yunmeng Jiang Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lan-qiren",
+    "name": "Lan Qiren",
+    "category": "Character",
+    "pinyin_or_chinese": "蓝启仁",
+    "aliases": [
+      "Grandmaster Lan",
+      "Elder Lan",
+      "Teacher Lan",
+      "蓝启仁",
+      "Master Lan",
+      "Uncle Lan"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A notoriously strict and pedantic elder and teacher in the Gusu Lan Clan renowned for his unyielding discipline.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-guangshan",
+    "name": "Jin Guangshan",
+    "category": "Character",
+    "pinyin_or_chinese": "金光善",
+    "aliases": [
+      "Sect Leader Jin (Former)",
+      "Lord Jin",
+      "金光善",
+      "Sect Leader Jin"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "The extravagant, self-indulgent, and politically calculating former leader of the Lanling Jin Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-ruohan",
+    "name": "Wen Ruohan",
+    "category": "Character",
+    "pinyin_or_chinese": "温若寒",
+    "aliases": [
+      "Sect Leader Wen",
+      "Chief Cultivator Wen",
+      "温若寒",
+      "Chief Cultivator",
+      "Wen-zongzhu",
+      "温若寒 / Wēn Ruòhán"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "The tyrannical, all-powerful leader of the Qishan Wen Clan who commands the Nightless City.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-chao",
+    "name": "Wen Chao",
+    "category": "Character",
+    "pinyin_or_chinese": "温晁",
+    "aliases": [
+      "Second Young Master Wen",
+      "Young Master Wen",
+      "温晁"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "The arrogant, cowardly, and boastful second son of Wen Ruohan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wang-lingjiao",
+    "name": "Wang Lingjiao",
+    "category": "Character",
+    "pinyin_or_chinese": "王灵娇",
+    "aliases": [
+      "Lingjiao",
+      "Mistress Wang",
+      "王灵娇"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "The vain, spiteful, and cruel favorite concubine of Wen Chao.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "su-she",
+    "name": "Su She",
+    "category": "Character",
+    "pinyin_or_chinese": "苏涉",
+    "aliases": [
+      "Su Minshan",
+      "Sect Leader Su",
+      "Moling Su Sect Leader",
+      "苏悯善",
+      "苏涉",
+      "Minshan",
+      "苏涉 (Sū Shè)"
+    ],
+    "affiliation": "Moling Su Clan / Gusu Lan Clan (former)",
+    "sect_or_affiliation": "Moling Su Clan / Gusu Lan Clan (former)",
+    "summary": "The insecure and ambitious founder of the Moling Su Clan, formerly a disciple of Gusu Lan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "mianmian",
+    "name": "Mianmian",
+    "category": "Character",
+    "pinyin_or_chinese": "罗青羊",
+    "aliases": [
+      "Luo Qingyang",
+      "绵绵",
+      "罗青羊"
+    ],
+    "affiliation": "Lanling Jin Clan / Rogue Cultivator",
+    "sect_or_affiliation": "Lanling Jin Clan / Rogue Cultivator",
+    "summary": "A brave, principled, and outspoken female cultivator who refuses to follow corrupt clan politics.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "a-qing",
+    "name": "A-Qing",
+    "category": "Character",
+    "pinyin_or_chinese": "阿箐",
+    "aliases": [
+      "Little Blind Girl",
+      "A-Qing of Yi City",
+      "阿箐",
+      "阿菁"
+    ],
+    "affiliation": "Yi City / Xiao Xingchen",
+    "sect_or_affiliation": "Yi City / Xiao Xingchen",
+    "summary": "A spirited, street-smart young girl with clouded eyes and a bamboo pole who feigns complete blindness.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "fairy",
+    "name": "Fairy",
+    "category": "Character",
+    "pinyin_or_chinese": "仙子",
+    "aliases": [
+      "Spiritual Dog",
+      "Jin Ling Dog",
+      "仙子",
+      "仙子 (Xiānzǐ)"
+    ],
+    "affiliation": "Jin Ling / Lanling Jin Clan",
+    "sect_or_affiliation": "Jin Ling / Lanling Jin Clan",
+    "summary": "A highly intelligent, ferocious black spiritual dog gifted to Jin Ling by Jin Guangyao.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "little-apple",
+    "name": "Little Apple",
+    "category": "Character",
+    "pinyin_or_chinese": "小苹果",
+    "aliases": [
+      "Donkey",
+      "Xiao Pingguo",
+      "Wei Wuxian Donkey",
+      "小苹果",
+      "小苹果 (Xiǎo Píngguǒ)"
+    ],
+    "affiliation": "Wei Wuxian",
+    "sect_or_affiliation": "Wei Wuxian",
+    "summary": "A stubborn, mischievous, and bad-tempered donkey tamed by Wei Wuxian who will only move when baited with apples.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "suibian",
+    "name": "Suibian",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "随便",
+    "aliases": [
+      "Whatever",
+      "Wei Wuxian Sword",
+      "随便",
+      "Suíbiàn",
+      "随便 (Suíbiàn)"
+    ],
+    "affiliation": "Wei Wuxian / Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Wei Wuxian / Yunmeng Jiang Clan",
+    "summary": "Wei Wuxian personal spiritual sword, forged with an unusual name meaning Whatever.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "bichen",
+    "name": "Bichen",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "避尘",
+    "aliases": [
+      "Avoid Dust",
+      "Lan Wangji Sword",
+      "Bìchén",
+      "避尘",
+      "避尘 (Bìchén)"
+    ],
+    "affiliation": "Lan Wangji / Gusu Lan Clan",
+    "sect_or_affiliation": "Lan Wangji / Gusu Lan Clan",
+    "summary": "A pristine, ice-cold spiritual sword wielded by Lan Wangji, celebrated for its razor-sharp crystal blade.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "zidian",
+    "name": "Zidian",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "紫电",
+    "aliases": [
+      "Purple Lightning",
+      "Madam Yu Ring",
+      "Jiang Cheng Whip",
+      "紫电"
+    ],
+    "affiliation": "Madam Yu / Jiang Cheng",
+    "sect_or_affiliation": "Madam Yu / Jiang Cheng",
+    "summary": "A powerful first-class spiritual ring that transforms on command into a crackling whip of purple lightning.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "chenqing",
+    "name": "Chenqing",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "陈情",
+    "aliases": [
+      "Flute of Resentment",
+      "Black Flute",
+      "Ghost Flute",
+      "陈情",
+      "Chénqíng-di",
+      "陈情 (Chénqíng)"
+    ],
+    "affiliation": "Wei Wuxian",
+    "sect_or_affiliation": "Wei Wuxian",
+    "summary": "A dark, jet-black dizi (bamboo flute) adorned with red tassels used by Wei Wuxian to command spirits and corpses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "stygian-tiger-seal",
+    "name": "Yin Tiger Tally",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "阴虎符",
+    "aliases": [
+      "Yinhu Fu",
+      "Tiger Amulet",
+      "Stygian Tiger Amulet",
+      "阴虎符",
+      "Stygian Tiger Seal",
+      "Stygian Tiger Tally",
+      "Yin Tiger Seal"
+    ],
+    "affiliation": "Wei Wuxian",
+    "sect_or_affiliation": "Wei Wuxian",
+    "summary": "A catastrophic artifact crafted by Wei Wuxian from dark iron capable of controlling thousands of resentful corpses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "sandu",
+    "name": "Sandu",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "三毒",
+    "aliases": [
+      "Three Poisons",
+      "Jiang Cheng Sword",
+      "三毒",
+      "Sandu Sword",
+      "三毒 (Sāndú)"
+    ],
+    "affiliation": "Jiang Cheng / Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Jiang Cheng / Yunmeng Jiang Clan",
+    "summary": "The sharp and agile spiritual sword wielded by Jiang Cheng, named after the three Buddhist poisons.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "shuoyue",
+    "name": "Shuoyue",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "朔月",
+    "aliases": [
+      "New Moon",
+      "Lan Xichen Sword",
+      "朔月"
+    ],
+    "affiliation": "Lan Xichen / Gusu Lan Clan",
+    "sect_or_affiliation": "Lan Xichen / Gusu Lan Clan",
+    "summary": "The elegant spiritual sword wielded by Lan Xichen, matching his pure and upright character.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "liebing",
+    "name": "Liebing",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "裂冰",
+    "aliases": [
+      "Ice Fracturer",
+      "Lan Xichen Xiao",
+      "裂冰",
+      "Ice Fracture",
+      "裂冰 (Lièbīng)"
+    ],
+    "affiliation": "Lan Xichen / Gusu Lan Clan",
+    "sect_or_affiliation": "Lan Xichen / Gusu Lan Clan",
+    "summary": "A delicate white jade xiao (vertical flute) played by Lan Xichen to pacify disturbed spirits.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "baxia",
+    "name": "Baxia",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "霸下",
+    "aliases": [
+      "Under Siege",
+      "Nie Mingjue Saber",
+      "霸下",
+      "霸下 (Bàxià)"
+    ],
+    "affiliation": "Nie Mingjue / Qinghe Nie Clan",
+    "sect_or_affiliation": "Nie Mingjue / Qinghe Nie Clan",
+    "summary": "A massive, fiercely spirited saber wielded by Nie Mingjue with immense destructive force.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jiangzai",
+    "name": "Jiangzai",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "降灾",
+    "aliases": [
+      "Descend Calamity",
+      "Xue Yang Sword",
+      "降灾",
+      "Disaster Bringer"
+    ],
+    "affiliation": "Xue Yang",
+    "sect_or_affiliation": "Xue Yang",
+    "summary": "A sinister, slender spiritual sword with a hooked blade wielded by Xue Yang.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "shuanghua",
+    "name": "Shuanghua",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "霜华",
+    "aliases": [
+      "Frost Bloom",
+      "Xiao Xingchen Sword",
+      "霜华",
+      "Frost Work",
+      "Frost Brilliance",
+      "霜华 (Shuānghuá)"
+    ],
+    "affiliation": "Xiao Xingchen",
+    "sect_or_affiliation": "Xiao Xingchen",
+    "summary": "A graceful spiritual sword etched with frost patterns that warns of corpse activity.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "fuxue",
+    "name": "Fuxue",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "拂雪",
+    "aliases": [
+      "Brushing Snow",
+      "Song Lan Sword",
+      "拂雪",
+      "Fuxue Sword",
+      "拂雪 (Fúxuě)"
+    ],
+    "affiliation": "Song Lan",
+    "sect_or_affiliation": "Song Lan",
+    "summary": "A long, pristine spiritual sword carried on the back of Song Lan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "hensheng",
+    "name": "Hensheng",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "恨生",
+    "aliases": [
+      "Hate Life",
+      "Jin Guangyao Sword",
+      "恨生",
+      "恨生 (Hènshēng)"
+    ],
+    "affiliation": "Jin Guangyao",
+    "sect_or_affiliation": "Jin Guangyao",
+    "summary": "A flexible, razor-thin soft sword concealed around Jin Guangyao waist.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "suihua",
+    "name": "Suihua",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "岁华",
+    "aliases": [
+      "Years Bloom",
+      "Jin Zixuan Sword",
+      "Jin Ling Sword",
+      "岁华",
+      "Suihua Sword",
+      "Suìhuá-jiàn",
+      "岁华 (Suìhuá)"
+    ],
+    "affiliation": "Jin Zixuan / Jin Ling",
+    "sect_or_affiliation": "Jin Zixuan / Jin Ling",
+    "summary": "An opulent, golden-hilt spiritual sword forged in Lanling Jin Clan passed from Jin Zixuan to Jin Ling.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "compass-of-evil",
+    "name": "Compass of Evil",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "风邪盘",
+    "aliases": [
+      "Fengxie Pan",
+      "Evil-Attracting Compass",
+      "Wind-Evil Compass",
+      "风邪盘",
+      "Evil-Pointing Compass",
+      "Compass of Ghostly Direction",
+      "风邪盘 (Fēngxié Pán)"
+    ],
+    "affiliation": "Wei Wuxian (Invention)",
+    "sect_or_affiliation": "Wei Wuxian (Invention)",
+    "summary": "A groundbreaking magical compass invented by Wei Wuxian that spins to indicate the direction of malevolent spirits.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "spirit-attraction-flag",
+    "name": "Spirit-Attraction Flag",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "招魂幡 (Zhāohún fān) / 招阴旗 (Zhāoyīn qí)",
+    "aliases": [
+      "Zhaohun Fan",
+      "Ghost-Luring Flag",
+      "Spirit-Luring Flag",
+      "招魂幡",
+      "Spirit-Attraction Talisman",
+      "Attraction Flag",
+      "Zhaoqing Banner",
+      "招魂幡 (Zhāohún fān) / 招阴旗 (Zhāoyīn qí)"
+    ],
+    "affiliation": "Wei Wuxian (Invention)",
+    "sect_or_affiliation": "Wei Wuxian (Invention)",
+    "summary": "A talisman-inscribed flag invented by Wei Wuxian that acts as bait to lure ghosts and dark creatures.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qiankun-pouch",
+    "name": "Qiankun Pouch",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "乾坤袋",
+    "aliases": [
+      "Universe Bag",
+      "Holding Pouch",
+      "Spiritual Storage Pouch",
+      "乾坤袋",
+      "Qiankun bag",
+      "Cosmos bag",
+      "Bag of Qiankun",
+      "乾坤袋 (Qiánkūn Dài)"
+    ],
+    "affiliation": "Common Cultivation Item",
+    "sect_or_affiliation": "Common Cultivation Item",
+    "summary": "A spiritual fabric pouch with an expanded spatial dimension inside for carrying large artifacts.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wangji-guqin",
+    "name": "Wangji Guqin",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "忘机琴",
+    "aliases": [
+      "Seven-Stringed Guqin",
+      "Lan Wangji Guqin",
+      "忘机琴"
+    ],
+    "affiliation": "Lan Wangji / Gusu Lan Clan",
+    "sect_or_affiliation": "Lan Wangji / Gusu Lan Clan",
+    "summary": "The antique seven-stringed zither used by Lan Wangji for Inquiry and chord assassination techniques.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "gusu-lan-clan",
+    "name": "Gusu Lan Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Gusu Lan Sect",
+      "Lan Clan",
+      "Lan Sect",
+      "姑苏蓝氏",
+      "Gusu Lan",
+      "Lan Clan of Gusu",
+      "姑苏蓝氏 (Gūsū Lán Shì)"
+    ],
+    "affiliation": "Cloud Recesses, Gusu",
+    "sect_or_affiliation": "Cloud Recesses, Gusu",
+    "summary": "A scholarly and austere cultivation clan founded by Lan An, renowned for their forehead ribbons, musical cultivation, and thousands of strict rules.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.340501+00:00",
+    "updated_at": "2026-10-02T11:23:14.340501+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yunmeng-jiang-clan",
+    "name": "Yunmeng Jiang Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "云梦江氏",
+    "aliases": [
+      "Yunmeng Jiang Sect",
+      "Jiang Clan",
+      "Jiang Sect",
+      "云梦江氏",
+      "Jiang Clan of Yunmeng",
+      "云梦江氏 (Yúnmèng Jiāng Shì)",
+      "Yunmeng Jiang"
+    ],
+    "affiliation": "Lotus Pier, Yunmeng",
+    "sect_or_affiliation": "Lotus Pier, Yunmeng",
+    "summary": "A lakeside cultivation clan known for their free-spirited maritime ethos, lotus motif, and nine-petal lotus silver clarity bells.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lanling-jin-clan",
+    "name": "Lanling Jin Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "兰陵金氏",
+    "aliases": [
+      "Lanling Jin Sect",
+      "Jin Clan",
+      "Jin Sect",
+      "兰陵金氏",
+      "Jin Clan of Lanling",
+      "Lanling Jin",
+      "兰陵金氏 (Lánlíng Jīn Shì)"
+    ],
+    "affiliation": "Koi Tower, Lanling",
+    "sect_or_affiliation": "Koi Tower, Lanling",
+    "summary": "An immensely wealthy and opulent cultivation clan famous for their golden robes, Sparks Amidst Snow peony motif, and forehead vermilion marks.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qishan-wen-clan",
+    "name": "Qishan Wen Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "岐山温氏",
+    "aliases": [
+      "Qishan Wen Sect",
+      "Wen Clan",
+      "Wen Sect",
+      "岐山温氏",
+      "岐山温氏 (Qíshān Wēn Shì)",
+      "Qishan Wen",
+      "Wen Clan of Qishan",
+      "Qíshān Wēn Shì"
+    ],
+    "affiliation": "Nightless City, Qishan",
+    "sect_or_affiliation": "Nightless City, Qishan",
+    "summary": "A massive, tyrannical clan historically dominating the cultivation world with their scorching sun motif.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qinghe-nie-clan",
+    "name": "Qinghe Nie Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Qinghe Nie Sect",
+      "Nie Clan",
+      "Nie Sect",
+      "清河聂氏",
+      "Qinghe Nie",
+      "Nie Sect of Qinghe",
+      "The Unclean Realm",
+      "清河聂氏 (Qīnghé Niè Shì)",
+      "Nie Clan of Qinghe"
+    ],
+    "affiliation": "Impure Realm, Qinghe",
+    "sect_or_affiliation": "Impure Realm, Qinghe",
+    "summary": "A rugged martial clan descended from butchers who cultivate the violent saber path instead of swords.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "moling-su-clan",
+    "name": "Moling Su Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "秣陵苏氏",
+    "aliases": [
+      "Moling Su Sect",
+      "Su Clan",
+      "Su Sect",
+      "秣陵苏氏",
+      "Su Clan of Moling",
+      "秣陵苏氏 (Mòlíng Sū Shì)"
+    ],
+    "affiliation": "Moling",
+    "sect_or_affiliation": "Moling",
+    "summary": "A newly emerged cultivation clan founded by Su She that imitates the musical techniques of the Gusu Lan Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "meishan-yu-clan",
+    "name": "Meishan Yu Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "眉山虞氏",
+    "aliases": [
+      "Meishan Yu Sect",
+      "Yu Clan",
+      "眉山虞氏",
+      "Yu Clan of Meishan",
+      "Yu Sect of Meishan"
+    ],
+    "affiliation": "Meishan",
+    "sect_or_affiliation": "Meishan",
+    "summary": "An ancient, matrilineally influential cultivation clan in Meishan and the birthplace of Madam Yu.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "baling-ouyang-clan",
+    "name": "Baling Ouyang Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "巴陵欧阳氏",
+    "aliases": [
+      "Baling Ouyang Sect",
+      "Ouyang Clan",
+      "巴陵欧阳氏"
+    ],
+    "affiliation": "Baling",
+    "sect_or_affiliation": "Baling",
+    "summary": "A prominent middle-tier cultivation clan home to junior disciple Ouyang Zizhen.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yueyang-chang-clan",
+    "name": "Yueyang Chang Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "岳阳常氏",
+    "aliases": [
+      "Yueyang Chang Sect",
+      "Chang Clan",
+      "岳阳常氏",
+      "Yueyang",
+      "Chang Sect of Yueyang",
+      "岳阳常氏 (Yuèyáng Cháng Shì)"
+    ],
+    "affiliation": "Yueyang",
+    "sect_or_affiliation": "Yueyang",
+    "summary": "A regional cultivation clan in Yueyang governed by Chang Ci an.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "the-cloud-recesses",
+    "name": "The Cloud Recesses",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "云深不知处",
+    "aliases": [
+      "Cloud Recesses",
+      "Yunshen Buzhichu",
+      "Gusu Lan Clan Residence",
+      "云深不知处",
+      "Gusu Lan Clan Seat",
+      "云深不知处 (Yún Shēn Bù Zhī Chù)"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "The elegant, mist-shrouded mountain headquarters of the Gusu Lan Clan, famous for its serene atmosphere and thousands of strict rules.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lotus-pier",
+    "name": "Lotus Pier",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "莲花坞",
+    "aliases": [
+      "Lianhua Wu",
+      "Lotus Dock",
+      "Yunmeng Jiang Clan Headquarters",
+      "莲花坞",
+      "莲花坞 (Liánhuā Wù)"
+    ],
+    "affiliation": "Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Yunmeng Jiang Clan",
+    "summary": "The picturesque, sprawling lakeside residence and headquarters of the Yunmeng Jiang Clan, renowned for its open, free-spirited atmosphere.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "golden-carp-tower",
+    "name": "Golden Carp Tower",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "金麟台",
+    "aliases": [
+      "Koi Tower",
+      "Jinlin Terrace",
+      "Jinlintai",
+      "Lanling Jin Clan Headquarters",
+      "金麟台",
+      "Jinlin Tower",
+      "金麟台 (Jinlintai)",
+      "Carp Tower",
+      "Jinling Terrace"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "The grand and opulent headquarters of the Lanling Jin Clan in Lanling, celebrated for its golden architecture and grand staircase.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "nightless-city",
+    "name": "Nightless City",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "不夜天城",
+    "aliases": [
+      "Nightless Sky",
+      "Buyetian Cheng",
+      "Qishan Wen Clan Capital",
+      "不夜天城",
+      "Immortal Capital of the Nightless City",
+      "Bùyètiān Chéng"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "The colossal, fortress-like ancestral domain and capital city of the Qishan Wen Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "impure-realm",
+    "name": "Impure Realm",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "不净世",
+    "aliases": [
+      "Bujing Shi",
+      "Qinghe Nie Clan Headquarters",
+      "不净世",
+      "Unclean Realm",
+      "Bùjìng Shì",
+      "Qinghe Nie Sect Headquarters",
+      "不净世 (Bùjìng Shì)"
+    ],
+    "affiliation": "Qinghe Nie Clan",
+    "sect_or_affiliation": "Qinghe Nie Clan",
+    "summary": "The rugged stone fortress and headquarters of the Qinghe Nie Clan built into the harsh cliffs of Qinghe.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "burial-mounds",
+    "name": "Burial Mounds",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "乱葬岗",
+    "aliases": [
+      "Luanzang Gang",
+      "Luanzang Hill",
+      "Mass Graves of Yiling",
+      "乱葬岗",
+      "Yiling Burial Mounds",
+      "乱葬岗 (Luànzàng Gǎng)"
+    ],
+    "affiliation": "Yiling / Wei Wuxian",
+    "sect_or_affiliation": "Yiling / Wei Wuxian",
+    "summary": "An ancient, corpse-strewn battlefield and mass grave in Yiling heavily saturated with dark resentful energy.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "guanyin-temple",
+    "name": "Guanyin Temple",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "观音庙",
+    "aliases": [
+      "Goddess of Mercy Temple",
+      "Yunping City Temple",
+      "观音庙"
+    ],
+    "affiliation": "Yunping City / Lanling Jin Clan",
+    "sect_or_affiliation": "Yunping City / Lanling Jin Clan",
+    "summary": "A bustling temple dedicated to the Goddess of Mercy in Yunping City established under the Lanling Jin Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yi-city",
+    "name": "Yi City",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "义城",
+    "aliases": [
+      "Yicheng",
+      "City of Coffins",
+      "Fog City",
+      "义城",
+      "City of Yi",
+      "义城 (Yì Chéng)"
+    ],
+    "affiliation": "Shu Region",
+    "sect_or_affiliation": "Shu Region",
+    "summary": "A remote, perpetually fog-shrouded town famously characterized by its prominent coffin-making trade and funerary shops.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "dafan-mountain",
+    "name": "Dafan Mountain",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "大梵山",
+    "aliases": [
+      "Mount Dafan",
+      "Dafan Shan",
+      "Buddha Feet Mountain",
+      "大梵山"
+    ],
+    "affiliation": "Qishan Region",
+    "sect_or_affiliation": "Qishan Region",
+    "summary": "A sacred mountain shaped like a seated Buddha home to ancient stone shrines and a prominent soul-consuming goddess statue.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "baifeng-mountain",
+    "name": "Baifeng Mountain",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "百凤山",
+    "aliases": [
+      "Mount Baifeng",
+      "Baifeng Shan",
+      "Grand Hunt Mountain",
+      "百凤山"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "A scenic mountain range in Lanling that serves as the prestigious venue for the Grand Cultivation Hunt.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "caiyi-town",
+    "name": "Caiyi Town",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "彩衣镇",
+    "aliases": [
+      "Caiyi",
+      "Water Town of Gusu",
+      "彩衣镇"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A lively water canal town situated near the foot of the mountain leading to Cloud Recesses, famous for its loquats and Emperor Smile liquor.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "mo-village",
+    "name": "Mo Village",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "莫家庄",
+    "aliases": [
+      "Mo Family Village",
+      "Mojia Zhuang",
+      "Mo Manor",
+      "莫家庄",
+      "Mojia Village",
+      "Moji Zhuang",
+      "莫家庄 (Mòjiā Zhuāng)"
+    ],
+    "affiliation": "Mo Clan",
+    "sect_or_affiliation": "Mo Clan",
+    "summary": "A mortal settlement and the estate of the wealthy Mo family, where the former Lanling Jin disciple Mo Xuanyu resides.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qiongqi-path",
+    "name": "Qiongqi Path",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "穷奇道",
+    "aliases": [
+      "Qiongqi Dao",
+      "Qiongqi Valley",
+      "穷奇道"
+    ],
+    "affiliation": "Qishan Region",
+    "sect_or_affiliation": "Qishan Region",
+    "summary": "A treacherous and narrow mountain pass surrounded by steep rocky cliffs historically used as a labor camp.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "baixue-temple",
+    "name": "Baixue Temple",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "白雪观",
+    "aliases": [
+      "Baixue Monastery",
+      "White Snow Temple",
+      "Song Lan Temple",
+      "白雪观"
+    ],
+    "affiliation": "Song Lan / Independent Cultivators",
+    "sect_or_affiliation": "Song Lan / Independent Cultivators",
+    "summary": "A peaceful Taoist monastery established by Song Lan and his master high in the mountains.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "stone-castles",
+    "name": "Stone Castles",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "石堡",
+    "aliases": [
+      "Saber Tombs of Qinghe",
+      "Nie Stone Fortresses",
+      "石堡"
+    ],
+    "affiliation": "Qinghe Nie Clan",
+    "sect_or_affiliation": "Qinghe Nie Clan",
+    "summary": "A cluster of mysterious stone fortifications in Qinghe used by the Nie Clan to inter their ancestral saber spirits.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wall-of-discipline",
+    "name": "Wall of Discipline",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "规训石壁",
+    "aliases": [
+      "Rules Wall",
+      "Cliff of Rules",
+      "Guixun Shibi",
+      "规训石壁",
+      "Discipline Wall",
+      "规训石壁 (Guīxùn Shíbì)"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A massive stone cliffside at the entrance of Cloud Recesses carved with thousands of strict sect rules.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jingshi",
+    "name": "Jingshi",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "静室",
+    "aliases": [
+      "The Jingshi",
+      "Quiet Room",
+      "Lan Wangji Residence",
+      "静室",
+      "静室 (Jìngshì)"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "The secluded private residence and study of Lan Wangji located within Cloud Recesses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yashi",
+    "name": "Yashi",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "雅室",
+    "aliases": [
+      "The Yashi",
+      "Elegant Room",
+      "Sect Leader Lan Reception Hall",
+      "雅室",
+      "The Elegant Room",
+      "雅室 (Yǎshì)"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "The quiet and refined reception study located within Cloud Recesses used for hosting private discussions.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "library-pavilion",
+    "name": "Library Pavilion",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "藏书阁",
+    "aliases": [
+      "Cangshu Ge",
+      "Cloud Recesses Library",
+      "藏书阁",
+      "藏书阁 (Cángshū Gé)"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A tranquil pavilion in Cloud Recesses that houses ancient scrolls, historical records, and cultivation texts.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lake-biling",
+    "name": "Lake Biling",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "碧灵湖",
+    "aliases": [
+      "Biling Lake",
+      "Water Abyss Lake",
+      "碧灵湖"
+    ],
+    "affiliation": "Caiyi Town",
+    "sect_or_affiliation": "Caiyi Town",
+    "summary": "A large, tranquil body of water near Caiyi Town that becomes plagued by waterborne spirits.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "xinglu-ridge",
+    "name": "Xinglu Ridge",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "行路岭",
+    "aliases": [
+      "Ridge of Xinglu",
+      "Xinglu Shan",
+      "行路岭",
+      "惺璐岭"
+    ],
+    "affiliation": "Qinghe Nie Clan",
+    "sect_or_affiliation": "Qinghe Nie Clan",
+    "summary": "A hazardous mountain ridge known as the Maneater Ridge in Qinghe territory.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yiling",
+    "name": "Yiling",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "夷陵",
+    "aliases": [
+      "Yiling Town",
+      "Yiling Region",
+      "夷陵"
+    ],
+    "affiliation": "Yunmeng Jiang Clan / Wei Wuxian",
+    "sect_or_affiliation": "Yunmeng Jiang Clan / Wei Wuxian",
+    "summary": "A remote town and surrounding valley under Yunmeng jurisdiction, home to the infamous Burial Mounds.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yunmeng",
+    "name": "Yunmeng",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "云梦",
+    "aliases": [
+      "Yunmeng Region",
+      "Yunmeng Lakes",
+      "云梦",
+      "Yunmeng Jiang Sect Territory",
+      "云梦 (Yúnmèng)"
+    ],
+    "affiliation": "Yunmeng Jiang Clan",
+    "sect_or_affiliation": "Yunmeng Jiang Clan",
+    "summary": "A scenic, water-locked region characterized by vast lakes and lotus ponds, serving as the ancestral home of Yunmeng Jiang Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yunping-city",
+    "name": "Yunping City",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "云萍城",
+    "aliases": [
+      "Yunping",
+      "City in Yunmeng",
+      "云萍城",
+      "栎阳城"
+    ],
+    "affiliation": "Lanling Jin Clan / Yunmeng",
+    "sect_or_affiliation": "Lanling Jin Clan / Yunmeng",
+    "summary": "A bustling city associated with the Lanling Jin Clan where Guanyin Temple is located.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lanling",
+    "name": "Lanling",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "兰陵",
+    "aliases": [
+      "Lanling Region",
+      "City of Lanling",
+      "兰陵"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "An opulent, highly prosperous region serving as the ancestral domain of the Lanling Jin Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "gusu",
+    "name": "Gusu",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "姑苏",
+    "aliases": [
+      "Gusu City",
+      "Gusu Prefecture",
+      "姑苏"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A picturesque, cultured region famed for its waterways, classical gardens, and the mountain peaks of Cloud Recesses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qishan",
+    "name": "Qishan",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "岐山",
+    "aliases": [
+      "Qishan Region",
+      "Sun Palace Domain",
+      "岐山"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "A harsh, mountainous domain dominated by the Qishan Wen Clan and their vast fortresses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qinghe",
+    "name": "Qinghe",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "清河",
+    "aliases": [
+      "Qinghe Region",
+      "清河"
+    ],
+    "affiliation": "Qinghe Nie Clan",
+    "sect_or_affiliation": "Qinghe Nie Clan",
+    "summary": "A rugged northern territory governed by the Qinghe Nie Clan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "golden-core",
+    "name": "Golden Core",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "金丹",
+    "aliases": [
+      "Jindan",
+      "Cultivation Core",
+      "Spiritual Core",
+      "金丹",
+      "Golden Elixir",
+      "金丹 (jīndān)"
+    ],
+    "affiliation": "Universal Cultivation",
+    "sect_or_affiliation": "Universal Cultivation",
+    "summary": "A concentrated nexus of pure spiritual energy formed in a cultivator dantian essential for wielding high spiritual power.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "resentful-energy",
+    "name": "Resentful Energy",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "怨气",
+    "aliases": [
+      "Dark Energy",
+      "Yuanqi",
+      "Resentment",
+      "怨气"
+    ],
+    "affiliation": "Demonic Cultivation",
+    "sect_or_affiliation": "Demonic Cultivation",
+    "summary": "Dark, volatile energy produced by the sorrow, anger, and suffering of unavenged souls and restless corpses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "spiritual-energy",
+    "name": "Spiritual Energy",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "灵气",
+    "aliases": [
+      "Lingqi",
+      "Spiritual Power",
+      "灵气"
+    ],
+    "affiliation": "Orthodox Cultivation",
+    "sect_or_affiliation": "Orthodox Cultivation",
+    "summary": "The pure energy of the natural world drawn through cultivation to enhance vitality and empower spiritual weapons.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "demonic-cultivation",
+    "name": "Demonic Cultivation",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "鬼道",
+    "aliases": [
+      "Ghost Path",
+      "Heretical Cultivation",
+      "Demonic Path",
+      "Mo Dao",
+      "鬼道"
+    ],
+    "affiliation": "Wei Wuxian",
+    "sect_or_affiliation": "Wei Wuxian",
+    "summary": "An unorthodox cultivation method invented by Wei Wuxian that channels resentful energy through musical rhythm and talismans.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "inquiry",
+    "name": "Inquiry",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "问灵",
+    "aliases": [
+      "Wenling",
+      "Questioning Spirits",
+      "问灵"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "A famous musical guqin piece composed by the Gusu Lan Clan that communicates directly with nearby souls and spirits.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "chord-of-empathy",
+    "name": "Chord of Empathy",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "共情",
+    "aliases": [
+      "Gongqing",
+      "Empathy Technique",
+      "Communing with Spirits",
+      "共情"
+    ],
+    "affiliation": "Wei Wuxian / Spiritual Technique",
+    "sect_or_affiliation": "Wei Wuxian / Spiritual Technique",
+    "summary": "A dangerous spiritual technique where a cultivator directly enters the memories and sensory experiences of a soul.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "water-abyss",
+    "name": "Water Abyss",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "水行渊",
+    "aliases": [
+      "Shuixingyuan",
+      "Water Ghost Swarm",
+      "水行渊",
+      "Shuǐxíngyuān"
+    ],
+    "affiliation": "Aquatic Monster",
+    "sect_or_affiliation": "Aquatic Monster",
+    "summary": "A terrifying aquatic vortex formed when countless water ghosts merge together into an insatiable lake-dwelling monster.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "emperor-smile",
+    "name": "Emperor's Smile",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "天子笑 (Tiānzǐ Xiào)",
+    "aliases": [
+      "Tianzi Xiao",
+      "Famous Gusu Liquor",
+      "天子笑",
+      "天子笑 (Tiānzǐ Xiào)"
+    ],
+    "affiliation": "Caiyi Town, Gusu",
+    "sect_or_affiliation": "Caiyi Town, Gusu",
+    "summary": "A celebrated, fragrant jarred wine brewed exclusively in Caiyi Town of Gusu.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "transportation-talisman",
+    "name": "Transportation Talisman",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "传送符 (Chuánsòng Fú)",
+    "aliases": [
+      "Teleportation Talisman",
+      "Distance-Shortening Talisman",
+      "Chuansong Fu",
+      "Suodi Fu",
+      "传送符",
+      "传送符 (Chuánsòng Fú)"
+    ],
+    "affiliation": "Cultivation World",
+    "sect_or_affiliation": "Cultivation World",
+    "summary": "A specialized spiritual paper charm that allows a cultivator to instantly transport themselves or objects across great distances at the cost of a significant amount of spiritual energy.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "night-hunting",
+    "name": "Night-hunting",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "夜猎 (Yèliè)",
+    "aliases": [
+      "Night Hunting",
+      "Ye Lie",
+      "夜猎 (Yè Liè)",
+      "night-hunt",
+      "夜猎",
+      "Yèliè / 夜猎",
+      "night-hunts",
+      "夜猎 (Yèliè)"
+    ],
+    "affiliation": "Cultivation World",
+    "sect_or_affiliation": "Cultivation World",
+    "summary": "A fundamental practice in which cultivators travel across the human realm to eliminate evil spirits, monsters, ghosts, and fierce corpses to protect commoners and build their reputation.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "madam-mo",
+    "name": "Madam Mo",
+    "category": "Character",
+    "pinyin_or_chinese": "莫夫人",
+    "aliases": [
+      "莫夫人"
+    ],
+    "affiliation": "Mo Family Village",
+    "sect_or_affiliation": "Mo Family Village",
+    "summary": "The domineering and bitter matriarch of the Mo estate.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "a-tong",
+    "name": "A-Tong",
+    "category": "Character",
+    "pinyin_or_chinese": "阿桐",
+    "aliases": [
+      "阿桐"
+    ],
+    "affiliation": "Mo Family Village",
+    "sect_or_affiliation": "Mo Family Village",
+    "summary": "A young servant boy employed in the Mo family household.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "a-ding",
+    "name": "A-Ding",
+    "category": "Character",
+    "pinyin_or_chinese": "阿丁",
+    "aliases": [
+      "阿丁"
+    ],
+    "affiliation": "Mo Family Village",
+    "sect_or_affiliation": "Mo Family Village",
+    "summary": "A young maidservant serving in the Mo family household.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "master-mo",
+    "name": "Master Mo",
+    "category": "Character",
+    "pinyin_or_chinese": "莫老爷",
+    "aliases": [
+      "Mo Ziyuan's father",
+      "Madam Mo's husband",
+      "莫老爷"
+    ],
+    "affiliation": "Mo Family Village",
+    "sect_or_affiliation": "Mo Family Village",
+    "summary": "The master of the Mo estate and Madam Mo's husband.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:14.674862+00:00",
+    "updated_at": "2026-10-02T11:23:14.674862+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "a-yan",
+    "name": "A-Yan",
+    "category": "Character",
+    "pinyin_or_chinese": "阿妍",
+    "aliases": [
+      "Blacksmith Zheng's daughter",
+      "阿妍"
+    ],
+    "affiliation": "Buddha's Foot Town",
+    "sect_or_affiliation": "Buddha's Foot Town",
+    "summary": "A young woman from Buddha's Foot Town who inexplicably lost her sanity and wanders the streets dancing with a vacant smile.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "blacksmith-zheng",
+    "name": "Blacksmith Zheng",
+    "category": "Character",
+    "pinyin_or_chinese": "郑铁匠",
+    "aliases": [
+      "郑铁匠"
+    ],
+    "affiliation": "Buddha's Foot Town",
+    "sect_or_affiliation": "Buddha's Foot Town",
+    "summary": "A blacksmith residing in Buddha's Foot Town and the father of A-Yan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "madam-jin",
+    "name": "Madam Jin",
+    "category": "Character",
+    "pinyin_or_chinese": "金夫人 (Jīn Fūrén)",
+    "aliases": [
+      "Jin Furen",
+      "Mother of Jin Zixuan",
+      "金夫人 (Jīn Fūrén)"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "The proud and strong-willed matriarch of the Lanling Jin Clan, who is a close friend of Madam Yu and the protective mother of Jin Zixuan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "spirit-locking-pouch",
+    "name": "Spirit-Locking Pouch",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "锁灵囊",
+    "aliases": [
+      "Suoling Nang",
+      "Spirit-Trapping Pouch",
+      "Lock-Spirit Pouch",
+      "锁灵囊"
+    ],
+    "affiliation": "Cultivation World",
+    "sect_or_affiliation": "Cultivation World",
+    "summary": "A specialized spiritual pouch used by cultivators to safely trap, store, and preserve spirits, soul fragments, or resentful energy.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "deity-binding-net",
+    "name": "Deity-Binding Net",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "缚仙网 (Fùxiān Wǎng)",
+    "aliases": [
+      "Deity-Binding Nets",
+      "Immortal-Binding Net",
+      "Fuxian Wang",
+      "缚仙网 (Fùxiān Wǎng)"
+    ],
+    "affiliation": "Lanling Jin Sect",
+    "sect_or_affiliation": "Lanling Jin Sect",
+    "summary": "An expensive, high-grade spiritual tool woven from gold thread that is used by cultivators to capture spiritual beasts, deities, and malevolent prey.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "dancing-goddess",
+    "name": "Dancing Goddess",
+    "category": "Character",
+    "pinyin_or_chinese": "舞天女",
+    "aliases": [
+      "Venerable Dancing Goddess",
+      "Soul-Consuming Goddess",
+      "Dancing Goddess Statue",
+      "舞天女"
+    ],
+    "affiliation": "Dafan Mountain",
+    "sect_or_affiliation": "Dafan Mountain",
+    "summary": "A ten-foot-tall stone statue sculpted by nature on Dafan Mountain",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "sunshot-campaign",
+    "name": "Sunshot Campaign",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "射日之征 (Shèrì zhī Zhēng)",
+    "aliases": [
+      "The Campaign to Shoot down the Sun",
+      "Shèrì zhī Zhēng",
+      "射日之征",
+      "射日之征 (Shèrì zhī Zhēng)"
+    ],
+    "affiliation": "Sunshot Alliance & Qishan Wen Sect",
+    "sect_or_affiliation": "Sunshot Alliance & Qishan Wen Sect",
+    "summary": "A grand military coalition launched by the major cultivation sects to rebel against the tyrannical oppression and aggressive expansion of the Qishan Wen Sect.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "silence-spell",
+    "name": "Silence Spell",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "禁言术",
+    "aliases": [
+      "Banning Spell",
+      "禁言术"
+    ],
+    "affiliation": "Gusu Lan Sect",
+    "sect_or_affiliation": "Gusu Lan Sect",
+    "summary": "A signature spell utilized by the Gusu Lan Sect that temporarily seals a target's ability to speak.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "passage-jade-token",
+    "name": "Passage Jade Token",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "通行玉令 (Tōngxíng Yùlìng)",
+    "aliases": [
+      "jade passage token",
+      "passage jade",
+      "entry jade token",
+      "jade entry pass",
+      "Tongxing Yuling",
+      "jade passage tokens",
+      "passage token",
+      "Cloud Recesses passage token",
+      "通行玉令 (Tōngxíng Yùlìng)"
+    ],
+    "affiliation": "Gusu Lan Sect",
+    "sect_or_affiliation": "Gusu Lan Sect",
+    "summary": "A specialized jade talisman carried by members and authorized guests of the Gusu Lan Sect to safely navigate and bypass the protective barrier surrounding the Cloud Recesses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-mao",
+    "name": "Wen Mao",
+    "category": "Character",
+    "pinyin_or_chinese": "温卯",
+    "aliases": [
+      "Qishan Wen Clan",
+      "温卯"
+    ],
+    "affiliation": "",
+    "sect_or_affiliation": "",
+    "summary": "The founding ancestor of the Qishan Wen Sect who first elevated the clan above the sect to usher in the age of hereditary houses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jiangnan-region",
+    "name": "Jiangnan Region",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "江南 (Jiāngnán)",
+    "aliases": [
+      "Jiangnan",
+      "South of the River",
+      "江南 (Jiāngnán)"
+    ],
+    "affiliation": "Gusu Lan Sect / Yunmeng Jiang Sect",
+    "sect_or_affiliation": "Gusu Lan Sect / Yunmeng Jiang Sect",
+    "summary": "A scenic geographical and cultural region south of the Yangtze River, known for its lush waterways, lotus lakes, and mild climate, which serves as the setting for sects like Gusu Lan and Yunmeng Jiang.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lan-an",
+    "name": "Lan An",
+    "category": "Character",
+    "pinyin_or_chinese": "蓝安 (Lán Ān)",
+    "aliases": [
+      "Lan An.",
+      "Founder of Gusu Lan Sect",
+      "蓝安 (Lán Ān)"
+    ],
+    "affiliation": "Gusu Lan Sect",
+    "sect_or_affiliation": "Gusu Lan Sect",
+    "summary": "The historical founder of the Gusu Lan Sect who was originally a temple monk before returning to secular life, choosing the surname Lan, and establishing the cultivation clan in Gusu after finding his fated partner.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "malignant-curse-mark",
+    "name": "Malignant Curse Mark",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "恶咒痕 (Èzhòuhén)",
+    "aliases": [
+      "Malignant Curse Mark.",
+      "Evil Curse Mark",
+      "Ezhouhen",
+      "恶咒痕 (Èzhòuhén)"
+    ],
+    "affiliation": "Dark Lore",
+    "sect_or_affiliation": "Dark Lore",
+    "summary": "A dark, spreading brand inflicted upon a cultivator's body by malevolent spirits or curses that steadily expands across the skin over time.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "chang-ping",
+    "name": "Chang Ping",
+    "category": "Character",
+    "pinyin_or_chinese": "常萍",
+    "aliases": [
+      "常萍"
+    ],
+    "affiliation": "Yueyang Chang Sect",
+    "sect_or_affiliation": "Yueyang Chang Sect",
+    "summary": "The leader of the Yueyang Chang Sect, a cultivation clan based in the Yueyang region.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wei-changze",
+    "name": "Wei Changze",
+    "category": "Character",
+    "pinyin_or_chinese": "魏长泽",
+    "aliases": [
+      "魏长泽"
+    ],
+    "affiliation": "Yunmeng Jiang Sect",
+    "sect_or_affiliation": "Yunmeng Jiang Sect",
+    "summary": "The father of Wei Wuxian, who formerly served as a subordinate and close companion to Sect Leader Jiang Fengmian of the Yunmeng Jiang Sect before departing to travel with the rogue cultivator Cangse Sanren.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "cangse-sanren",
+    "name": "Cangse Sanren",
+    "category": "Character",
+    "pinyin_or_chinese": "藏色散人 (Cángsè Sǎnrén)",
+    "aliases": [
+      "Rogue Cultivator Cangse",
+      "藏色散人 (Cángsè Sǎnrén)"
+    ],
+    "affiliation": "Baoshan Sanren's Lineage",
+    "sect_or_affiliation": "Baoshan Sanren's Lineage",
+    "summary": "A highly talented rogue cultivator and former disciple of the immortal Baoshan Sanren, renowned for her lively personality, exceptional spiritual power, and marriage to Wei Changze.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "baoshan-sanren",
+    "name": "Baoshan Sanren",
+    "category": "Character",
+    "pinyin_or_chinese": "抱山散人 (Bàoshān Sǎnrén)",
+    "aliases": [
+      "Embracing Mountain Pilgrim",
+      "抱山散人 (Bàoshān Sǎnrén)"
+    ],
+    "affiliation": "Celestial Mountain",
+    "sect_or_affiliation": "Celestial Mountain",
+    "summary": "A legendary, immortal cultivator who resides on a secluded celestial mountain and takes in disciples on the strict condition that once they leave her sanctuary to enter the mortal world, they can never return.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yanling-daoren",
+    "name": "Yanling Daoren",
+    "category": "Character",
+    "pinyin_or_chinese": "延灵道人 (Yánlíng Dàorén)",
+    "aliases": [
+      "Daoist Yanling",
+      "延灵道人 (Yánlíng Dàorén)"
+    ],
+    "affiliation": "Baoshan Sanren's Lineage",
+    "sect_or_affiliation": "Baoshan Sanren's Lineage",
+    "summary": "The first disciple of the immortal Baoshan Sanren, who chose to descend from his teacher's secluded mountain to enter the mortal world as a rogue cultivator.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-zhuliu",
+    "name": "Wen Zhuliu",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Core-Melting Hand",
+      "Hua Dan Shou",
+      "Zhao Zhuliu",
+      "温逐流 (Wēn Zhúlíú)"
+    ],
+    "affiliation": "Qishan Wen Sect",
+    "sect_or_affiliation": "Qishan Wen Sect",
+    "summary": "A powerful and loyal cultivator serving the Qishan Wen Sect, feared throughout the cultivation world for his unique ability to dissolve a cultivator's golden core.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "clarity-bell",
+    "name": "Clarity Bell",
+    "category": "Weapon / Item",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Qingxin Bell",
+      "Clearing-Heart Bell",
+      "Nine-Petaled Lotus Clarity Bell",
+      "清心铃 (Qīngxīn Líng)"
+    ],
+    "affiliation": "Yunmeng Jiang Sect",
+    "sect_or_affiliation": "Yunmeng Jiang Sect",
+    "summary": "A silver bell adorned with the nine-petaled lotus motif worn at the waist by Yunmeng Jiang Clan members to steady the mind and dispel malevolent illusions.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "chang-ci-an",
+    "name": "Chang Ci'an",
+    "category": "Character",
+    "pinyin_or_chinese": "常慈安 (Cháng Cí'ān)",
+    "aliases": [
+      "Chang Ci’an",
+      "Chang Ci-an",
+      "Leader Chang",
+      "常慈安 (Cháng Cí'ān)"
+    ],
+    "affiliation": "Yueyang Chang Sect",
+    "sect_or_affiliation": "Yueyang Chang Sect",
+    "summary": "The leader of the Yueyang Chang Sect who is established in the narrative through his early interactions with Xue Yang during the latter's youth.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "lingchi",
+    "name": "Lingchi",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "凌遲",
+      "língchí",
+      "lingering slicing"
+    ],
+    "affiliation": "Cultivation World",
+    "sect_or_affiliation": "Cultivation World",
+    "summary": "usually translated \"slow slicing\" or (incorrectly) \"death by a thousand cuts\", is a form of torture and execution where a knife is used to methodically remove portions of the body over an extended period of time, eventually resulting in death.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "ouyang-zizhen",
+    "name": "Ouyang Zizhen",
+    "category": "Character",
+    "pinyin_or_chinese": "欧阳子真",
+    "aliases": [
+      "欧阳子真"
+    ],
+    "affiliation": "Baling Ouyang Clan",
+    "sect_or_affiliation": "Baling Ouyang Clan",
+    "summary": "A young cultivator belonging to the Baling Ouyang Clan who frequently travels and participates in various night-hunts alongside his generational peers.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "tortoise-of-slaughter",
+    "name": "Tortoise of Slaughter",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "Túlù Xuánwǔ / 屠戮玄武",
+    "aliases": [
+      "Xuanwu of Slaughter",
+      "Tulu Xuanwu",
+      "Slaughter Xuanwu",
+      "Túlù Xuánwǔ / 屠戮玄武"
+    ],
+    "affiliation": "Mount Muxi",
+    "sect_or_affiliation": "Mount Muxi",
+    "summary": "An ancient, deformed beast resembling a gargantuan carnivorous tortoise with a serpent head that dwells in a subterranean lake beneath Mount Muxi.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "discussion-conference",
+    "name": "Discussion Conference",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "清谈会 (Qīngtán Huì)",
+    "aliases": [
+      "Discussion Conferences",
+      "Qingtan Conference",
+      "Cultivation Conference",
+      "清谈会 (Qīngtán Huì)"
+    ],
+    "affiliation": "Cultivation World",
+    "sect_or_affiliation": "Cultivation World",
+    "summary": "Grand recurring gatherings hosted by the prominent cultivation sects to discuss spiritual philosophy, showcase spiritual skills, and negotiate political matters.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qin-su",
+    "name": "Qin Su",
+    "category": "Character",
+    "pinyin_or_chinese": "秦愫 (Qín Sù)",
+    "aliases": [
+      "A-Su",
+      "秦愫 (Qín Sù)"
+    ],
+    "affiliation": "Lanling Jin Sect",
+    "sect_or_affiliation": "Lanling Jin Sect",
+    "summary": "The gentle and supportive wife of Jin Guangyao, who was raised as the daughter of the Laoling Qin Sect's leader.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-chan",
+    "name": "Jin Chan",
+    "category": "Character",
+    "pinyin_or_chinese": "金阐",
+    "aliases": [
+      "金阐"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "A junior disciple of the Lanling Jin Clan who participates in the Discussion Conference and the third-party hunts.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "wen-xu",
+    "name": "Wen Xu",
+    "category": "Character",
+    "pinyin_or_chinese": "温旭 (Wēn Xù)",
+    "aliases": [
+      "温旭 (Wēn Xù)"
+    ],
+    "affiliation": "Qishan Wen Sect",
+    "sect_or_affiliation": "Qishan Wen Sect",
+    "summary": "The eldest son of Sect Leader Wen Ruohan and a prominent, authoritative cultivator within the Qishan Wen Sect.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "the-watchtowers",
+    "name": "The Watchtowers",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "瞭望台 (Liàowàng Tái)",
+    "aliases": [
+      "Jin Sect Watchtowers",
+      "Liaowangtai",
+      "瞭望台 (Liàowàng Tái)"
+    ],
+    "affiliation": "Lanling Jin Sect",
+    "sect_or_affiliation": "Lanling Jin Sect",
+    "summary": "A network of surveillance and defense stations proposed by Jin Guangyao and built across various regions to monitor spiritual disturbances and allow commoners to easily request aid from cultivators.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "mount-muxi",
+    "name": "Mount Muxi",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "暮溪山 (Mùxī Shān)",
+    "aliases": [
+      "Muxi Mountain",
+      "Muxishan",
+      "暮溪山 (Mùxī Shān)"
+    ],
+    "affiliation": "Qishan",
+    "sect_or_affiliation": "Qishan",
+    "summary": "A mountain region in Qishan where the Qishan Wen Sect forced young disciples from major clans to gather for indoctrination and a dangerous night hunt.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "supervisory-office",
+    "name": "Supervisory Office",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "监察寮 / Jiānchá Liáo",
+    "aliases": [
+      "Supervision Office",
+      "Jiancha Liao",
+      "Wen Sect Supervisory Office",
+      "监察寮 / Jiānchá Liáo"
+    ],
+    "affiliation": "Qishan Wen Clan",
+    "sect_or_affiliation": "Qishan Wen Clan",
+    "summary": "A network of oppressive regional administrative outposts and monitoring stations established by the Qishan Wen Clan to surveil and enforce dominion over other cultivation clans.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "hanshi",
+    "name": "Hanshi",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "寒室 (Hánshì)",
+    "aliases": [
+      "Cold Room",
+      "Hánshì",
+      "寒室 (Hánshì)"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "The private residence and study of Lan Xichen, the clan leader of the Gusu Lan Sect, located within the Cloud Recesses.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "qingheng-jun",
+    "name": "Qingheng-jun",
+    "category": "Character",
+    "pinyin_or_chinese": "青蘅君",
+    "aliases": [
+      "Qīnghéng-jūn",
+      "青蘅君"
+    ],
+    "affiliation": "Gusu Lan Clan",
+    "sect_or_affiliation": "Gusu Lan Clan",
+    "summary": "The former leader of the Gusu Lan Clan, who is the older brother of Lan Qiren and the father of Lan Xichen and Lan Wangji.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-zixun",
+    "name": "Jin Zixun",
+    "category": "Character",
+    "pinyin_or_chinese": "金子勋 / Jīn Zixūn",
+    "aliases": [
+      "Jīn Zixūn",
+      "金子勋 / Jīn Zixūn"
+    ],
+    "affiliation": "Lanling Jin Clan",
+    "sect_or_affiliation": "Lanling Jin Clan",
+    "summary": "An arrogant and confrontational cultivator of the Lanling Jin Clan and cousin to Jin Zixuan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "demon-subduing-cave",
+    "name": "Demon-Subduing Cave",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "伏魔洞 (Fúmó Dòng)",
+    "aliases": [
+      "Fumo Cave",
+      "Fumo Dong",
+      "伏魔洞 (Fúmó Dòng)"
+    ],
+    "affiliation": "Wei Wuxian",
+    "sect_or_affiliation": "Wei Wuxian",
+    "summary": "A large cavern on the Burial Mounds that serves as Wei Wuxian's residence and cultivation workshop during his time as the Yiling Patriarch.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "yi-weichun",
+    "name": "Yi Weichun",
+    "category": "Character",
+    "pinyin_or_chinese": "易为春",
+    "aliases": [
+      "Yì Wéichūn",
+      "易为春"
+    ],
+    "affiliation": "Unspecified Clan",
+    "sect_or_affiliation": "Unspecified Clan",
+    "summary": "A middle-aged cultivator who wears a wooden prosthetic leg and harbors deep resentment toward Wei Wuxian following the battle at Nightless City.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "fang-mengchen",
+    "name": "Fang Mengchen",
+    "category": "Character",
+    "pinyin_or_chinese": "方梦臣 / Fāng Mèngchén",
+    "aliases": [
+      "Fāng Mèngchén",
+      "方梦臣 / Fāng Mèngchén"
+    ],
+    "affiliation": "Unspecified Cultivation Sect",
+    "sect_or_affiliation": "Unspecified Cultivation Sect",
+    "summary": "A young cultivator who harbors a deep personal grudge against Wei Wuxian and participates in the second siege of the Burial Mounds.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "leling-qin-clan",
+    "name": "Leling Qin Clan",
+    "category": "Clan / Sect",
+    "pinyin_or_chinese": "乐陵秦氏 (Lèlíng Qín Shì)",
+    "aliases": [
+      "Leling Qin Sect",
+      "Qin Clan of Leling",
+      "乐陵秦氏 (Lèlíng Qín Shì)"
+    ],
+    "affiliation": "Lanling Jin Sect",
+    "sect_or_affiliation": "Lanling Jin Sect",
+    "summary": "A minor cultivation clan based in Leling that is subordinate to and closely affiliated with the prominent Lanling Jin Sect.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "jin-rusong",
+    "name": "Jin Rusong",
+    "category": "Character",
+    "pinyin_or_chinese": "金如松",
+    "aliases": [
+      "Jīn Rúsōng",
+      "金如松"
+    ],
+    "affiliation": "Lanling Jin Sect",
+    "sect_or_affiliation": "Lanling Jin Sect",
+    "summary": "Jin Rusong is the young son of Jin Guangyao and Qin Su of the Lanling Jin Sect.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "bicao",
+    "name": "Bicao",
+    "category": "Character",
+    "pinyin_or_chinese": "碧草 / Bìcǎo",
+    "aliases": [
+      "Bìcǎo",
+      "碧草",
+      "碧草 / Bìcǎo"
+    ],
+    "affiliation": "Laoling Qin Clan",
+    "sect_or_affiliation": "Laoling Qin Clan",
+    "summary": "Bicao is Madam Qin's personal maid and trusted confidante.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  },
+  {
+    "book_id": "mo-dao-zu-shi",
+    "id": "meng-shi",
+    "name": "Meng Shi",
+    "category": "Character",
+    "pinyin_or_chinese": "孟诗",
+    "aliases": [
+      "Mèng Shī",
+      "孟诗"
+    ],
+    "affiliation": "Yunping",
+    "sect_or_affiliation": "Yunping",
+    "summary": "An educated brothel worker from Yunping and the loving mother of Jin Guangyao.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:15.01828+00:00",
+    "updated_at": "2026-10-02T11:23:15.01828+00:00"
+  }
+]

@@ -1,0 +1,21 @@
+# Python virtual environment & cache
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment variables & secrets
+.env
+
+# OS metadata & temporary files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+scratch_chrome/
+
+# System logs
+*.log

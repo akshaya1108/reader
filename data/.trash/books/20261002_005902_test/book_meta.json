@@ -1,0 +1,10 @@
+{
+  "id": "test",
+  "title": "test",
+  "author": "test",
+  "genre": "test",
+  "color": "#ba6d78",
+  "created_at": "01/10/2026",
+  "last_read_chapter": 1,
+  "enable_glossary": false
+}

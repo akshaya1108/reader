@@ -1,0 +1,183 @@
+[
+  {
+    "id": "hobbits",
+    "name": "Hobbits",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Halflings"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "Hobbits are an unobtrusive yet resilient race of small folk native to the Shire who are known for their love of peace, comfort, and good food."
+  },
+  {
+    "id": "frodo-baggins",
+    "name": "Frodo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ring-bearer",
+      "Mr. Underhill"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A respectable and quiet young hobbit from the Shire who inherits a mysterious and highly dangerous magic ring from his uncle."
+  },
+  {
+    "id": "aragorn-ii",
+    "name": "Aragorn II",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Strider",
+      "Elessar",
+      "The Dúnadan"
+    ],
+    "sect_or_affiliation": "Rangers of the North",
+    "affiliation": "Rangers of the North",
+    "summary": "A mysterious, weather-beaten ranger of the wilderness who possesses a hidden royal lineage and great martial skill."
+  },
+  {
+    "id": "samwise-gamgee",
+    "name": "Samwise Gamgee",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sam"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A loyal and simple-hearted gardener of Bag End who accompanies his master, Frodo, on a perilous quest."
+  },
+  {
+    "id": "legolas",
+    "name": "Legolas",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Prince of the Woodland Realm"
+    ],
+    "sect_or_affiliation": "Woodland Realm",
+    "affiliation": "Woodland Realm",
+    "summary": "A highly skilled elven archer and the prince of the Elves of Mirkwood."
+  },
+  {
+    "id": "gimli",
+    "name": "Gimli",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lockbearer",
+      "Elf-friend"
+    ],
+    "sect_or_affiliation": "Durin's Folk",
+    "affiliation": "Durin's Folk",
+    "summary": "A proud and stalwart dwarf warrior from the Lonely Mountain who represents his people at the council in Rivendell."
+  },
+  {
+    "id": "boromir",
+    "name": "Boromir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain of the White Tower",
+      "High Warden of the White Tower"
+    ],
+    "sect_or_affiliation": "Kingdom of Gondor",
+    "affiliation": "Kingdom of Gondor",
+    "summary": "A valiant warrior and the eldest son of the Ruling Steward of Gondor, who travels north seeking aid for his besieged homeland."
+  },
+  {
+    "id": "arwen",
+    "name": "Arwen",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Undómiel",
+      "Evenstar"
+    ],
+    "sect_or_affiliation": "Rivendell",
+    "affiliation": "Rivendell",
+    "summary": "The beautiful and noble half-elven daughter of Elrond, the Lord of Rivendell."
+  },
+  {
+    "id": "th-oden",
+    "name": "Théoden",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "King of the Mark",
+      "Théoden Ednew"
+    ],
+    "sect_or_affiliation": "Kingdom of Rohan",
+    "affiliation": "Kingdom of Rohan",
+    "summary": "The aging King of Rohan who rules from the golden hall of Meduseld, currently beset by grief and ill advice."
+  },
+  {
+    "id": "owyn",
+    "name": "Éowyn",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lady of Rohan",
+      "White Lady of Rohan"
+    ],
+    "sect_or_affiliation": "Kingdom of Rohan",
+    "affiliation": "Kingdom of Rohan",
+    "summary": "A noble shieldmaiden of Rohan and the spirited niece of King Théoden, who yearns to prove her courage in battle."
+  },
+  {
+    "id": "faramir",
+    "name": "Faramir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain of the Rangers of Ithilien"
+    ],
+    "sect_or_affiliation": "Kingdom of Gondor",
+    "affiliation": "Kingdom of Gondor",
+    "summary": "The thoughtful and scholarly younger brother of Boromir, who commands the rangers guarding the borders of Gondor."
+  },
+  {
+    "id": "sauron",
+    "name": "Sauron",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Dark Lord",
+      "The Enemy",
+      "The Necromancer"
+    ],
+    "sect_or_affiliation": "Mordor",
+    "affiliation": "Mordor",
+    "summary": "An ancient and malevolent dark lord who seeks to reclaim his lost Ring of Power to subject the world to his dominion."
+  },
+  {
+    "id": "gollum",
+    "name": "Gollum",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sméagol",
+      "Slinker",
+      "Stinker"
+    ],
+    "sect_or_affiliation": "Independent",
+    "affiliation": "Independent",
+    "summary": "A wretched, obsessed creature who once possessed the Ring of Power and constantly stalks its new bearer to reclaim it."
+  },
+  {
+    "id": "mordor",
+    "name": "Mordor",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Black Land",
+      "Land of Shadow"
+    ],
+    "affiliation": "Sauron",
+    "sect_or_affiliation": "Sauron",
+    "summary": "Mordor is a desolate and menacing realm in the east of Middle-earth ruled by the Dark Lord Sauron."
+  }
+]

@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Library</title>
+  <!-- Google Fonts: Lora (Classic Serif) & Lato (Warm Sans) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="theme-sepia font-serif">
+
+  <!-- Top Dark Bar -->
+  <header class="top-nav-bar">
+    <div class="nav-left">
+      <div class="nav-brand" id="brand-link">
+        <svg class="nav-icon-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+        <span class="nav-title">My Library</span>
+      </div>
+    </div>
+    <div class="nav-right">
+      <div id="api-status-badge" class="status-pill status-checking" title="Checking Gemini AI Connection...">
+        <span class="status-dot"></span>
+        <svg class="status-wifi-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Shell -->
+  <div class="app-layout">
+    
+    <!-- Left Sidebar: MY BOOKS -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-title">MY BOOKS</span>
+      </div>
+      <button class="btn btn-start-book" id="btn-open-new-book-modal">
+        <span>+ Start New Book</span>
+      </button>
+      <div class="books-list" id="books-list-container">
+        <!-- Injected dynamically by JS -->
+      </div>
+    </aside>
+
+    <!-- Main Content Area: Book Details & Chapters -->
+    <main class="main-content" id="main-content-view">
+      
+      <!-- Top Action Bar with 3-Dot Menu -->
+      <div class="book-top-bar">
+        <button class="btn-back" id="btn-back-library">
+          <span>&lsaquo; Back to Library</span>
+        </button>
+        
+        <div class="book-menu-wrapper" id="book-menu-wrapper">
+          <button class="btn-more-options" id="btn-book-more-options" title="Book options" aria-haspopup="true" aria-expanded="false">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <circle cx="12" cy="5" r="2"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+              <circle cx="12" cy="19" r="2"></circle>
+            </svg>
+          </button>
+          <div class="book-more-dropdown" id="book-more-dropdown" style="display: none;">
+            <button type="button" class="book-dropdown-item" id="btn-edit-book">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Edit details</span>
+            </button>
+            <button type="button" class="book-dropdown-item item-danger" id="btn-delete-book">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Delete book</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Book Overview Header -->
+      <section class="book-meta-header" id="book-meta-header">
+        <h1 class="book-title" id="display-book-title">Things That Deserve to Die</h1>
+        <p class="book-author" id="display-book-author">by Ahn Hyoseop</p>
+        
+        <!-- Clean Typographic Metadata Row with Vertical Dividers -->
+        <div class="book-meta-clean-row">
+          <span class="book-meta-item" id="badge-genre">KOREAN WEB NOVEL</span>
+          <span class="book-meta-divider"></span>
+          <span class="book-meta-item" id="badge-chapters">108 CHAPTERS</span>
+          <span class="book-meta-divider"></span>
+          <span class="book-meta-item" id="badge-words">~2,30,612 WORDS</span>
+          <span class="book-meta-divider"></span>
+        </div>
+
+        <!-- Full-Width Dividing Line -->
+        <div class="book-details-divider"></div>
+
+        <!-- Action Row Below Horizontal Line (Continue + Capsule View Toggles) -->
+        <div class="book-actions-row">
+          <div class="book-actions-left">
+            <button class="btn btn-green" id="btn-continue-reading">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>Continue (Ch 1)</span>
+            </button>
+            <button class="btn btn-icon-only btn-bookmark" id="btn-go-bookmark" title="Go to bookmark" style="display: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#e67e22" stroke="#d35400" stroke-width="1"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+            </button>
+            <button class="btn btn-secondary btn-main-glossary" id="btn-main-glossary" title="Open Lore Glossary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+              <span>Glossary</span>
+            </button>
+          </div>
+
+          <!-- Capsule Toggle: Manage Mode, Read Only Mode, Search -->
+          <div class="view-toggles-capsule" id="view-toggles-capsule">
+            <button class="icon-toggle active" id="btn-view-cards" title="Manage / Edit Mode">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+            </button>
+            <button class="icon-toggle" id="btn-view-table" title="Read Only Mode">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+            </button>
+            <button class="icon-toggle" id="btn-open-search" title="Search">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Chapters Section -->
+      <section class="chapters-section">
+        <h2 class="chapters-heading">Chapters</h2>
+
+        <!-- Top Manage Mode Pagination & Top Write Chapter Button -->
+        <div class="manage-pagination-wrapper top-pagination-wrapper" id="top-manage-pagination-wrapper">
+          <div class="manage-pagination-row">
+            <span class="pagination-info" id="top-pagination-info">Showing 1–10 of 108 chapters</span>
+            <div class="pagination-controls" id="top-pagination-controls">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          <div class="manage-bottom-actions">
+            <button class="btn btn-green btn-bottom-write" id="btn-top-write-modal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Write chapter</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Card View Container -->
+        <div class="chapters-cards-container" id="chapters-cards-container">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Bottom Manage Mode Pagination & Bottom Actions -->
+        <div class="manage-pagination-wrapper bottom-pagination-wrapper" id="bottom-manage-pagination-wrapper">
+          <div class="manage-pagination-row">
+            <span class="pagination-info" id="bottom-pagination-info">Showing 1–10 of 108 chapters</span>
+            <div class="pagination-controls" id="bottom-pagination-controls">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          <div class="manage-bottom-actions">
+            <button class="btn btn-green btn-bottom-write" id="btn-bottom-write-modal">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+              <span>Write chapter</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Table View Container -->
+        <div class="chapters-table-container" id="chapters-table-container" style="display: none;">
+          <table class="chapters-table">
+            <thead>
+              <tr>
+                <th>CHAPTER</th>
+                <th>TITLE</th>
+                <th>WORDS</th>
+                <th>DATE ADDED</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="chapters-table-body">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- FULL CHAPTER READER OVERLAY (Screenshot 4) -->
+  <div class="reader-overlay" id="reader-overlay" style="display: none;">
+    <!-- Ambient Reader Fidget Canvas (Left Margin Grass & Butterfly Motion) -->
+    <canvas id="reader-fidget-canvas" class="reader-fidget-canvas"></canvas>
+
+    <!-- Reader Sticky Top Bar -->
+    <nav class="reader-nav-bar">
+      <div class="reader-nav-left">
+        <button class="btn-reader-close" id="btn-reader-close">Close</button>
+        <div class="reader-book-info" id="reader-book-info">
+          <span class="reader-book-title">Things That Deserve to Die</span>
+          <span class="reader-book-sep">&bull;</span>
+          <span class="reader-book-author">Ahn Hyoseop</span>
+        </div>
+      </div>
+      
+      <div class="reader-nav-right">
+        <!-- Chapter Switcher -->
+        <div class="chapter-stepper">
+          <button class="stepper-btn" id="btn-prev-ch" title="Previous Chapter">&lsaquo;</button>
+          <select class="stepper-select" id="reader-chapter-select">
+            <!-- Injected dynamically -->
+          </select>
+          <button class="stepper-btn" id="btn-next-ch" title="Next Chapter">&rsaquo;</button>
+        </div>
+
+        <!-- Font Select -->
+        <select class="reader-select" id="reader-font-family">
+          <option value="font-serif">Serif (Lora)</option>
+          <option value="font-sans">Sans (Lato)</option>
+        </select>
+
+        <!-- Font Sizing -->
+        <div class="font-size-group">
+          <button class="btn-font-size" id="btn-font-dec" title="Decrease font size">A-</button>
+          <button class="btn-font-size" id="btn-font-reset" title="Reset font size">A</button>
+          <button class="btn-font-size" id="btn-font-inc" title="Increase font size">A+</button>
+        </div>
+
+        <!-- Search Drawer Button -->
+        <button class="reader-icon-btn" id="btn-reader-search" title="Search">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </button>
+
+        <!-- Theme Pickers -->
+        <div class="theme-buttons-group">
+          <button class="btn-theme-toggle" data-theme="theme-light" title="Light Paper">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          </button>
+          <button class="btn-theme-toggle active" data-theme="theme-sepia" title="Warm Parchment">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+          </button>
+          <button class="btn-theme-toggle" data-theme="theme-dark" title="Dark Ink">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Reading Canvas -->
+    <div class="reader-canvas">
+      <article class="reader-article" id="reader-article">
+        <div class="reader-ch-subtitle" id="reader-ch-subtitle">CHAPTER 1</div>
+        <h1 class="reader-ch-title" id="reader-ch-title">Chapter 1</h1>
+        <div class="reader-content" id="reader-content-body">
+          <!-- Text with interactive character hover tags injected here -->
+        </div>
+
+        <!-- Bottom Chapter Nav -->
+        <div class="reader-footer-nav">
+          <button class="btn btn-secondary" id="btn-reader-bottom-prev">&lsaquo; Previous Chapter</button>
+          <button class="btn btn-rose" id="btn-reader-bottom-next">Next Chapter &rsaquo;</button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- FLOATING CHARACTER HOVER CARD -->
+  <div class="char-hover-card" id="char-hover-card" style="display: none;">
+    <div class="char-card-header">
+      <div class="char-card-names">
+        <span class="char-primary-name" id="char-hover-name">Wei Wuxian</span>
+      </div>
+      <span class="char-trigger-pill" id="char-hover-trigger">Character</span>
+    </div>
+    <div class="char-card-sect" id="char-hover-sect">Yunmeng Jiang Sect</div>
+    <div class="char-card-aliases-row" id="char-hover-aliases-row">
+      <span class="aliases-label">Aliases:</span>
+      <span class="aliases-list" id="char-hover-aliases">Wei Ying, Yiling Patriarch, A-Xian</span>
+    </div>
+    <div class="char-card-summary" id="char-hover-summary">
+      The unorthodox protagonist; founder of Demonic Cultivation.
+    </div>
+    <div class="char-card-footer">
+      <button class="btn-card-edit" id="btn-hover-edit-char">Edit Note</button>
+    </div>
+    <div class="card-arrow" id="card-arrow"></div>
+  </div>
+
+  <!-- FLOATING SELECTION ADD-TO-GLOSSARY POPUP -->
+  <div class="reader-selection-popup" id="reader-selection-popup" style="display: none;">
+    <button class="btn-selection-glossary" id="btn-selection-add-glossary">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+      <span id="selection-btn-text">Add to glossary</span>
+    </button>
+    <div class="selection-arrow" id="selection-arrow"></div>
+  </div>
+
+  <!-- WRITE A CHAPTER MODAL (Screenshot 1 & Screenshot 8.18.39) -->
+  <div class="modal-backdrop" id="modal-write-chapter" style="display: none;">
+    <div class="modal-dialog modal-write">
+      <h2 class="modal-heading">Write a Chapter</h2>
+      
+      <div class="write-header-grid">
+        <div class="form-group">
+          <label class="form-label" for="write-ch-num">CHAPTER #</label>
+          <input type="number" id="write-ch-num" class="form-input num-input" min="1" value="1">
+        </div>
+        <div class="form-group flex-1">
+          <label class="form-label" for="write-ch-title">CHAPTER TITLE <span class="label-optional">(optional)</span></label>
+          <input type="text" id="write-ch-title" class="form-input" placeholder="Leave empty for Chapter # only">
+        </div>
+      </div>
+
+      <div class="form-group content-group">
+        <label class="form-label">CONTENT</label>
+        
+        <!-- Rich Text Toolbar (Screenshot 8.18.39) -->
+        <div class="editor-toolbar">
+          <button type="button" class="toolbar-btn" data-cmd="bold" title="Bold"><b>B</b></button>
+          <button type="button" class="toolbar-btn" data-cmd="italic" title="Italic" style="font-weight: 400; font-size: 1.05rem;">/</button>
+          <button type="button" class="toolbar-btn" data-cmd="underline" title="Underline"><u>U</u></button>
+          <button type="button" class="toolbar-btn" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+          <span class="toolbar-divider"></span>
+          <button type="button" class="toolbar-btn" data-cmd="insertHorizontalRule" title="Divider">—</button>
+          <span class="toolbar-divider"></span>
+          <button type="button" class="toolbar-btn" data-cmd="insertUnorderedList" title="Bullet List">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="6" x2="20" y2="6"></line><line x1="9" y1="12" x2="20" y2="12"></line><line x1="9" y1="18" x2="20" y2="18"></line><circle cx="4" cy="6" r="1.5" fill="currentColor"></circle><circle cx="4" cy="12" r="1.5" fill="currentColor"></circle><circle cx="4" cy="18" r="1.5" fill="currentColor"></circle></svg>
+          </button>
+          <button type="button" class="toolbar-btn" data-cmd="insertOrderedList" title="Numbered List">
+            <svg width="19" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="11" y1="6" x2="21" y2="6"></line><line x1="11" y1="12" x2="21" y2="12"></line><line x1="11" y1="18" x2="21" y2="18"></line><text x="2" y="7.5" font-size="6.5" font-family="sans-serif" font-weight="bold" fill="currentColor" stroke="none">1</text><text x="2" y="13.5" font-size="6.5" font-family="sans-serif" font-weight="bold" fill="currentColor" stroke="none">2</text><text x="2" y="19.5" font-size="6.5" font-family="sans-serif" font-weight="bold" fill="currentColor" stroke="none">3</text></svg>
+          </button>
+          <span class="toolbar-divider"></span>
+          <button type="button" class="toolbar-btn" data-cmd="justifyLeft" title="Align Left">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="17" y1="10" x2="3" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="17" y1="18" x2="3" y2="18"></line></svg>
+          </button>
+          <button type="button" class="toolbar-btn" data-cmd="justifyCenter" title="Align Center">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="10" x2="6" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="18" y1="18" x2="6" y2="18"></line></svg>
+          </button>
+          <button type="button" class="toolbar-btn" data-cmd="justifyRight" title="Align Right">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="10" x2="7" y2="10"></line><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="7" y2="18"></line></svg>
+          </button>
+          <button type="button" class="toolbar-btn" data-cmd="justifyFull" title="Justify">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="21" y1="6" x2="3" y2="6"></line><line x1="21" y1="10" x2="3" y2="10"></line><line x1="21" y1="14" x2="3" y2="14"></line><line x1="21" y1="18" x2="3" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <!-- Editable Content Box -->
+        <div class="editor-content-area" id="write-ch-content" contenteditable="true" placeholder="Paste or write your translated chapter here..."></div>
+      </div>
+
+      <!-- AI Scan Indicator Toggle -->
+      <div class="ai-scan-checkbox-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="write-auto-scan-gemini" checked>
+          <span>Automatically scan text with Gemini AI to detect characters, aliases & spoiler-free 1-line notes</span>
+        </label>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-write">Cancel</button>
+        <button class="btn btn-rose" id="btn-save-write">
+          <span id="save-write-btn-text">Save Chapter</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT BOOK DETAILS MODAL -->
+  <div class="modal-backdrop" id="modal-edit-book" style="display: none;">
+    <div class="modal-dialog">
+      <h2 class="modal-heading">Edit Book Details</h2>
+      <div class="form-group">
+        <label class="form-label" for="edit-book-title">BOOK TITLE *</label>
+        <input type="text" id="edit-book-title" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-book-author">AUTHOR</label>
+        <input type="text" id="edit-book-author" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="edit-book-genre">GENRE / CATEGORY</label>
+        <input type="text" id="edit-book-genre" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">BOOK ACCENT COLOR</label>
+        <div class="color-picker-row">
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#ba6d78"><span class="color-dot" style="background:#ba6d78;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#5c8672"><span class="color-dot" style="background:#5c8672;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#c4884d"><span class="color-dot" style="background:#c4884d;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#647b9a"><span class="color-dot" style="background:#647b9a;"></span></label>
+          <label class="color-option"><input type="radio" name="edit-book-color" value="#8c6b96"><span class="color-dot" style="background:#8c6b96;"></span></label>
+        </div>
+      </div>
+      <div class="form-group toggle-group">
+        <label class="toggle-row" for="edit-book-glossary-toggle">
+          <span class="toggle-switch">
+            <input type="checkbox" id="edit-book-glossary-toggle" checked>
+            <span class="toggle-slider"></span>
+          </span>
+          <span class="toggle-text-block">
+            <span class="toggle-label-title">Add Lore Glossary</span>
+            <span class="toggle-label-desc">Enable lore glossary, hover hints, and text-selection lookup for this book</span>
+          </span>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-edit-book">Cancel</button>
+        <button class="btn btn-rose" id="btn-save-edit-book">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- START NEW BOOK MODAL -->
+  <div class="modal-backdrop" id="modal-new-book" style="display: none;">
+    <div class="modal-dialog">
+      <h2 class="modal-heading">Start New Book</h2>
+      <div class="form-group">
+        <label class="form-label" for="new-book-title">BOOK TITLE *</label>
+        <input type="text" id="new-book-title" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="new-book-author">AUTHOR</label>
+        <input type="text" id="new-book-author" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="new-book-genre">GENRE / CATEGORY</label>
+        <input type="text" id="new-book-genre" class="form-input">
+      </div>
+      <div class="form-group">
+        <label class="form-label">BOOK ACCENT COLOR</label>
+        <div class="color-picker-row">
+          <label class="color-option"><input type="radio" name="book-color" value="#ba6d78" checked><span class="color-dot" style="background:#ba6d78;"></span></label>
+          <label class="color-option"><input type="radio" name="book-color" value="#5c8672"><span class="color-dot" style="background:#5c8672;"></span></label>
+          <label class="color-option"><input type="radio" name="book-color" value="#c4884d"><span class="color-dot" style="background:#c4884d;"></span></label>
+          <label class="color-option"><input type="radio" name="book-color" value="#647b9a"><span class="color-dot" style="background:#647b9a;"></span></label>
+          <label class="color-option"><input type="radio" name="book-color" value="#8c6b96"><span class="color-dot" style="background:#8c6b96;"></span></label>
+        </div>
+      </div>
+      <div class="form-group toggle-group">
+        <label class="toggle-row" for="new-book-glossary-toggle">
+          <span class="toggle-switch">
+            <input type="checkbox" id="new-book-glossary-toggle" checked>
+            <span class="toggle-slider"></span>
+          </span>
+          <span class="toggle-text-block">
+            <span class="toggle-label-title">Add Lore Glossary</span>
+            <span class="toggle-label-desc">Enable lore glossary, hover hints, and text-selection lookup for this book</span>
+          </span>
+        </label>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-new-book">Cancel</button>
+        <button class="btn btn-rose" id="btn-create-new-book">Create Book</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GLOSSARY MODAL (BIG POP UP BOX) -->
+  <div class="modal-backdrop" id="modal-glossary" style="display: none;">
+    <div class="modal-dialog modal-glossary" id="modal-glossary-dialog">
+      <!-- Header -->
+      <div class="modal-glossary-header">
+        <div class="modal-glossary-title-group">
+          <span class="modal-glossary-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+          </span>
+          <h2 class="modal-glossary-heading">Glossary</h2>
+          <span class="glossary-total-badge" id="glossary-total-badge">0</span>
+        </div>
+        <div class="modal-glossary-header-actions">
+          <button class="btn btn-green btn-sm" id="btn-open-add-char-form">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Add Lore Entry</span>
+          </button>
+          <button class="btn btn-secondary btn-sm" id="btn-open-wiki-scraper">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Auto-Fill from Web</span>
+          </button>
+          <button class="modal-close-btn" id="btn-close-glossary" title="Close glossary">&times;</button>
+        </div>
+      </div>
+
+      <!-- Controls & Filter Toolbar -->
+      <div class="modal-glossary-toolbar">
+        <div class="glossary-search-box">
+          <svg class="glossary-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="glossary-search" class="form-input glossary-search-input" placeholder="Search names, aliases, affiliations, lore...">
+          <button type="button" class="glossary-search-clear" id="btn-clear-glossary-search" title="Clear search" style="display: none;">&times;</button>
+        </div>
+
+        <div class="glossary-toolbar-filters">
+          <!-- Category Filter Dropdown (Dropdown selection, no endless scroll of pills!) -->
+          <div class="glossary-filter-group">
+            <label for="glossary-category-filter" class="glossary-control-label">Category:</label>
+            <select id="glossary-category-filter" class="form-input glossary-control-select">
+              <option value="all">All Categories</option>
+              <option value="Character">Character</option>
+              <option value="Weapon / Item">Weapon / Item</option>
+              <option value="Clan / Sect">Clan / Sect</option>
+              <option value="Location / Realm">Location / Realm</option>
+              <option value="Concept / Lore">Concept / Lore</option>
+            </select>
+          </div>
+
+          <!-- Sort Dropdown -->
+          <div class="glossary-filter-group">
+            <label for="glossary-sort-select" class="glossary-control-label">Sort by:</label>
+            <select id="glossary-sort-select" class="form-input glossary-control-select">
+              <option value="relevance">Relevance (Mentions)</option>
+              <option value="time_newest">Time Added (Newest)</option>
+              <option value="time_oldest">Time Added (Oldest)</option>
+              <option value="alpha">Alphabetical (A–Z)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Summary / Status Row -->
+      <div class="modal-glossary-status-row">
+        <span class="glossary-count-label" id="glossary-count-label"></span>
+      </div>
+
+      <!-- Scrollable Area for Collapsible Forms & Cards Grid -->
+      <div class="modal-glossary-scroll-area">
+        <!-- Character Guide Import Panel (Collapsible) -->
+        <div class="wiki-scraper-panel" id="wiki-scraper-panel" style="display: none;">
+          <div class="wiki-panel-inner">
+            <h4>Import from Web / AI</h4>
+            <p class="helper-text">Enter any character, weapon, item, or clan (e.g. <strong>Madam Jin</strong>, <strong>Zidian</strong>, <strong>Cloud Recesses</strong>), or novel title / wiki link.</p>
+            <input type="text" id="wiki-url-input" class="form-input" placeholder="e.g. Zidian, Madam Jin, or Mo Dao Zu Shi">
+            <div class="wiki-panel-btns">
+              <button class="btn btn-secondary btn-sm" id="btn-cancel-wiki">Cancel</button>
+              <button class="btn btn-green btn-sm" id="btn-run-wiki-scrape">Import Entry</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add/Edit Character Form (Collapsible) -->
+        <div class="char-edit-panel" id="char-edit-panel" style="display: none;">
+          <div class="char-edit-inner">
+            <h4 id="char-form-heading">Add Entry</h4>
+            <input type="hidden" id="char-form-id">
+            <div class="form-group">
+              <label class="form-label">Type / Category</label>
+              <select id="char-form-category" class="form-input">
+                <option value="Character">Character</option>
+                <option value="Weapon / Item">Weapon / Item</option>
+                <option value="Clan / Sect">Clan / Sect</option>
+                <option value="Location / Realm">Location / Realm</option>
+                <option value="Concept / Lore">Concept / Lore</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <label class="form-label" style="margin-bottom: 0;">Primary Name *</label>
+                <button type="button" class="btn-ai-autofill-sm" id="btn-ai-autofill-char" title="Auto-fill details using AI">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                  <span>Auto-fill with AI</span>
+                </button>
+              </div>
+              <input type="text" id="char-form-name" class="form-input" placeholder="e.g. Zidian, Madam Jin, Cloud Recesses" style="margin-top: 6px;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Aliases (comma-separated)</label>
+              <input type="text" id="char-form-aliases" class="form-input" placeholder="e.g. Purple Lightning, Amethyst Ring, 紫电">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Affiliation</label>
+              <input type="text" id="char-form-sect" class="form-input" placeholder="e.g. Yunmeng Jiang Clan, Fellowship of the Ring, House Stark">
+            </div>
+            <div class="form-group">
+              <label class="form-label">1-Line Spoiler-Free Summary</label>
+              <textarea id="char-form-summary" class="form-textarea" rows="2" placeholder="e.g. A spiritual weapon or character description."></textarea>
+            </div>
+            <div class="char-form-btns">
+              <button class="btn btn-secondary btn-sm" id="btn-cancel-char-form">Cancel</button>
+              <button class="btn btn-rose btn-sm" id="btn-save-char-form">Save Entry</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Character Cards Grid -->
+        <div class="glossary-list-grid" id="glossary-list-container">
+          <!-- Injected dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- UNIFIED READER SEARCH & LORE DRAWER -->
+  <aside class="reader-search-drawer" id="reader-search-drawer">
+    <div class="search-drawer-header">
+      <div class="search-drawer-title-group">
+        <span class="search-drawer-icon">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        </span>
+        <h3 class="search-drawer-heading">Search</h3>
+      </div>
+      <button class="btn-drawer-close" id="btn-close-search" title="Close (Esc)">&times;</button>
+    </div>
+
+    <!-- Search Input & Filter Pills -->
+    <div class="search-drawer-tools">
+      <div class="search-input-wrapper">
+        <svg class="search-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="reader-search-input" class="search-drawer-input" placeholder="Search chapters, dialogue, lore...">
+        <button class="search-input-clear" id="btn-clear-search" style="display: none;" title="Clear search">&times;</button>
+      </div>
+
+      <!-- Scope Filter Pills -->
+      <div class="search-scope-pills" id="search-scope-pills">
+        <button class="search-scope-pill active" data-scope="all">All <span class="scope-count" id="count-scope-all">0</span></button>
+        <button class="search-scope-pill" data-scope="this_chapter">This Chapter <span class="scope-count" id="count-scope-this-chapter">0</span></button>
+        <button class="search-scope-pill" data-scope="all_chapters">All Chapters <span class="scope-count" id="count-scope-all-chapters">0</span></button>
+        <button class="search-scope-pill" data-scope="lore">Lore Glossary <span class="scope-count" id="count-scope-lore">0</span></button>
+      </div>
+
+      <!-- Quick Add Lore Bar -->
+      <div class="search-lore-actions-row" id="search-lore-actions-row">
+        <button class="btn btn-secondary btn-sm" id="btn-search-add-lore">+ Add Lore Entry</button>
+      </div>
+    </div>
+
+    <!-- Quick Add Lore Panel inside Drawer (Collapsible) -->
+    <div class="search-add-lore-panel" id="search-add-lore-panel" style="display: none;">
+      <div class="search-add-lore-inner">
+        <div class="search-add-lore-title-row">
+          <h4 id="search-lore-form-heading">Add Lore Entry</h4>
+          <button type="button" class="btn-cancel-lore-inline" id="btn-cancel-search-lore">&times;</button>
+        </div>
+        <input type="hidden" id="search-lore-id">
+        <div class="form-group">
+          <label class="form-label">Type / Category</label>
+          <select id="search-lore-category" class="form-input">
+            <option value="Character">Character</option>
+            <option value="Weapon / Item">Weapon / Item</option>
+            <option value="Clan / Sect">Clan / Sect</option>
+            <option value="Location / Realm">Location / Realm</option>
+            <option value="Concept / Lore">Concept / Lore</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="form-label" style="margin-bottom: 0;">Primary Name *</label>
+            <button type="button" class="btn-ai-autofill-sm" id="btn-ai-autofill-search-lore" title="Auto-fill details using AI">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <span>Auto-Fill with AI</span>
+            </button>
+          </div>
+          <input type="text" id="search-lore-name" class="form-input" placeholder="e.g. Wei Wuxian, Zidian, Cloud Recesses">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Aliases (comma-separated)</label>
+          <input type="text" id="search-lore-aliases" class="form-input" placeholder="e.g. Yiling Patriarch, Wei Ying, A-Xian">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Affiliation</label>
+          <input type="text" id="search-lore-sect" class="form-input" placeholder="e.g. Yunmeng Jiang Sect, Fellowship of the Ring">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Spoiler-Free Summary</label>
+          <textarea id="search-lore-summary" class="form-textarea" rows="2" placeholder="One sentence introductory description..."></textarea>
+        </div>
+        <div class="search-add-lore-btns">
+          <button type="button" class="btn btn-secondary btn-sm" id="btn-close-search-lore-form">Cancel</button>
+          <button type="button" class="btn btn-green btn-sm" id="btn-save-search-lore">Save Entry</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scrollable Results Container -->
+    <div class="search-results-container" id="search-results-container">
+      <div class="search-empty-state" id="search-empty-state">
+        <p class="search-empty-hint">Type at least 2 characters to search dialogue, scenes, character names, or lore across this novel.</p>
+      </div>
+      <div class="search-loading-state" id="search-loading-state" style="display: none;">
+        <span class="search-spinner"></span>
+        <span>Searching...</span>
+      </div>
+      <div class="search-results-list" id="search-results-list" style="display: none;">
+        <!-- Injected dynamically: Lore Cards & Chapter Occurrences -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Client JavaScript -->
+  <script src="/static/js/app.js"></script>
+  <script src="/static/js/fidget.js"></script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+[
+  {
+    "id": "aragorn-ii",
+    "name": "Aragorn II",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Strider",
+      "Elessar",
+      "Heir of Isildur"
+    ],
+    "sect_or_affiliation": "Rangers of the North",
+    "affiliation": "Rangers of the North",
+    "summary": "A rugged ranger of the North with a mysterious royal heritage and exceptional tracking skills."
+  },
+  {
+    "id": "arwen",
+    "name": "Arwen",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Evenstar"
+    ],
+    "sect_or_affiliation": "Elves of Rivendell",
+    "affiliation": "Elves of Rivendell",
+    "summary": "An aristocratic and ethereal Elven noblewoman of Rivendell of legendary grace."
+  },
+  {
+    "id": "bilbo-baggins",
+    "name": "Bilbo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Burglar"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A well-to-do hobbit of the Shire known for his unexpected past adventures and penchant for writing."
+  },
+  {
+    "id": "frodo-baggins",
+    "name": "Frodo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ring-bearer"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A young, studious hobbit of the Shire and nephew to Bilbo Baggins."
+  },
+  {
+    "id": "beregond",
+    "name": "Beregond",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain Beregond"
+    ],
+    "sect_or_affiliation": "Gondor",
+    "affiliation": "Gondor",
+    "summary": "A dedicated guard and soldier serving in the Citadel of Minas Tirith."
+  },
+  {
+    "id": "bergil",
+    "name": "Bergil",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Gondor",
+    "affiliation": "Gondor",
+    "summary": "A young boy of Minas Tirith and the son of Beregond."
+  },
+  {
+    "id": "fredegar-bolger",
+    "name": "Fredegar Bolger",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Fatty"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A plump hobbit of the Shire and a close friend of Frodo Baggins."
+  },
+  {
+    "id": "tom-bombadil",
+    "name": "Tom Bombadil",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Iarwain Ben-adar"
+    ],
+    "sect_or_affiliation": "Old Forest",
+    "affiliation": "Old Forest",
+    "summary": "A merry, enigmatic entity of immense ancient power residing within the Old Forest."
+  },
+  {
+    "id": "boromir",
+    "name": "Boromir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain of the White Tower"
+    ],
+    "sect_or_affiliation": "Gondor",
+    "affiliation": "Gondor",
+    "summary": "A proud, martial nobleman and captain from the realm of Gondor."
+  },
+  {
+    "id": "meriadoc-brandybuck",
+    "name": "Meriadoc Brandybuck",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Merry"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A clever and resourceful young hobbit of the Shire belonging to the Brandybuck family."
+  },
+  {
+    "id": "barliman-butterbur",
+    "name": "Barliman Butterbur",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Bree",
+    "affiliation": "Bree",
+    "summary": "A bustling, forgetful innkeeper of the Prancing Pony in the village of Bree."
+  },
+  {
+    "id": "celeborn",
+    "name": "Celeborn",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lord of Lothlórien"
+    ],
+    "sect_or_affiliation": "Elves of Lothlórien",
+    "affiliation": "Elves of Lothlórien",
+    "summary": "An ancient Elven lord who rules the golden realm of Lothlórien alongside Galadriel."
+  },
+  {
+    "id": "denethor-ii",
+    "name": "Denethor II",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lord and Steward of Gondor"
+    ],
+    "sect_or_affiliation": "Gondor",
+    "affiliation": "Gondor",
+    "summary": "The stern, brooding ruling Steward of the realm of Gondor."
+  },
+  {
+    "id": "elladan-and-elrohir",
+    "name": "Elladan and Elrohir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Twin Sons of Elrond"
+    ],
+    "sect_or_affiliation": "Elves of Rivendell",
+    "affiliation": "Elves of Rivendell",
+    "summary": "Prowling Elven warrior brothers from Rivendell who frequently ride against wild adversaries."
+  },
+  {
+    "id": "omer",
+    "name": "Éomer",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Third Marshal of the Riddermark"
+    ],
+    "sect_or_affiliation": "Rohan",
+    "affiliation": "Rohan",
+    "summary": "A fierce and loyal equestrian commander of Rohan's martial forces."
+  },
+  {
+    "id": "owyn",
+    "name": "Éowyn",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Shieldmaiden of Rohan"
+    ],
+    "sect_or_affiliation": "Rohan",
+    "affiliation": "Rohan",
+    "summary": "A noblewoman of Rohan with a yearning for martial glory and freedom."
+  },
+  {
+    "id": "faramir",
+    "name": "Faramir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain of the Rangers"
+    ],
+    "sect_or_affiliation": "Gondor",
+    "affiliation": "Gondor",
+    "summary": "A scholarly and gentle captain of the Gondorian rangers, and younger brother to Boromir."
+  },
+  {
+    "id": "samwise-gamgee",
+    "name": "Samwise Gamgee",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sam"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A steadfast and loyal hobbit gardener of the Shire serving Frodo Baggins."
+  },
+  {
+    "id": "gamling",
+    "name": "Gamling",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Old"
+    ],
+    "sect_or_affiliation": "Rohan",
+    "affiliation": "Rohan",
+    "summary": "An elderly, experienced warrior and counsellor loyal to the king of Rohan."
+  },
+  {
+    "id": "gh-n-buri-gh-n",
+    "name": "Ghân-buri-Ghân",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Chieftain of the Wúfwen"
+    ],
+    "sect_or_affiliation": "Drúadan Forest",
+    "affiliation": "Drúadan Forest",
+    "summary": "A chieftain of the wild, forest-dwelling Drúedain people."
+  },
+  {
+    "id": "gildor-inglorion",
+    "name": "Gildor Inglorion",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "House of Finrod"
+    ],
+    "sect_or_affiliation": "Exiled Noldor Elves",
+    "affiliation": "Exiled Noldor Elves",
+    "summary": "A noble and wise wanderer among the wandering Elven companies of the Shire."
+  },
+  {
+    "id": "gimli",
+    "name": "Gimli",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lockbearer",
+      "Son of Glóin"
+    ],
+    "sect_or_affiliation": "Dwarves of Erebor",
+    "affiliation": "Dwarves of Erebor",
+    "summary": "A stout, proud Dwarf warrior skilled with the axe and fiercely loyal to his companions."
+  },
+  {
+    "id": "goldberry",
+    "name": "Goldberry",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "River-daughter"
+    ],
+    "sect_or_affiliation": "Old Forest",
+    "affiliation": "Old Forest",
+    "summary": "An ethereal, graceful maiden associated with the springs of the Old Forest."
+  },
+  {
+    "id": "gollum",
+    "name": "Gollum",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sméagol"
+    ],
+    "sect_or_affiliation": "None",
+    "affiliation": "None",
+    "summary": "A wretched, corrupted creature obsessed with finding a lost magical golden ring."
+  },
+  {
+    "id": "gorbag",
+    "name": "Gorbag",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Minas Morgul Orcs",
+    "affiliation": "Minas Morgul Orcs",
+    "summary": "A cynical Orc captain stationed in the garrison of Minas Morgul."
+  },
+  {
+    "id": "grimbold",
+    "name": "Grimbold",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Rohan",
+    "affiliation": "Rohan",
+    "summary": "A valiant marshal and leader of men from the Westfold region of Rohan."
+  },
+  {
+    "id": "gwaihir",
+    "name": "Gwaihir",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Windlord"
+    ],
+    "sect_or_affiliation": "Great Eagles",
+    "affiliation": "Great Eagles",
+    "summary": "A noble and majestic giant eagle of the Misty Mountains."
+  },
+  {
+    "id": "imrahil",
+    "name": "Imrahil",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Prince of Dol Amroth"
+    ],
+    "sect_or_affiliation": "Dol Amroth",
+    "affiliation": "Dol Amroth",
+    "summary": "A charismatic and chivalrous prince of the coastal fiefdom of Dol Amroth in Gondor."
+  },
+  {
+    "id": "kham-l",
+    "name": "Khamûl",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Black Easterling",
+      "The Shadow of the East"
+    ],
+    "sect_or_affiliation": "Nazgûl",
+    "affiliation": "Nazgûl",
+    "summary": "One of the dreaded Ringwraiths serving the Dark Lord."
+  },
+  {
+    "id": "legolas",
+    "name": "Legolas",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Greenleaf"
+    ],
+    "sect_or_affiliation": "Elves of Mirkwood",
+    "affiliation": "Elves of Mirkwood",
+    "summary": "An agile Elven prince from Mirkwood possessing peerless marksmanship with a bow."
+  },
+  {
+    "id": "lugdush",
+    "name": "Lugdush",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Isengard Orcs",
+    "affiliation": "Isengard Orcs",
+    "summary": "An Orc soldier from Isengard sent on a raiding mission."
+  },
+  {
+    "id": "mauh-r",
+    "name": "Mauhúr",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Isengard Orcs",
+    "affiliation": "Isengard Orcs",
+    "summary": "An aggressive Orc captain leading a detachment of fighters from Isengard."
+  },
+  {
+    "id": "rowlie-appledore",
+    "name": "Rowlie Appledore",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A minor resident and gatekeeper figure within the Shire."
+  },
+  {
+    "id": "sauron",
+    "name": "Sauron",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Dark Lord",
+      "The Enemy",
+      "Lord of the Rings"
+    ],
+    "sect_or_affiliation": "Mordor",
+    "affiliation": "Mordor",
+    "summary": "The supreme dark sorcerer and master of Mordor seeking world domination."
+  },
+  {
+    "id": "shagrat",
+    "name": "Shagrat",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "sect_or_affiliation": "Cirith Ungol Orcs",
+    "affiliation": "Cirith Ungol Orcs",
+    "summary": "A brutish Uruk captain commanding the tower garrison of Cirith Ungol."
+  },
+  {
+    "id": "shelob",
+    "name": "Shelob",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Her Ladyship"
+    ],
+    "sect_or_affiliation": "Cirith Ungol",
+    "affiliation": "Cirith Ungol",
+    "summary": "An ancient, monstrous giant spider dwelling in the dark tunnels above Mordor."
+  },
+  {
+    "id": "th-oden",
+    "name": "Théoden",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "King Théoden",
+      "Ednew"
+    ],
+    "sect_or_affiliation": "Rohan",
+    "affiliation": "Rohan",
+    "summary": "The aging King of Rohan weighed down by trials and dark counsel."
+  },
+  {
+    "id": "adelard-took",
+    "name": "Adelard Took",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Addie"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A notoriously nosy relative belonging to the eccentric Took family of the Shire."
+  },
+  {
+    "id": "peregrin-took",
+    "name": "Peregrin Took",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Pippin"
+    ],
+    "sect_or_affiliation": "The Shire",
+    "affiliation": "The Shire",
+    "summary": "A young, impulsive hobbit of the Shire prone to accidental mischief."
+  },
+  {
+    "id": "treebeard",
+    "name": "Treebeard",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Fangorn"
+    ],
+    "sect_or_affiliation": "Ents",
+    "affiliation": "Ents",
+    "summary": "An ancient, tree-like shepherd and guardian of the forest of Fangorn."
+  },
+  {
+    "id": "witch-king-of-angmar",
+    "name": "Witch-king of Angmar",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lord of Nazgûl",
+      "The Black Captain"
+    ],
+    "sect_or_affiliation": "Nazgûl",
+    "affiliation": "Nazgûl",
+    "summary": "The terrifying chief lieutenant and sorcerer-king under the Dark Lord's command."
+  },
+  {
+    "id": "witch-king-s-winged-steed",
+    "name": "Witch-king's winged steed",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Fell beast"
+    ],
+    "sect_or_affiliation": "Mordor",
+    "affiliation": "Mordor",
+    "summary": "A monstrous, foul-winged creature serving as the mount of the Witch-king."
+  },
+  {
+    "id": "gr-ma",
+    "name": "Gríma",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Wormtongue"
+    ],
+    "sect_or_affiliation": "Rohan",
+    "affiliation": "Rohan",
+    "summary": "A pale, treacherous counselor and political advisor in the court of Rohan."
+  },
+  {
+    "id": "bag-end",
+    "name": "Bag End",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Under-Hill"
+    ],
+    "affiliation": "Baggins Family",
+    "sect_or_affiliation": "Baggins Family",
+    "summary": "Bag End is a comfortable and luxurious hobbit-hole situated at the top of The Hill in Hobbiton, serving as the residence of Bilbo Baggins and later Frodo Baggins."
+  },
+  {
+    "id": "hobbiton",
+    "name": "Hobbiton",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "Hobbiton is a village in the Shire and the birthplace and early home of Bilbo and Frodo Baggins."
+  }
+]

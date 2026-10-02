@@ -1,0 +1,10 @@
+{
+  "id": "trash-test-book",
+  "title": "Trash Test Book",
+  "author": "Unknown Author",
+  "genre": "Web Novel",
+  "color": "#5c8672",
+  "created_at": "01/10/2026",
+  "last_read_chapter": 5,
+  "enable_glossary": true
+}
