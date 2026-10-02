@@ -87,6 +87,147 @@ async function callGeminiDirect(prompt) {
   return null;
 }
 
+function escapeSearchHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+export function extractChapterSearchSnippets(contentHtml, query) {
+  if (!contentHtml || !query) return [];
+
+  let rawParagraphs = [];
+  const pRegex = /<p[^>]*>([\s\S]*?)<\/p>/gi;
+  let m;
+  while ((m = pRegex.exec(contentHtml)) !== null) {
+    rawParagraphs.push(m[1]);
+  }
+
+  if (rawParagraphs.length === 0) {
+    const clean = contentHtml.replace(/<br\s*\/?>/gi, '\n');
+    rawParagraphs = clean.split('\n').map(p => p.trim()).filter(Boolean);
+  }
+
+  const matches = [];
+  const qLower = query.toLowerCase();
+
+  for (let pIdx = 0; pIdx < rawParagraphs.length; pIdx++) {
+    const pHtml = rawParagraphs[pIdx];
+    let text = pHtml.replace(/<[^>]+>/g, '');
+    text = text
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .trim();
+
+    if (!text) continue;
+
+    const textLower = text.toLowerCase();
+    let start = 0;
+    while (true) {
+      const pos = textLower.indexOf(qLower, start);
+      if (pos === -1) break;
+
+      const matchText = text.slice(pos, pos + query.length);
+      const beforeStr = text.slice(0, pos);
+      const afterStr = text.slice(pos + query.length);
+
+      const beforeWords = beforeStr.trim().split(/\s+/).filter(Boolean);
+      const afterWords = afterStr.trim().split(/\s+/).filter(Boolean);
+
+      let snippetBefore = '';
+      if (beforeWords.length > 14) {
+        snippetBefore = '...' + beforeWords.slice(-14).join(' ') + ' ';
+      } else {
+        snippetBefore = beforeStr;
+      }
+
+      let snippetAfter = '';
+      if (afterWords.length > 14) {
+        snippetAfter = ' ' + afterWords.slice(0, 14).join(' ') + '...';
+      } else {
+        snippetAfter = afterStr;
+      }
+
+      const safeBefore = escapeSearchHtml(snippetBefore);
+      const safeMatch = `<mark class="search-match">${escapeSearchHtml(matchText)}</mark>`;
+      const safeAfter = escapeSearchHtml(snippetAfter);
+      const snippetHtml = `${safeBefore}${safeMatch}${safeAfter}`;
+
+      matches.push({
+        paragraph_index: pIdx,
+        snippet_html: snippetHtml,
+        text_before: snippetBefore,
+        match_text: matchText,
+        text_after: snippetAfter
+      });
+
+      start = pos + query.length;
+    }
+  }
+
+  return matches;
+}
+
+function searchGlossaryClientSide(glossary, query) {
+  if (!glossary || !query) return [];
+  const qLower = query.toLowerCase().trim();
+  const results = [];
+
+  for (const entry of glossary) {
+    const name = entry.name || '';
+    const aliases = Array.isArray(entry.aliases) ? entry.aliases : [];
+    const pinyin = entry.pinyin_or_chinese || '';
+    const summary = entry.summary || entry.notes || '';
+    const sect = entry.affiliation || entry.sect_or_affiliation || '';
+    const category = entry.category || 'Character';
+
+    let matchedField = null;
+    let matchedAlias = null;
+
+    if (name.toLowerCase().includes(qLower)) {
+      matchedField = 'name';
+    } else {
+      const foundAlias = aliases.find(a => (a || '').toLowerCase().includes(qLower));
+      if (foundAlias) {
+        matchedField = 'alias';
+        matchedAlias = foundAlias;
+      } else if (pinyin && pinyin.toLowerCase().includes(qLower)) {
+        matchedField = 'pinyin';
+      } else if (summary && summary.toLowerCase().includes(qLower)) {
+        matchedField = 'summary';
+      } else if (sect && sect.toLowerCase().includes(qLower)) {
+        matchedField = 'sect';
+      }
+    }
+
+    if (matchedField) {
+      results.push({
+        ...entry,
+        id: entry.id,
+        name,
+        category,
+        pinyin_or_chinese: pinyin,
+        aliases,
+        affiliation: sect,
+        sect_or_affiliation: sect,
+        summary,
+        matched_field: matchedField,
+        matched_alias: matchedAlias
+      });
+    }
+  }
+
+  return results;
+}
+
 export const api = {
   getLastSyncTime() {
     return lastSyncTimestamp;
@@ -722,150 +863,9 @@ Return a JSON array with 1 object (or [] if not canon):
     return { success: false, message: 'Could not extract details for this entry.' };
   },
 
-function escapeSearchHtml(str) {
-  if (!str) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
-}
-
-export function extractChapterSearchSnippets(contentHtml, query) {
-  if (!contentHtml || !query) return [];
-
-  let rawParagraphs = [];
-  const pRegex = /<p[^>]*>([\s\S]*?)<\/p>/gi;
-  let m;
-  while ((m = pRegex.exec(contentHtml)) !== null) {
-    rawParagraphs.push(m[1]);
-  }
-
-  if (rawParagraphs.length === 0) {
-    const clean = contentHtml.replace(/<br\s*\/?>/gi, '\n');
-    rawParagraphs = clean.split('\n').map(p => p.trim()).filter(Boolean);
-  }
-
-  const matches = [];
-  const qLower = query.toLowerCase();
-
-  for (let pIdx = 0; pIdx < rawParagraphs.length; pIdx++) {
-    const pHtml = rawParagraphs[pIdx];
-    let text = pHtml.replace(/<[^>]+>/g, '');
-    text = text
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'")
-      .trim();
-
-    if (!text) continue;
-
-    const textLower = text.toLowerCase();
-    let start = 0;
-    while (true) {
-      const pos = textLower.indexOf(qLower, start);
-      if (pos === -1) break;
-
-      const matchText = text.slice(pos, pos + query.length);
-      const beforeStr = text.slice(0, pos);
-      const afterStr = text.slice(pos + query.length);
-
-      const beforeWords = beforeStr.trim().split(/\s+/).filter(Boolean);
-      const afterWords = afterStr.trim().split(/\s+/).filter(Boolean);
-
-      let snippetBefore = '';
-      if (beforeWords.length > 14) {
-        snippetBefore = '...' + beforeWords.slice(-14).join(' ') + ' ';
-      } else {
-        snippetBefore = beforeStr;
-      }
-
-      let snippetAfter = '';
-      if (afterWords.length > 14) {
-        snippetAfter = ' ' + afterWords.slice(0, 14).join(' ') + '...';
-      } else {
-        snippetAfter = afterStr;
-      }
-
-      const safeBefore = escapeSearchHtml(snippetBefore);
-      const safeMatch = `<mark class="search-match">${escapeSearchHtml(matchText)}</mark>`;
-      const safeAfter = escapeSearchHtml(snippetAfter);
-      const snippetHtml = `${safeBefore}${safeMatch}${safeAfter}`;
-
-      matches.push({
-        paragraph_index: pIdx,
-        snippet_html: snippetHtml,
-        text_before: snippetBefore,
-        match_text: matchText,
-        text_after: snippetAfter
-      });
-
-      start = pos + query.length;
-    }
-  }
-
-  return matches;
-}
-
-function searchGlossaryClientSide(glossary, query) {
-  if (!glossary || !query) return [];
-  const qLower = query.toLowerCase().trim();
-  const results = [];
-
-  for (const entry of glossary) {
-    const name = entry.name || '';
-    const aliases = Array.isArray(entry.aliases) ? entry.aliases : [];
-    const pinyin = entry.pinyin_or_chinese || '';
-    const summary = entry.summary || entry.notes || '';
-    const sect = entry.affiliation || entry.sect_or_affiliation || '';
-    const category = entry.category || 'Character';
-
-    let matchedField = null;
-    let matchedAlias = null;
-
-    if (name.toLowerCase().includes(qLower)) {
-      matchedField = 'name';
-    } else {
-      const foundAlias = aliases.find(a => (a || '').toLowerCase().includes(qLower));
-      if (foundAlias) {
-        matchedField = 'alias';
-        matchedAlias = foundAlias;
-      } else if (pinyin && pinyin.toLowerCase().includes(qLower)) {
-        matchedField = 'pinyin';
-      } else if (summary && summary.toLowerCase().includes(qLower)) {
-        matchedField = 'summary';
-      } else if (sect && sect.toLowerCase().includes(qLower)) {
-        matchedField = 'sect';
-      }
-    }
-
-    if (matchedField) {
-      results.push({
-        ...entry,
-        id: entry.id,
-        name,
-        category,
-        pinyin_or_chinese: pinyin,
-        aliases,
-        affiliation: sect,
-        sect_or_affiliation: sect,
-        summary,
-        matched_field: matchedField,
-        matched_alias: matchedAlias
-      });
-    }
-  }
-
-  return results;
-}
-
   async search(bookId, query, scope = 'all', ch = null) {
-    const qLower = (query || '').toLowerCase().trim();
-    if (!qLower) {
+    const qTrim = (query || '').trim();
+    if (!qTrim) {
       return {
         query: '',
         glossary_matches: [],
@@ -880,8 +880,8 @@ function searchGlossaryClientSide(glossary, query) {
     // 1. Try local Flask server if running
     if (this.isOnline()) {
       try {
-        let url = `/api/books/${encodeURIComponent(bookId)}/search?q=${encodeURIComponent(query)}&scope=${scope}`;
-        if (ch !== null) url += `&ch=${ch}`;
+        let url = `/api/books/${encodeURIComponent(bookId)}/search?q=${encodeURIComponent(qTrim)}&scope=${scope}`;
+        if (ch !== null && ch !== undefined) url += `&ch=${ch}`;
         const res = await fetch(url);
         if (res.ok) {
           const serverData = await res.json();
@@ -899,7 +899,7 @@ function searchGlossaryClientSide(glossary, query) {
     if (scope === 'all' || scope === 'lore') {
       try {
         const glossary = await this.getGlossary(bookId);
-        glossaryMatches = searchGlossaryClientSide(glossary, query);
+        glossaryMatches = searchGlossaryClientSide(glossary, qTrim);
       } catch (err) {
         console.warn('Error fetching glossary for search:', err);
       }
@@ -915,7 +915,8 @@ function searchGlossaryClientSide(glossary, query) {
       // Query Supabase chapters table if online
       if (this.isOnline()) {
         try {
-          let sUrl = `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&content=ilike.*${encodeURIComponent(query)}*&select=chapter_number,title,content&order=chapter_number.asc`;
+          const encodedPattern = encodeURIComponent(`*${qTrim}*`);
+          let sUrl = `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&content=ilike.${encodedPattern}&select=chapter_number,title,content&order=chapter_number.asc`;
           if (targetCh !== null) {
             sUrl += `&chapter_number=eq.${targetCh}`;
           }
@@ -931,6 +932,7 @@ function searchGlossaryClientSide(glossary, query) {
       // If offline or Supabase returned no rows, search offline IndexedDB chapters
       if (!matchingChapters || matchingChapters.length === 0) {
         try {
+          const qLower = qTrim.toLowerCase();
           if (targetCh !== null) {
             const singleCh = await offlineDB.getChapter(bookId, targetCh);
             if (singleCh && singleCh.content && singleCh.content.toLowerCase().includes(qLower)) {
@@ -949,7 +951,7 @@ function searchGlossaryClientSide(glossary, query) {
       for (const chItem of (matchingChapters || [])) {
         const chNum = Number(chItem.chapter_number);
         if (targetCh !== null && chNum !== targetCh) continue;
-        const snippets = extractChapterSearchSnippets(chItem.content || '', query);
+        const snippets = extractChapterSearchSnippets(chItem.content || '', qTrim);
         if (snippets.length > 0) {
           totalChapterMatches += snippets.length;
           chapterMatches.push({
@@ -964,7 +966,7 @@ function searchGlossaryClientSide(glossary, query) {
     }
 
     return {
-      query,
+      query: qTrim,
       glossary_matches: glossaryMatches,
       chapter_matches: chapterMatches,
       total_lore_matches: glossaryMatches.length,
