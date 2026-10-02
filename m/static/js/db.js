@@ -165,27 +165,69 @@ class OfflineDB {
     });
   }
 
+  async deleteChapter(bookId, chapterNum) {
+    const db = await this.init();
+    return new Promise((resolve) => {
+      const tx = db.transaction('chapters', 'readwrite');
+      tx.objectStore('chapters').delete([bookId, Number(chapterNum)]);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  }
+
+  async reconcileChaptersList(bookId, freshList) {
+    const db = await this.init();
+    const freshNums = new Set((freshList || []).map(ch => Number(ch.chapter_number)));
+    return new Promise((resolve) => {
+      const tx = db.transaction('chapters', 'readwrite');
+      const store = tx.objectStore('chapters');
+      const index = store.index('book_id');
+      const req = index.getAll(IDBKeyRange.only(bookId));
+      req.onsuccess = () => {
+        const cached = req.result || [];
+        cached.forEach(ch => {
+          if (!freshNums.has(Number(ch.chapter_number))) {
+            store.delete([bookId, Number(ch.chapter_number)]);
+          }
+        });
+      };
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  }
+
   // --- Glossary ---
   async saveGlossary(bookId, entries) {
     const db = await this.init();
     return new Promise((resolve, reject) => {
       const tx = db.transaction('glossary', 'readwrite');
       const store = tx.objectStore('glossary');
-      entries.forEach(item => {
-        const gid = item.id || (item.name || '').toLowerCase().trim().replace(/\s+/g, '-');
-        store.put({
-          book_id: bookId,
-          id: gid,
-          name: item.name || '',
-          category: item.category || 'Character',
-          pinyin_or_chinese: item.pinyin_or_chinese || '',
-          aliases: Array.isArray(item.aliases) ? item.aliases : [],
-          affiliation: item.affiliation || item.sect_or_affiliation || '',
-          sect_or_affiliation: item.sect_or_affiliation || item.affiliation || '',
-          summary: item.summary || '',
-          mentions: Number(item.mentions || 0)
+      const index = store.index('book_id');
+      const req = index.getAll(IDBKeyRange.only(bookId));
+      req.onsuccess = () => {
+        const cached = req.result || [];
+        const freshIds = new Set((entries || []).map(e => e.id || (e.name || '').toLowerCase().trim().replace(/\s+/g, '-')));
+        cached.forEach(old => {
+          if (!freshIds.has(old.id)) {
+            store.delete([bookId, old.id]);
+          }
         });
-      });
+        (entries || []).forEach(item => {
+          const gid = item.id || (item.name || '').toLowerCase().trim().replace(/\s+/g, '-');
+          store.put({
+            book_id: bookId,
+            id: gid,
+            name: item.name || '',
+            category: item.category || 'Character',
+            pinyin_or_chinese: item.pinyin_or_chinese || '',
+            aliases: Array.isArray(item.aliases) ? item.aliases : [],
+            affiliation: item.affiliation || item.sect_or_affiliation || '',
+            sect_or_affiliation: item.sect_or_affiliation || item.affiliation || '',
+            summary: item.summary || '',
+            mentions: Number(item.mentions || 0)
+          });
+        });
+      };
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
@@ -223,7 +265,17 @@ class OfflineDB {
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
-  }
+  },
+
+  async deleteGlossaryEntry(bookId, charId) {
+    const db = await this.init();
+    return new Promise((resolve) => {
+      const tx = db.transaction('glossary', 'readwrite');
+      tx.objectStore('glossary').delete([bookId, charId]);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    });
+  },
 
   // --- Downloads Registry ---
   async getDownloadStatus(bookId) {

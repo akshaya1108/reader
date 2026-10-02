@@ -22,6 +22,10 @@ const UPSERT_HEADERS = {
 
 let lastSyncTimestamp = new Date();
 
+const KNOWN_CLUSTERS = [
+  ['the-fellowship-of-the-ring', 'the-two-towers', 'the-return-of-the-king']
+];
+
 export const api = {
   getLastSyncTime() {
     return lastSyncTimestamp;
@@ -41,12 +45,24 @@ export const api = {
         if (res.ok) {
           const books = await res.json();
           // Normalize fields for frontend compatibility
-          const normalized = books.map(b => ({
-            ...b,
-            cover: b.cover_image || b.cover || '',
-            chapters_count: b.total_chapters || b.chapters_count || 0,
-            total_words: b.word_count || b.total_words || 0
-          }));
+          const normalized = books.map(b => {
+            let sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
+            if (!sharedId) {
+              for (const cl of KNOWN_CLUSTERS) {
+                if (cl.includes(b.id)) {
+                  sharedId = 'the-two-towers';
+                  break;
+                }
+              }
+            }
+            return {
+              ...b,
+              cover: b.cover_image || b.cover || '',
+              chapters_count: b.total_chapters || b.chapters_count || 0,
+              total_words: b.word_count || b.total_words || 0,
+              shared_glossary_id: sharedId
+            };
+          });
           await offlineDB.saveBooks(normalized);
           lastSyncTimestamp = new Date();
           return normalized;
@@ -58,12 +74,61 @@ export const api = {
 
     // Offline / network failure fallback
     const localBooks = await offlineDB.getBooks();
-    return localBooks.map(b => ({
-      ...b,
-      cover: b.cover_image || b.cover || '',
-      chapters_count: b.total_chapters || b.chapters_count || 0,
-      total_words: b.word_count || b.total_words || 0
-    }));
+    return localBooks.map(b => {
+      let sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
+      if (!sharedId) {
+        for (const cl of KNOWN_CLUSTERS) {
+          if (cl.includes(b.id)) {
+            sharedId = 'the-two-towers';
+            break;
+          }
+        }
+      }
+      return {
+        ...b,
+        cover: b.cover_image || b.cover || '',
+        chapters_count: b.total_chapters || b.chapters_count || 0,
+        total_words: b.word_count || b.total_words || 0,
+        shared_glossary_id: sharedId
+      };
+    });
+  },
+
+  async getClusterBookIds(bookId) {
+    try {
+      const books = await this.getBooks();
+      const targetBook = books.find(b => b.id === bookId);
+      let canonicalId = targetBook?.shared_glossary_id || (targetBook?.bookmark && targetBook.bookmark._shared_glossary_id);
+      if (!canonicalId) {
+        for (const cl of KNOWN_CLUSTERS) {
+          if (cl.includes(bookId)) {
+            canonicalId = 'the-two-towers';
+            break;
+          }
+        }
+      }
+      if (!canonicalId) canonicalId = bookId;
+
+      const cluster = new Set([bookId, canonicalId]);
+      for (const cl of KNOWN_CLUSTERS) {
+        if (cl.includes(bookId) || cl.includes(canonicalId)) {
+          cl.forEach(id => cluster.add(id));
+        }
+      }
+      books.forEach(b => {
+        const bCanon = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id);
+        if (b.id === canonicalId || bCanon === canonicalId || bCanon === bookId || b.id === bookId) {
+          cluster.add(b.id);
+        }
+      });
+      return Array.from(cluster).filter(Boolean);
+    } catch (e) {
+      console.warn('Error resolving cluster book ids:', e);
+      for (const cl of KNOWN_CLUSTERS) {
+        if (cl.includes(bookId)) return cl;
+      }
+      return [bookId];
+    }
   },
 
   async getBook(bookId) {
@@ -72,18 +137,36 @@ export const api = {
   },
 
   async updateBook(bookId, data) {
+    const canonId = await this.getGlossaryCanonicalId(bookId);
+    const books = await this.getBooks();
+    const targetBook = books.find(b => b.id === bookId);
+    const clusterCanon = targetBook?.shared_glossary_id || (canonId !== bookId ? canonId : null);
+
+    const nowIso = data.last_read_at || new Date().toISOString();
+
+    let bookmarkPayload = data.bookmark;
+    if (bookmarkPayload !== undefined) {
+      if (bookmarkPayload && typeof bookmarkPayload === 'object') {
+        if (clusterCanon && !bookmarkPayload._shared_glossary_id) {
+          bookmarkPayload = { ...bookmarkPayload, _shared_glossary_id: clusterCanon };
+        }
+      } else if (bookmarkPayload === null && clusterCanon) {
+        bookmarkPayload = { _shared_glossary_id: clusterCanon };
+      }
+    }
+
     // 1. Update local IndexedDB immediately
     await offlineDB.updateBookProgress(bookId, {
       lastReadChapter: data.last_read_chapter,
-      bookmark: data.bookmark,
-      lastReadAt: data.last_read_at || new Date().toISOString()
+      bookmark: bookmarkPayload,
+      lastReadAt: nowIso
     });
 
     // 2. Update cloud if online, else queue
     const payload = {};
     if (data.last_read_chapter !== undefined) payload.last_read_chapter = data.last_read_chapter;
-    if (data.last_read_at !== undefined) payload.last_read_at = data.last_read_at;
-    if (data.bookmark !== undefined) payload.bookmark = data.bookmark;
+    payload.last_read_at = nowIso;
+    if (bookmarkPayload !== undefined) payload.bookmark = bookmarkPayload;
     if (data.bookmarks !== undefined) payload.bookmarks = data.bookmarks;
 
     if (this.isOnline()) {
@@ -98,6 +181,17 @@ export const api = {
         console.warn('Failed to sync progress to cloud, queued locally:', e);
         await offlineDB.queueSyncItem({ type: 'update_book', bookId, payload });
       }
+
+      // Direct sync to local Flask backend when on Wi-Fi / local server
+      if (typeof window !== 'undefined' && (window.location.origin.includes(':5001') || !window.location.hostname.includes('github.io'))) {
+        try {
+          await fetch(`/api/books/${encodeURIComponent(bookId)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+        } catch (_) {}
+      }
     } else {
       await offlineDB.queueSyncItem({ type: 'update_book', bookId, payload });
     }
@@ -106,16 +200,7 @@ export const api = {
   },
 
   async getChapters(bookId) {
-    // Check if book is saved offline
-    const isOffline = await offlineDB.getDownloadStatus(bookId);
-    if (isOffline) {
-      const localChapters = await offlineDB.getChaptersList(bookId);
-      if (localChapters && localChapters.length > 0) {
-        return localChapters;
-      }
-    }
-
-    // Fetch chapters list from Supabase
+    // 1. If online, fetch fresh list from cloud or local server first
     if (this.isOnline()) {
       try {
         const res = await fetch(
@@ -124,6 +209,8 @@ export const api = {
         );
         if (res.ok) {
           const list = await res.json();
+          // Prune any deleted chapters from local IndexedDB
+          await offlineDB.reconcileChaptersList(bookId, list);
           lastSyncTimestamp = new Date();
           return list;
         }
@@ -132,20 +219,39 @@ export const api = {
       }
     }
 
-    // Fallback to local chapters
-    return await offlineDB.getChaptersList(bookId);
+    // 2. Check if book has downloaded/cached chapters in local IndexedDB
+    const localChapters = await offlineDB.getChaptersList(bookId);
+    if (localChapters && localChapters.length > 0) {
+      return localChapters;
+    }
+
+    return [];
+  },
+
+  async deleteChapter(bookId, chapterNum) {
+    const num = Number(chapterNum);
+    // 1. Delete from local IndexedDB
+    await offlineDB.deleteChapter(bookId, num);
+
+    // 2. Delete from Supabase if online
+    if (this.isOnline()) {
+      try {
+        await fetch(
+          `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&chapter_number=eq.${num}`,
+          { method: 'DELETE', headers: HEADERS }
+        );
+        lastSyncTimestamp = new Date();
+      } catch (e) {
+        console.warn(`Failed to delete chapter ${num} from cloud:`, e);
+      }
+    }
+    return { success: true };
   },
 
   async getChapter(bookId, chapterNum) {
     const num = Number(chapterNum);
 
-    // 1. Check local IndexedDB first for instant zero-latency load
-    const cached = await offlineDB.getChapter(bookId, num);
-    if (cached && cached.content) {
-      return cached;
-    }
-
-    // 2. Fetch from Supabase if online
+    // 1. If online, fetch fresh chapter from cloud or local server first so chapter edits reflect
     if (this.isOnline()) {
       try {
         const res = await fetch(
@@ -166,70 +272,65 @@ export const api = {
       }
     }
 
-    if (cached) return cached;
+    // 2. Check local IndexedDB (offline or cloud failed)
+    const cached = await offlineDB.getChapter(bookId, num);
+    if (cached && cached.content) {
+      return cached;
+    }
+
     throw new Error(`Chapter ${num} not available offline. Please connect to download.`);
   },
 
-  async getGlossary(bookId) {
-    let targetBookId = bookId;
+  async getGlossaryCanonicalId(bookId) {
+    for (const cl of KNOWN_CLUSTERS) {
+      if (cl.includes(bookId)) return 'the-two-towers';
+    }
     try {
-      const book = await this.getBook(bookId);
-      if (book && book.shared_glossary_id) {
-        targetBookId = book.shared_glossary_id;
-      }
-    } catch (e) {}
+      const books = await this.getBooks();
+      const targetBook = books.find(b => b.id === bookId);
+      return targetBook?.shared_glossary_id || (targetBook?.bookmark && targetBook.bookmark._shared_glossary_id) || bookId;
+    } catch (_) {
+      return bookId;
+    }
+  },
+
+  async getGlossary(bookId) {
+    const targetId = await this.getGlossaryCanonicalId(bookId);
 
     if (this.isOnline()) {
       try {
-        let res = await fetch(
-          `${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(bookId)}&select=*&order=name.asc`,
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetId)}&select=*&order=name.asc`,
           { headers: HEADERS, cache: 'no-store' }
         );
-        let entries = res.ok ? await res.json() : [];
-
-        // Fallback: If no entries found under bookId but targetBookId is different, fetch targetBookId
-        if ((!entries || entries.length === 0) && targetBookId !== bookId) {
-          const resTarget = await fetch(
-            `${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetBookId)}&select=*&order=name.asc`,
-            { headers: HEADERS, cache: 'no-store' }
-          );
-          if (resTarget.ok) {
-            entries = await resTarget.json();
-          }
-        }
-
-        if (entries && entries.length > 0) {
-          await offlineDB.saveGlossary(bookId, entries);
-          if (targetBookId !== bookId) {
-            await offlineDB.saveGlossary(targetBookId, entries);
+        if (res.ok) {
+          const entries = await res.json();
+          // Store directly into canonical room in IndexedDB
+          await offlineDB.saveGlossary(targetId, entries);
+          if (targetId !== bookId) {
+            await offlineDB.saveGlossary(bookId, entries);
           }
           lastSyncTimestamp = new Date();
           return entries;
         }
       } catch (e) {
-        console.warn('Network error loading glossary from cloud, using local DB:', e);
+        console.warn('Network error loading canonical glossary from cloud:', e);
       }
     }
 
-    let localEntries = await offlineDB.getGlossary(bookId);
-    if ((!localEntries || localEntries.length === 0) && targetBookId !== bookId) {
-      localEntries = await offlineDB.getGlossary(targetBookId);
+    // Offline / fallback to local IndexedDB
+    let local = await offlineDB.getGlossary(targetId);
+    if ((!local || local.length === 0) && targetId !== bookId) {
+      local = await offlineDB.getGlossary(bookId);
     }
-    return localEntries || [];
+    return local || [];
   },
 
   async saveGlossaryEntry(bookId, entry) {
-    let targetBookId = bookId;
-    try {
-      const book = await this.getBook(bookId);
-      if (book && book.shared_glossary_id) {
-        targetBookId = book.shared_glossary_id;
-      }
-    } catch (e) {}
-
+    const targetId = await this.getGlossaryCanonicalId(bookId);
     const gid = entry.id || (entry.name || '').toLowerCase().trim().replace(/\s+/g, '-');
     const row = {
-      book_id: bookId,
+      book_id: targetId,
       id: gid,
       name: entry.name || '',
       category: entry.category || 'Character',
@@ -242,79 +343,100 @@ export const api = {
       updated_at: new Date().toISOString()
     };
 
-    // 1. Save to local IndexedDB immediately
-    await offlineDB.saveGlossaryEntry(bookId, row);
-    if (targetBookId !== bookId) {
-      await offlineDB.saveGlossaryEntry(targetBookId, { ...row, book_id: targetBookId });
+    // 1. Save directly into canonical room in IndexedDB
+    await offlineDB.saveGlossaryEntry(targetId, row);
+    if (targetId !== bookId) {
+      await offlineDB.saveGlossaryEntry(bookId, { ...row, book_id: bookId });
     }
 
-    // 2. Auto-sync to Supabase if online
+    // 2. Save directly into canonical room in Supabase
     if (this.isOnline()) {
-      const rows = [row];
-      if (targetBookId !== bookId) {
-        rows.push({ ...row, book_id: targetBookId });
-      }
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/glossary`, {
           method: 'POST',
           headers: UPSERT_HEADERS,
-          body: JSON.stringify(rows)
+          body: JSON.stringify([row])
         });
         if (res.ok) {
           lastSyncTimestamp = new Date();
-          return row;
         } else {
-          console.warn('Supabase glossary save failed, queued locally:', await res.text());
-          await offlineDB.queueSyncItem({ type: 'save_glossary', bookId, row });
+          await offlineDB.queueSyncItem({ type: 'save_glossary', bookId: targetId, row });
         }
       } catch (e) {
-        console.warn('Network error saving glossary, queued locally:', e);
-        await offlineDB.queueSyncItem({ type: 'save_glossary', bookId, row });
+        await offlineDB.queueSyncItem({ type: 'save_glossary', bookId: targetId, row });
+      }
+
+      // Direct sync to local Flask backend when on Wi-Fi / local server
+      if (typeof window !== 'undefined' && (window.location.origin.includes(':5001') || !window.location.hostname.includes('github.io'))) {
+        try {
+          await fetch(`/api/books/${encodeURIComponent(targetId)}/glossary`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(row)
+          });
+        } catch (_) {}
       }
     } else {
-      await offlineDB.queueSyncItem({ type: 'save_glossary', bookId, row });
+      await offlineDB.queueSyncItem({ type: 'save_glossary', bookId: targetId, row });
     }
 
     return row;
   },
 
-  async deleteGlossaryEntry(bookId, charId) {
-    let targetBookId = bookId;
-    try {
-      const book = await this.getBook(bookId);
-      if (book && book.shared_glossary_id) {
-        targetBookId = book.shared_glossary_id;
-      }
-    } catch (e) {}
+  async deleteGlossaryEntry(bookId, charId, charName = '') {
+    const targetId = await this.getGlossaryCanonicalId(bookId);
+    const cleanId = (charId || '').trim();
+    const cleanName = (charName || '').trim();
+    const slugName = cleanName.toLowerCase().replace(/\s+/g, '-');
 
-    // Delete locally
-    const db = await offlineDB.init();
-    await new Promise((resolve) => {
-      const tx = db.transaction('glossary', 'readwrite');
-      tx.objectStore('glossary').delete([bookId, charId]);
-      if (targetBookId !== bookId) {
-        tx.objectStore('glossary').delete([targetBookId, charId]);
-      }
-      tx.oncomplete = () => resolve();
-      tx.onerror = () => resolve();
-    });
+    // 1. Delete directly from canonical room in IndexedDB
+    if (cleanId) await offlineDB.deleteGlossaryEntry(targetId, cleanId);
+    if (cleanName) await offlineDB.deleteGlossaryEntry(targetId, cleanName);
+    if (slugName && slugName !== cleanId) await offlineDB.deleteGlossaryEntry(targetId, slugName);
 
+    if (targetId !== bookId) {
+      if (cleanId) await offlineDB.deleteGlossaryEntry(bookId, cleanId);
+      if (cleanName) await offlineDB.deleteGlossaryEntry(bookId, cleanName);
+      if (slugName && slugName !== cleanId) await offlineDB.deleteGlossaryEntry(bookId, slugName);
+    }
+
+    // 2. Delete directly from canonical room in Supabase
     if (this.isOnline()) {
       try {
-        await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(bookId)}&id=eq.${encodeURIComponent(charId)}`, {
-          method: 'DELETE',
-          headers: HEADERS
-        });
-        if (targetBookId !== bookId) {
-          await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetBookId)}&id=eq.${encodeURIComponent(charId)}`, {
+        if (cleanId) {
+          await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetId)}&id=eq.${encodeURIComponent(cleanId)}`, {
+            method: 'DELETE',
+            headers: HEADERS
+          });
+        }
+        if (cleanName) {
+          await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetId)}&name=eq.${encodeURIComponent(cleanName)}`, {
+            method: 'DELETE',
+            headers: HEADERS
+          });
+        }
+        if (slugName && slugName !== cleanId) {
+          await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetId)}&id=eq.${encodeURIComponent(slugName)}`, {
             method: 'DELETE',
             headers: HEADERS
           });
         }
         lastSyncTimestamp = new Date();
       } catch (e) {
-        console.warn('Failed to delete on cloud:', e);
+        console.warn(`Failed to delete glossary entry from cloud for ${targetId}:`, e);
+        await offlineDB.queueSyncItem({ type: 'delete_glossary', bookId: targetId, charId: cleanId });
       }
+
+      // Direct sync to local Flask backend when on Wi-Fi / local server
+      if (typeof window !== 'undefined' && (window.location.origin.includes(':5001') || !window.location.hostname.includes('github.io'))) {
+        try {
+          await fetch(`/api/books/${encodeURIComponent(targetId)}/glossary/${encodeURIComponent(cleanId || slugName)}`, {
+            method: 'DELETE'
+          });
+        } catch (_) {}
+      }
+    } else {
+      await offlineDB.queueSyncItem({ type: 'delete_glossary', bookId: targetId, charId: cleanId });
     }
 
     return { success: true };
@@ -466,7 +588,9 @@ export const api = {
         // Pre-cache chapter images for offline viewing
         if (typeof caches !== 'undefined') {
           try {
-            const cache = await caches.open('xianxia-mobile-v19');
+            const cacheNames = await caches.keys();
+            const activeCache = cacheNames[0] || 'xianxia-mobile-v27';
+            const cache = await caches.open(activeCache);
             for (const ch of fullChapters) {
               const matches = (ch.content || '').matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
               for (const m of matches) {
@@ -522,6 +646,12 @@ export const api = {
             method: 'POST',
             headers: UPSERT_HEADERS,
             body: JSON.stringify([item.row])
+          });
+          if (res.ok) await offlineDB.removeSyncItem(item.id);
+        } else if (item.type === 'delete_glossary') {
+          const res = await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(item.bookId)}&id=eq.${encodeURIComponent(item.charId)}`, {
+            method: 'DELETE',
+            headers: HEADERS
           });
           if (res.ok) await offlineDB.removeSyncItem(item.id);
         } else if (item.type === 'update_book') {

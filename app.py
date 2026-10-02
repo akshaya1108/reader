@@ -6,6 +6,8 @@ import html
 import urllib.parse
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from dotenv import load_dotenv
+import requests
+import threading
 
 from ai_glossary import extract_characters_from_text, slugify, get_gemini_client, ai_enhance_book_metadata, is_chinese_novel, clean_entry_for_novel, CHINESE_CHAR_RE
 from scraper import scrape_fandom_character_list, scrape_fandom_data, sanitize_wiki_data_with_gemini, extract_title_from_url, lookup_single_entity
@@ -22,9 +24,8 @@ CHAPTERS_DIR = os.path.join(DATA_DIR, "chapters")
 TRASH_DIR = os.path.join(DATA_DIR, ".trash")
 TRASH_CHAPTERS_DIR = os.path.join(TRASH_DIR, "chapters")
 TRASH_BOOKS_DIR = os.path.join(TRASH_DIR, "books")
-MOBILE_DIR = os.path.join(BASE_DIR, "mobile")
+MOBILE_DIR = os.path.join(BASE_DIR, "m")
 MOBILE_STATIC_DIR = os.path.join(MOBILE_DIR, "static")
-MOBILE_TEMPLATES_DIR = os.path.join(MOBILE_DIR, "templates")
 
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(GLOSSARY_DIR, exist_ok=True)
@@ -35,6 +36,52 @@ os.makedirs(TRASH_BOOKS_DIR, exist_ok=True)
 
 SUPABASE_URL = "https://giqhugtncggxansflxaz.supabase.co"
 SUPABASE_KEY = "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ"
+
+def delete_glossary_from_supabase_sync(book_id, char_id=None, char_name=None):
+    try:
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        }
+        books = load_books()
+        target_book = next((b for b in books if b.get("id") == book_id), None)
+        canonical_id = (target_book.get("shared_glossary_id") if target_book else None) or book_id
+        cluster_bids = {book_id, canonical_id}
+        for b in books:
+            if b.get("shared_glossary_id") in (book_id, canonical_id) or b.get("id") == canonical_id:
+                cluster_bids.add(b["id"])
+
+        for bid in cluster_bids:
+            if char_id:
+                url_id = f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{bid}&id=eq.{char_id}"
+                requests.delete(url_id, headers=headers, timeout=4)
+            if char_name:
+                import urllib.parse
+                url_name = f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{bid}&name=eq.{urllib.parse.quote(char_name)}"
+                requests.delete(url_name, headers=headers, timeout=4)
+    except Exception as e:
+        print(f"Notice during sync Supabase glossary delete: {e}")
+
+SYNC_META_FILE = os.path.join(GLOSSARY_DIR, "_sync_meta.json")
+
+def load_sync_meta():
+    if os.path.exists(SYNC_META_FILE):
+        try:
+            with open(SYNC_META_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, dict):
+                    return data
+        except Exception:
+            pass
+    return {"tombstones": {}, "last_synced_ids": {}}
+
+def save_sync_meta(meta):
+    try:
+        os.makedirs(GLOSSARY_DIR, exist_ok=True)
+        with open(SYNC_META_FILE, "w", encoding="utf-8") as f:
+            json.dump(meta, f, indent=2, ensure_ascii=False)
+    except Exception as e:
+        print(f"Notice saving sync meta: {e}")
 
 def push_books_to_supabase_async(books):
     import threading
@@ -71,12 +118,16 @@ def push_books_to_supabase_async(books):
                     "cover_image": b.get("cover") or b.get("cover_image") or "",
                     "last_read_chapter": b.get("last_read_chapter") or 1,
                     "last_read_at": last_read_at,
-                    "bookmark": b.get("bookmark") or None,
+                    "bookmark": {
+                        **(b.get("bookmark") if isinstance(b.get("bookmark"), dict) else {}),
+                        **({"_shared_glossary_id": b["shared_glossary_id"]} if b.get("shared_glossary_id") else {})
+                    } or None,
                     "enable_glossary": b.get("enable_glossary", True)
                 }
                 payload.append(row)
             if payload:
-                requests.post(url, headers=headers, json=payload, timeout=6)
+                res = requests.post(url, headers=headers, json=payload, timeout=6)
+                print(f"Supabase books push status: {res.status_code}")
         except Exception as e:
             print(f"Background Supabase books push notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
@@ -95,6 +146,21 @@ def push_chapters_to_supabase_async(book_id):
             print(f"Background Supabase chapters push notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
 
+def delete_chapter_from_supabase_async(book_id, ch_num):
+    import threading
+    def _run():
+        try:
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            }
+            url = f"{SUPABASE_URL}/rest/v1/chapters?book_id=eq.{book_id}&chapter_number=eq.{ch_num}"
+            res = requests.delete(url, headers=headers, timeout=6)
+            print(f"Supabase chapter delete {book_id} ch {ch_num}: {res.status_code}")
+        except Exception as e:
+            print(f"Background Supabase chapter delete notice: {e}")
+    threading.Thread(target=_run, daemon=True).start()
+
 def load_books():
     if not os.path.exists(BOOKS_FILE):
         return []
@@ -105,6 +171,11 @@ def save_books(books):
     with open(BOOKS_FILE, "w", encoding="utf-8") as f:
         json.dump(books, f, indent=2, ensure_ascii=False)
     push_books_to_supabase_async(books)
+
+try:
+    push_books_to_supabase_async(load_books())
+except Exception:
+    pass
 
 def resolve_glossary_book_id(book_id):
     books = load_books()
@@ -178,33 +249,223 @@ def normalize_category(raw_category):
     raw_lower = str(raw_category).strip().lower()
     return CATEGORY_NORMALIZATION_MAP.get(raw_lower, "Character")
 
-def load_glossary(book_id):
-    path = get_glossary_file(book_id)
+def load_glossary(book_id, sync_remote=True):
     books = load_books()
     book = next((b for b in books if b.get("id") == book_id), None)
-    effective_id = book_id
-    if book and book.get("shared_glossary_id"):
-        shared_file = get_glossary_file(book["shared_glossary_id"])
-        if os.path.exists(shared_file) and os.path.getsize(shared_file) > 10:
-            effective_id = book["shared_glossary_id"]
-            path = shared_file
+    canonical_id = (book.get("shared_glossary_id") if book else None) or resolve_glossary_book_id(book_id)
 
-    if not os.path.exists(path):
-        return []
-    with open(path, "r", encoding="utf-8") as f:
-        try:
-            data = json.load(f)
-        except Exception:
-            data = []
+    # Resolve all book IDs sharing this glossary cluster
+    cluster_bids = {book_id, canonical_id}
+    for b in books:
+        if b.get("shared_glossary_id") in (book_id, canonical_id) or b.get("id") == canonical_id:
+            cluster_bids.add(b["id"])
 
-    # If effective file has entries but book_id's own file is empty or missing, sync locally
-    if effective_id != book_id and data:
-        own_path = get_glossary_file(book_id)
+    # Locate existing glossary file with data
+    path = get_glossary_file(canonical_id)
+    if not os.path.exists(path) or os.path.getsize(path) <= 10:
+        for cb in cluster_bids:
+            alt_path = os.path.join(GLOSSARY_DIR, f"{cb}.json")
+            if os.path.exists(alt_path) and os.path.getsize(alt_path) > 10:
+                path = alt_path
+                break
+
+    data = []
+    local_seen = set()
+    for cb in cluster_bids:
+        cb_path = os.path.join(GLOSSARY_DIR, f"{cb}.json")
+        if os.path.exists(cb_path) and os.path.getsize(cb_path) > 10:
+            try:
+                with open(cb_path, "r", encoding="utf-8") as f:
+                    cb_data = json.load(f)
+                    for item in cb_data:
+                        iid = item.get("id") or slugify(item.get("name", ""))
+                        if iid and iid not in local_seen:
+                            local_seen.add(iid)
+                            data.append(item)
+            except Exception:
+                pass
+
+    # Fetch remote entries from Supabase to merge edits made on phone / cloud
+    if sync_remote:
         try:
-            with open(own_path, "w", encoding="utf-8") as wf:
-                json.dump(data, wf, indent=2, ensure_ascii=False)
-        except Exception:
-            pass
+            meta = load_sync_meta()
+            tombstones = meta.get("tombstones", {})
+            last_synced = meta.get("last_synced_ids", {})
+
+            # Clean tombstones older than 14 days
+            now = datetime.datetime.now()
+            cutoff = (now - datetime.timedelta(days=14)).isoformat()
+            tombstones = {k: v for k, v in tombstones.items() if v > cutoff}
+
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            }
+            remote_entries = []
+            successful_remote_query = False
+            try:
+                res = requests.get(
+                    f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{canonical_id}&select=*",
+                    headers=headers,
+                    timeout=3.5
+                )
+                if res.status_code == 200:
+                    successful_remote_query = True
+                    remote_entries = res.json() or []
+            except Exception:
+                pass
+
+            # Fallback: if canonical room had no entries yet, check older cluster bids
+            if not remote_entries:
+                for tid in cluster_bids:
+                    if tid != canonical_id:
+                        try:
+                            res_alt = requests.get(
+                                f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&select=*",
+                                headers=headers,
+                                timeout=2.5
+                            )
+                            if res_alt.status_code == 200 and res_alt.json():
+                                remote_entries.extend(res_alt.json())
+                                successful_remote_query = True
+                        except Exception:
+                            pass
+
+            if successful_remote_query:
+                # 1. Filter out remote entries that match tombstones (prevent resurrection)
+                valid_remote = []
+                for rentry in remote_entries:
+                    rid = rentry.get("id") or slugify(rentry.get("name", ""))
+                    rslug = slugify(rentry.get("name", ""))
+                    rname_low = rentry.get("name", "").strip().lower()
+                    if rid in tombstones or rslug in tombstones or rname_low in tombstones:
+                        # Entry was marked deleted, ensure Supabase drops it
+                        try:
+                            for tid in cluster_bids:
+                                requests.delete(
+                                    f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{rid}",
+                                    headers=headers,
+                                    timeout=2
+                                )
+                        except Exception:
+                            pass
+                    else:
+                        valid_remote.append(rentry)
+                remote_entries = valid_remote
+
+                # 2. Reconcile deletions that occurred remotely (e.g. on mobile phone)
+                cluster_prev_synced = set()
+                for tid in cluster_bids:
+                    cluster_prev_synced.update(last_synced.get(tid, []))
+
+                remote_id_set = {r.get("id") for r in remote_entries if r.get("id")}
+                remote_slug_set = {slugify(r.get("name", "")) for r in remote_entries if r.get("name")}
+                remote_name_set = {r.get("name", "").strip().lower() for r in remote_entries if r.get("name")}
+
+                changed = False
+                if cluster_prev_synced:
+                    pruned_data = []
+                    for item in data:
+                        iid = item.get("id") or slugify(item.get("name", ""))
+                        islug = slugify(item.get("name", ""))
+                        iname_low = item.get("name", "").strip().lower()
+
+                        was_synced = (iid in cluster_prev_synced or islug in cluster_prev_synced or iname_low in cluster_prev_synced)
+                        in_remote = (iid in remote_id_set or islug in remote_slug_set or iname_low in remote_name_set)
+                        in_tombstones = (iid in tombstones or islug in tombstones or iname_low in tombstones)
+
+                        if in_tombstones or (was_synced and not in_remote):
+                            # Entry was deleted (either locally or on phone)
+                            tombstones[iid] = now.isoformat()
+                            if islug:
+                                tombstones[islug] = now.isoformat()
+                            if iname_low:
+                                tombstones[iname_low] = now.isoformat()
+                            for tid in cluster_bids:
+                                try:
+                                    requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{iid}", headers=headers, timeout=2)
+                                    if islug and islug != iid:
+                                        requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{islug}", headers=headers, timeout=2)
+                                except Exception:
+                                    pass
+                            changed = True
+                        else:
+                            pruned_data.append(item)
+                    data = pruned_data
+
+                # 3. Merge active remote entries into data
+                local_by_name = {c.get("name", "").lower().strip(): c for c in data if c.get("name")}
+                local_by_id = {c.get("id"): c for c in data if c.get("id")}
+
+                for rentry in remote_entries:
+                    rname = rentry.get("name", "").strip()
+                    rid = rentry.get("id") or slugify(rname)
+                    if not rname:
+                        continue
+
+                    match = local_by_id.get(rid) or local_by_name.get(rname.lower())
+                    if match:
+                        r_updated = rentry.get("updated_at") or ""
+                        m_updated = match.get("updated_at") or ""
+                        if (r_updated and r_updated > m_updated) or not match.get("summary"):
+                            if rentry.get("summary"):
+                                match["summary"] = rentry.get("summary")
+                            if rentry.get("category"):
+                                match["category"] = rentry.get("category")
+                            aff = rentry.get("affiliation") or rentry.get("sect_or_affiliation")
+                            if aff:
+                                match["affiliation"] = aff
+                                match["sect_or_affiliation"] = aff
+                            match["updated_at"] = r_updated or now.isoformat()
+                            changed = True
+                    else:
+                        new_item = {
+                            "id": rid,
+                            "name": rname,
+                            "category": normalize_category(rentry.get("category", "Character")),
+                            "pinyin_or_chinese": rentry.get("pinyin_or_chinese", ""),
+                            "aliases": rentry.get("aliases") if isinstance(rentry.get("aliases"), list) else [],
+                            "affiliation": rentry.get("affiliation") or rentry.get("sect_or_affiliation", ""),
+                            "sect_or_affiliation": rentry.get("sect_or_affiliation") or rentry.get("affiliation", ""),
+                            "summary": rentry.get("summary", ""),
+                            "updated_at": rentry.get("updated_at") or now.isoformat()
+                        }
+                        data.append(new_item)
+                        local_by_name[rname.lower()] = new_item
+                        local_by_id[rid] = new_item
+                        changed = True
+
+                # 4. Save updated sync snapshot
+                current_active_ids = [c.get("id") or slugify(c.get("name", "")) for c in data if c.get("name")]
+                for tid in cluster_bids:
+                    last_synced[tid] = list(set(current_active_ids))
+
+                meta["tombstones"] = tombstones
+                meta["last_synced_ids"] = last_synced
+                save_sync_meta(meta)
+
+                if changed:
+                    for bid in cluster_bids:
+                        b_path = os.path.join(GLOSSARY_DIR, f"{bid}.json")
+                        try:
+                            with open(b_path, "w", encoding="utf-8") as wf:
+                                json.dump(data, wf, indent=2, ensure_ascii=False)
+                        except Exception as e:
+                            print(f"Error saving merged glossary for {bid}: {e}")
+                    push_glossary_to_supabase_async(canonical_id, data)
+        except Exception as ex:
+            print(f"Notice during load_glossary sync: {ex}")
+
+    # Ensure all cluster files locally have the glossary data
+    if data:
+        for bid in cluster_bids:
+            b_path = os.path.join(GLOSSARY_DIR, f"{bid}.json")
+            if not os.path.exists(b_path) or os.path.getsize(b_path) <= 10:
+                try:
+                    with open(b_path, "w", encoding="utf-8") as wf:
+                        json.dump(data, wf, indent=2, ensure_ascii=False)
+                except Exception:
+                    pass
 
     is_chinese = is_chinese_novel(book.get("title", ""), book.get("genre", "")) if book else False
 
@@ -245,7 +506,7 @@ def push_glossary_to_supabase_async(book_id, entries):
                 "Content-Type": "application/json",
                 "Prefer": "resolution=merge-duplicates"
             }
-            # Identify all book IDs that share this glossary cluster
+            # Identify canonical book ID for this cluster
             books = load_books()
             target_book = next((b for b in books if b.get("id") == book_id), None)
             canonical_id = (target_book.get("shared_glossary_id") if target_book else None) or book_id
@@ -254,36 +515,44 @@ def push_glossary_to_supabase_async(book_id, entries):
                 if b.get("shared_glossary_id") in (book_id, canonical_id) or b.get("id") == canonical_id:
                     cluster_bids.add(b["id"])
 
-            for bid in cluster_bids:
-                payload = []
-                for item in entries:
-                    gid = item.get("id") or item.get("name", "").lower().strip().replace(" ", "-")
-                    if not gid:
-                        continue
-                    aliases = item.get("aliases") or []
-                    if isinstance(aliases, str):
-                        aliases = [a.strip() for a in aliases.split(",") if a.strip()]
-                    payload.append({
-                        "book_id": bid,
-                        "id": gid,
-                        "name": item.get("name", ""),
-                        "category": item.get("category", "Character"),
-                        "pinyin_or_chinese": item.get("pinyin_or_chinese", ""),
-                        "aliases": aliases,
-                        "affiliation": item.get("affiliation") or item.get("sect_or_affiliation", ""),
-                        "sect_or_affiliation": item.get("sect_or_affiliation") or item.get("affiliation", ""),
-                        "summary": item.get("summary", ""),
-                        "mentions": int(item.get("mentions") or 0)
-                    })
-                # Push in chunks of 50 to avoid request size limits
-                for i in range(0, len(payload), 50):
-                    chunk = payload[i:i + 50]
-                    requests.post(url, headers=headers, json=chunk, timeout=10)
+            payload = []
+            for item in entries:
+                gid = item.get("id") or item.get("name", "").lower().strip().replace(" ", "-")
+                if not gid:
+                    continue
+                aliases = item.get("aliases") or []
+                if isinstance(aliases, str):
+                    aliases = [a.strip() for a in aliases.split(",") if a.strip()]
+                payload.append({
+                    "book_id": canonical_id,
+                    "id": gid,
+                    "name": item.get("name", ""),
+                    "category": item.get("category", "Character"),
+                    "pinyin_or_chinese": item.get("pinyin_or_chinese", ""),
+                    "aliases": aliases,
+                    "affiliation": item.get("affiliation") or item.get("sect_or_affiliation", ""),
+                    "sect_or_affiliation": item.get("sect_or_affiliation") or item.get("affiliation", ""),
+                    "summary": item.get("summary", ""),
+                    "mentions": int(item.get("mentions") or 0)
+                })
+
+            # Push in chunks of 50 to avoid request size limits
+            for i in range(0, len(payload), 50):
+                chunk = payload[i:i + 50]
+                requests.post(url, headers=headers, json=chunk, timeout=10)
+
+            # Purge any redundant rows under non-canonical cluster IDs
+            for other_bid in cluster_bids:
+                if other_bid != canonical_id:
+                    try:
+                        requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{other_bid}", headers=headers, timeout=5)
+                    except Exception:
+                        pass
         except Exception as e:
             print(f"Background Supabase push notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
 
-def save_glossary(book_id, glossary):
+def save_glossary(book_id, glossary, push_remote=True):
     path = get_glossary_file(book_id)
 
     # 1. Automatic rolling snapshot backup
@@ -296,11 +565,11 @@ def save_glossary(book_id, glossary):
             with open(path, "r", encoding="utf-8") as rf, open(backup_file, "w", encoding="utf-8") as wf:
                 wf.write(rf.read())
             
-            # Keep only the last 15 backups for this book
+            # Keep only the last 3 backups for this book
             existing_backups = sorted(
                 [f for f in os.listdir(backup_dir) if f.startswith(f"{book_id}_") and f.endswith(".json")]
             )
-            while len(existing_backups) > 15:
+            while len(existing_backups) > 3:
                 oldest = os.path.join(backup_dir, existing_backups.pop(0))
                 try:
                     os.remove(oldest)
@@ -378,7 +647,8 @@ def save_glossary(book_id, glossary):
         except Exception as e:
             print(f"Notice saving glossary for {bid}: {e}")
 
-    push_glossary_to_supabase_async(book_id, cleaned_glossary)
+    if push_remote:
+        push_glossary_to_supabase_async(book_id, cleaned_glossary)
 
 def sanitize_html(raw_html):
     if not raw_html:
@@ -407,40 +677,40 @@ def index():
 
 # Mobile PWA Routes
 @app.route("/m")
+def mobile_index_redirect():
+    return redirect("/m/")
+
 @app.route("/m/")
 def mobile_index():
-    return send_from_directory(MOBILE_TEMPLATES_DIR, "mobile.html")
+    return send_from_directory(MOBILE_DIR, "index.html")
 
-@app.route("/api/deploy-git")
-def deploy_git():
-    try:
-        import subprocess
-        r1 = subprocess.run(["git", "add", "-A"], cwd=BASE_DIR, capture_output=True, text=True)
-        r2 = subprocess.run(["git", "commit", "-m", "Fix linked cluster glossary sync and bump service worker to v20"], cwd=BASE_DIR, capture_output=True, text=True)
-        r3 = subprocess.run(["git", "push", "origin", "main"], cwd=BASE_DIR, capture_output=True, text=True)
-        return jsonify({
-            "add": r1.stdout + r1.stderr,
-            "commit": r2.stdout + r2.stderr,
-            "push": r3.stdout + r3.stderr
-        })
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-@app.route("/api/check-supabase-schema")
-def check_supabase_schema():
-    return jsonify({"success": True})
+@app.route("/m/static/<path:filename>")
 def mobile_static(filename):
     return send_from_directory(MOBILE_STATIC_DIR, filename)
+
+@app.route("/static/css/mobile.css")
+def fallback_mobile_css():
+    return send_from_directory(os.path.join(MOBILE_STATIC_DIR, "css"), "mobile.css")
+
+@app.route("/static/js/<filename>")
+def fallback_mobile_js(filename):
+    if filename in ["mobile-app.js", "api.js", "db.js"]:
+        return send_from_directory(os.path.join(MOBILE_STATIC_DIR, "js"), filename)
+    return send_from_directory(os.path.join(BASE_DIR, "static", "js"), filename)
+
+@app.route("/static/icons/<filename>")
+def fallback_mobile_icons(filename):
+    return send_from_directory(os.path.join(MOBILE_STATIC_DIR, "icons"), filename)
 
 @app.route("/m/manifest.json")
 @app.route("/manifest.json")
 def pwa_manifest():
-    return send_from_directory(MOBILE_STATIC_DIR, "manifest.json", mimetype="application/manifest+json")
+    return send_from_directory(MOBILE_DIR, "manifest.json", mimetype="application/manifest+json")
 
 @app.route("/m/sw.js")
 @app.route("/sw.js")
 def pwa_sw():
-    return send_from_directory(MOBILE_STATIC_DIR, "sw.js", mimetype="application/javascript")
+    return send_from_directory(MOBILE_DIR, "sw.js", mimetype="application/javascript")
 
 
 @app.route("/api/status")
@@ -452,10 +722,9 @@ def status():
         "model": "gemini-3.6-flash"
     })
 
-@app.route("/api/sync-supabase", methods=["POST"])
+@app.route("/api/sync-supabase", methods=["POST", "GET"])
 def sync_supabase_endpoint():
     try:
-        import requests
         headers = {
             "apikey": SUPABASE_KEY,
             "Authorization": f"Bearer {SUPABASE_KEY}",
@@ -464,33 +733,73 @@ def sync_supabase_endpoint():
         }
         books = load_books()
         synced_glossary = 0
+
+        # 1. Pull latest reading progress & bookmarks from Supabase
+        try:
+            res_books = requests.get(
+                f"{SUPABASE_URL}/rest/v1/books?select=id,last_read_chapter,last_read_at,bookmark,bookmarks",
+                headers=headers,
+                timeout=5
+            )
+            if res_books.ok:
+                remote_books = res_books.json()
+                local_books = load_books()
+                book_map = {rb["id"]: rb for rb in remote_books if rb.get("id")}
+                changed_books = False
+                for lb in local_books:
+                    bid = lb["id"]
+                    if bid in book_map:
+                        rb = book_map[bid]
+                        r_at = rb.get("last_read_at") or ""
+                        l_at = lb.get("last_read_at") or ""
+                        r_bm = rb.get("bookmark")
+                        l_bm = lb.get("bookmark")
+
+                        r_bm_clean = {k: v for k, v in r_bm.items() if not k.startswith("_")} if isinstance(r_bm, dict) else r_bm
+                        l_bm_clean = {k: v for k, v in l_bm.items() if not k.startswith("_")} if isinstance(l_bm, dict) else l_bm
+
+                        should_adopt = False
+                        if r_at and (not l_at or r_at >= l_at):
+                            should_adopt = True
+                        elif r_bm_clean != l_bm_clean and r_at:
+                            should_adopt = True
+
+                        if should_adopt:
+                            if rb.get("last_read_chapter"):
+                                lb["last_read_chapter"] = rb["last_read_chapter"]
+                            if r_bm is not None:
+                                new_bm = dict(r_bm) if isinstance(r_bm, dict) else {}
+                                if lb.get("shared_glossary_id"):
+                                    new_bm["_shared_glossary_id"] = lb["shared_glossary_id"]
+                                lb["bookmark"] = new_bm if ("chapter_number" in new_bm or "_shared_glossary_id" in new_bm) else None
+                            else:
+                                if lb.get("shared_glossary_id"):
+                                    lb["bookmark"] = {"_shared_glossary_id": lb["shared_glossary_id"]}
+                                else:
+                                    lb["bookmark"] = None
+                            if rb.get("bookmarks") is not None:
+                                lb["bookmarks"] = rb["bookmarks"]
+                            lb["last_read_at"] = r_at or datetime.datetime.now().isoformat()
+                            changed_books = True
+                if changed_books:
+                    with open(BOOKS_FILE, "w", encoding="utf-8") as bf:
+                        json.dump(local_books, bf, indent=2, ensure_ascii=False)
+                    books = local_books
+        except Exception as e:
+            print(f"Notice syncing remote book progress: {e}")
+
+        # 2. Pull remote glossary entries from Supabase and merge non-destructively
+        seen_clusters = set()
         for b in books:
             bid = b["id"]
-            res = requests.get(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{bid}", headers=headers, timeout=6)
-            if res.ok:
-                remote_entries = res.json()
-                if remote_entries:
-                    save_glossary(bid, remote_entries)
-                    synced_glossary += len(remote_entries)
+            cid = b.get("shared_glossary_id") or bid
+            if cid in seen_clusters:
+                continue
+            seen_clusters.add(cid)
+            merged_entries = load_glossary(bid, sync_remote=True)
+            synced_glossary += len(merged_entries)
 
-        # Pull book progress
-        res_books = requests.get(f"{SUPABASE_URL}/rest/v1/books", headers=headers, timeout=6)
-        if res_books.ok:
-            remote_books = res_books.json()
-            local_books = load_books()
-            book_map = {rb["id"]: rb for rb in remote_books}
-            for lb in local_books:
-                if lb["id"] in book_map:
-                    rb = book_map[lb["id"]]
-                    if rb.get("last_read_chapter"):
-                        lb["last_read_chapter"] = rb["last_read_chapter"]
-                    if rb.get("bookmark"):
-                        lb["bookmark"] = rb["bookmark"]
-                    if rb.get("last_read_at"):
-                        lb["last_read_at"] = rb["last_read_at"]
-            save_books(local_books)
-
-        # Background sync of books and chapters to Supabase
+        # 3. Background sync of books and chapters to Supabase
         def _bg_push():
             try:
                 import sys
@@ -498,11 +807,11 @@ def sync_supabase_endpoint():
                 if scripts_path not in sys.path:
                     sys.path.insert(0, scripts_path)
                 from sync_to_supabase import sync_books as push_all_books, sync_chapters as push_all_chapters
-                push_all_books()
-                push_all_chapters()
+                book_ids = push_all_books() or []
+                for bid in book_ids:
+                    push_all_chapters(bid)
             except Exception as ex:
                 print(f"Background Supabase full push notice: {ex}")
-        import threading
         threading.Thread(target=_bg_push, daemon=True).start()
 
         return jsonify({
@@ -516,6 +825,61 @@ def sync_supabase_endpoint():
 # Books CRUD
 @app.route("/api/books", methods=["GET"])
 def list_books():
+    # If requested with ?sync=1, pull latest reading progress from Supabase first
+    if request.args.get("sync") == "1":
+        try:
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            }
+            res_b = requests.get(
+                f"{SUPABASE_URL}/rest/v1/books?select=id,last_read_chapter,last_read_at,bookmark,bookmarks",
+                headers=headers,
+                timeout=2.0
+            )
+            if res_b.ok:
+                remote_books = res_b.json()
+                local_books = load_books()
+                changed = False
+                bmap = {rb["id"]: rb for rb in remote_books if rb.get("id")}
+                for lb in local_books:
+                    rb = bmap.get(lb["id"])
+                    if rb:
+                        r_at = rb.get("last_read_at") or ""
+                        l_at = lb.get("last_read_at") or ""
+                        r_bm = rb.get("bookmark")
+                        l_bm = lb.get("bookmark")
+
+                        r_bm_clean = {k: v for k, v in r_bm.items() if not k.startswith("_")} if isinstance(r_bm, dict) else r_bm
+                        l_bm_clean = {k: v for k, v in l_bm.items() if not k.startswith("_")} if isinstance(l_bm, dict) else l_bm
+
+                        should_adopt = False
+                        if r_at and (not l_at or r_at >= l_at):
+                            should_adopt = True
+                        elif r_bm_clean != l_bm_clean and r_at:
+                            should_adopt = True
+
+                        if should_adopt:
+                            if rb.get("last_read_chapter"):
+                                lb["last_read_chapter"] = rb["last_read_chapter"]
+                            if r_bm is not None:
+                                new_bm = dict(r_bm) if isinstance(r_bm, dict) else {}
+                                if lb.get("shared_glossary_id"):
+                                    new_bm["_shared_glossary_id"] = lb["shared_glossary_id"]
+                                lb["bookmark"] = new_bm if ("chapter_number" in new_bm or "_shared_glossary_id" in new_bm) else None
+                            else:
+                                if lb.get("shared_glossary_id"):
+                                    lb["bookmark"] = {"_shared_glossary_id": lb["shared_glossary_id"]}
+                                else:
+                                    lb["bookmark"] = None
+                            lb["last_read_at"] = r_at or datetime.datetime.now().isoformat()
+                            changed = True
+                if changed:
+                    with open(BOOKS_FILE, "w", encoding="utf-8") as bf:
+                        json.dump(local_books, bf, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
+
     books = load_books()
     # Enrich with chapter counts and total words
     for book in books:
@@ -1498,6 +1862,41 @@ def delete_chapter(book_id, ch_num):
                 os.remove(filepath)
             except Exception:
                 pass
+
+    # 1. Update book stats (chapter count, total words) in books.json
+    try:
+        books = load_books()
+        for b in books:
+            if b.get("id") == book_id:
+                ch_dir = os.path.join(CHAPTERS_DIR, book_id)
+                total_words = 0
+                count = 0
+                max_ch = 1
+                if os.path.exists(ch_dir):
+                    ch_files = [f for f in os.listdir(ch_dir) if f.endswith(".json")]
+                    count = len(ch_files)
+                    for f in ch_files:
+                        try:
+                            with open(os.path.join(ch_dir, f), "r", encoding="utf-8") as cf:
+                                cdata = json.load(cf)
+                                total_words += int(cdata.get("word_count", 0))
+                                cnum = int(cdata.get("chapter_number", 0))
+                                if cnum > max_ch:
+                                    max_ch = cnum
+                        except Exception:
+                            pass
+                b["chapters_count"] = count
+                b["total_words"] = total_words
+                if b.get("last_read_chapter", 1) == ch_num:
+                    b["last_read_chapter"] = min(b.get("last_read_chapter", 1), max_ch)
+                break
+        save_books(books)
+    except Exception as e:
+        print(f"Error updating book stats on chapter delete: {e}")
+
+    # 2. Async delete from Supabase
+    delete_chapter_from_supabase_async(book_id, ch_num)
+
     return jsonify({"success": True})
 
 
@@ -2002,10 +2401,56 @@ def add_or_update_character(book_id):
 
 @app.route("/api/books/<book_id>/glossary/<char_id>", methods=["DELETE"])
 def delete_character(book_id, char_id):
-    glossary = load_glossary(book_id)
-    glossary = [c for c in glossary if c.get("id") != char_id]
-    save_glossary(book_id, glossary)
-    return jsonify({"success": True, "glossary": glossary})
+    import urllib.parse
+    char_id_clean = urllib.parse.unquote(char_id).strip()
+    glossary = load_glossary(book_id, sync_remote=False)
+
+    removed_items = []
+    remaining = []
+    for c in glossary:
+        cid = c.get("id") or ""
+        cname = c.get("name", "").strip()
+        cslug = slugify(cname)
+        if cid == char_id_clean or cslug == char_id_clean or (cname and cname.lower() == char_id_clean.lower()):
+            removed_items.append(c)
+        else:
+            remaining.append(c)
+
+    # Save remaining entries locally without pushing remote immediately
+    save_glossary(book_id, remaining, push_remote=False)
+
+    # Update tombstones and sync meta
+    meta = load_sync_meta()
+    tombstones = meta.get("tombstones", {})
+    last_synced = meta.get("last_synced_ids", {})
+    now_iso = datetime.datetime.now().isoformat()
+
+    tombstones[char_id_clean] = now_iso
+
+    for item in removed_items:
+        iid = item.get("id") or slugify(item.get("name", ""))
+        iname = item.get("name", "").strip()
+        if iid:
+            tombstones[iid] = now_iso
+        if iname:
+            tombstones[slugify(iname)] = now_iso
+            tombstones[iname.lower()] = now_iso
+        delete_glossary_from_supabase_sync(book_id, char_id=iid, char_name=iname)
+
+    delete_glossary_from_supabase_sync(book_id, char_id=char_id_clean)
+
+    # Remove deleted entries from last_synced_ids
+    for bid_key in list(last_synced.keys()):
+        last_synced[bid_key] = [
+            x for x in last_synced[bid_key]
+            if x != char_id_clean and not any(x == (it.get("id") or slugify(it.get("name", ""))) for it in removed_items)
+        ]
+
+    meta["tombstones"] = tombstones
+    meta["last_synced_ids"] = last_synced
+    save_sync_meta(meta)
+
+    return jsonify({"success": True, "glossary": remaining})
 
 # Manual AI Scan
 @app.route("/api/books/<book_id>/scan-chapter", methods=["POST"])

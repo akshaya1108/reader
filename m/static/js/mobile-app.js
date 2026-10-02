@@ -1052,9 +1052,14 @@ function renderReaderText(rawHtml) {
 async function saveBookmark(chNum, paragraphIdx = 0) {
   if (!state.currentBook) return;
 
+  const sharedId = state.currentBook.shared_glossary_id ||
+    (state.currentBook.bookmark && state.currentBook.bookmark._shared_glossary_id) ||
+    (state.activeBookId.includes('fellowship') || state.activeBookId.includes('two-towers') || state.activeBookId.includes('return-of-the-king') ? 'the-two-towers' : null);
+
   const bookmarkData = {
     chapter_number: chNum,
-    paragraph_index: paragraphIdx
+    paragraph_index: paragraphIdx,
+    ...(sharedId ? { _shared_glossary_id: sharedId } : {})
   };
 
   state.currentBook.bookmark = bookmarkData;
@@ -1071,7 +1076,12 @@ async function saveBookmark(chNum, paragraphIdx = 0) {
   } catch (e) {}
 
   try {
-    await api.updateBook(state.activeBookId, { bookmark: bookmarkData });
+    const nowIso = new Date().toISOString();
+    state.currentBook.last_read_at = nowIso;
+    await api.updateBook(state.activeBookId, {
+      bookmark: bookmarkData,
+      last_read_at: nowIso
+    });
   } catch (e) {
     console.error('Error saving bookmark:', e);
   }
@@ -1080,7 +1090,11 @@ async function saveBookmark(chNum, paragraphIdx = 0) {
 async function removeBookmark() {
   if (!state.currentBook) return;
 
-  state.currentBook.bookmark = null;
+  const sharedId = state.currentBook.shared_glossary_id ||
+    (state.currentBook.bookmark && state.currentBook.bookmark._shared_glossary_id) ||
+    (state.activeBookId.includes('fellowship') || state.activeBookId.includes('two-towers') || state.activeBookId.includes('return-of-the-king') ? 'the-two-towers' : null);
+
+  state.currentBook.bookmark = sharedId ? { _shared_glossary_id: sharedId } : null;
 
   const btnBookmark = document.getElementById('btn-book-bookmark');
   if (btnBookmark) {
@@ -1092,7 +1106,12 @@ async function removeBookmark() {
   } catch (e) {}
 
   try {
-    await api.updateBook(state.activeBookId, { bookmark: null });
+    const nowIso = new Date().toISOString();
+    state.currentBook.last_read_at = nowIso;
+    await api.updateBook(state.activeBookId, {
+      bookmark: sharedId ? { _shared_glossary_id: sharedId } : null,
+      last_read_at: nowIso
+    });
   } catch (e) {
     console.error('Error removing bookmark:', e);
   }
@@ -1624,12 +1643,13 @@ function setupEditLoreSheet() {
   if (btnDelete) {
     btnDelete.addEventListener('click', async () => {
       const id = document.getElementById('edit-lore-id').value;
-      if (!id) return;
+      const name = document.getElementById('edit-lore-name')?.value || '';
+      if (!id && !name) return;
       if (!confirm('Are you sure you want to delete this lore entry?')) return;
 
       btnDelete.disabled = true;
       try {
-        await api.deleteGlossaryEntry(state.activeBookId, id);
+        await api.deleteGlossaryEntry(state.activeBookId, id, name);
         showToast('Deleted lore entry');
         closeSheet();
 

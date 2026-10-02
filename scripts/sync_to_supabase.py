@@ -58,7 +58,10 @@ def sync_books():
             "cover_image": b.get("cover") or b.get("cover_image") or "",
             "last_read_chapter": b.get("last_read_chapter") or 1,
             "last_read_at": last_read_at,
-            "bookmark": b.get("bookmark") or {},
+            "bookmark": {
+                **(b.get("bookmark") if isinstance(b.get("bookmark"), dict) else {}),
+                **({"_shared_glossary_id": b["shared_glossary_id"]} if b.get("shared_glossary_id") else {})
+            } or {},
             "bookmarks": b.get("bookmarks") or [],
             "enable_glossary": bool(b.get("enable_glossary", True))
         }
@@ -69,15 +72,61 @@ def sync_books():
         print(f"Successfully synced {len(payload)} books.")
     else:
         print(f"Error syncing books ({res.status_code}): {res.text}")
+
+    # Reconcile books: delete any remote books that no longer exist locally
+    try:
+        r_books = requests.get(
+            f"{SUPABASE_URL}/rest/v1/books?select=id",
+            headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+            timeout=8
+        )
+        if r_books.status_code == 200:
+            local_ids = {b["id"] for b in payload}
+            for rb in r_books.json():
+                rid = rb.get("id")
+                if rid and rid not in local_ids:
+                    requests.delete(f"{SUPABASE_URL}/rest/v1/books?id=eq.{rid}", headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}, timeout=6)
+                    requests.delete(f"{SUPABASE_URL}/rest/v1/chapters?book_id=eq.{rid}", headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}, timeout=6)
+                    requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{rid}", headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}, timeout=6)
+                    print(f"Deleted orphaned book '{rid}' from Supabase.")
+    except Exception as e:
+        print(f"Error reconciling books in Supabase: {e}")
     
     return [b["id"] for b in payload]
 
 def sync_chapters(book_id):
     ch_dir = os.path.join(CHAPTERS_DIR, book_id)
-    if not os.path.exists(ch_dir):
-        return
-    
-    files = [f for f in os.listdir(ch_dir) if f.endswith(".json")]
+    files = []
+    if os.path.exists(ch_dir):
+        files = [f for f in os.listdir(ch_dir) if f.endswith(".json")]
+
+    local_nums = set()
+    for f in files:
+        base = f.replace(".json", "")
+        if base.isdigit():
+            local_nums.add(int(base))
+
+    # Reconcile with Supabase: delete any chapters in Supabase that were deleted locally
+    try:
+        res = requests.get(
+            f"{SUPABASE_URL}/rest/v1/chapters?book_id=eq.{book_id}&select=chapter_number",
+            headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+            timeout=8
+        )
+        if res.status_code == 200:
+            remote_rows = res.json()
+            for r in remote_rows:
+                r_num = r.get("chapter_number")
+                if r_num is not None and int(r_num) not in local_nums:
+                    del_res = requests.delete(
+                        f"{SUPABASE_URL}/rest/v1/chapters?book_id=eq.{book_id}&chapter_number=eq.{r_num}",
+                        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                        timeout=8
+                    )
+                    print(f"Deleted orphaned chapter {r_num} for book '{book_id}' from Supabase (status {del_res.status_code}).")
+    except Exception as e:
+        print(f"Error reconciling chapters in Supabase for '{book_id}': {e}")
+
     def sort_key(name):
         base = name.replace(".json", "")
         try:
@@ -198,9 +247,33 @@ def sync_glossary(book_id):
 
     print(f"Done glossary for '{book_id}': {total_synced} uploaded.")
 
+    # Reconcile glossary: delete any remote rows for this book that no longer exist locally
+    try:
+        r_gl = requests.get(
+            f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{book_id}&select=id",
+            headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+            timeout=6
+        )
+        if r_gl.status_code == 200:
+            local_ids = {p["id"] for p in payload}
+            for rg in r_gl.json():
+                rid = rg.get("id")
+                if rid and rid not in local_ids:
+                    requests.delete(
+                        f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{book_id}&id=eq.{rid}",
+                        headers={"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"},
+                        timeout=5
+                    )
+    except Exception as e:
+        print(f"  Error reconciling remote glossary for {book_id}: {e}")
+
 def main():
+    import sys
     print("Starting sync to Supabase...")
     book_ids = sync_books()
+    if "--books-only" in sys.argv:
+        print("Books-only sync complete!")
+        return
     for bid in book_ids:
         sync_chapters(bid)
         sync_glossary(bid)
