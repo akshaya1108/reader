@@ -136,15 +136,26 @@ def sync_chapters(book_id):
 
 def sync_glossary(book_id):
     gl_path = os.path.join(GLOSSARY_DIR, f"{book_id}.json")
-    if not os.path.exists(gl_path):
-        return
+    entries = []
+    if os.path.exists(gl_path):
+        try:
+            with open(gl_path, "r", encoding="utf-8") as f:
+                entries = json.load(f)
+        except Exception as e:
+            print(f"Error reading glossary for {book_id}: {e}")
 
-    try:
-        with open(gl_path, "r", encoding="utf-8") as f:
-            entries = json.load(f)
-    except Exception as e:
-        print(f"Error reading glossary for {book_id}: {e}")
-        return
+    if not entries and os.path.exists(BOOKS_FILE):
+        try:
+            with open(BOOKS_FILE, "r", encoding="utf-8") as f:
+                bks = json.load(f)
+            b = next((x for x in bks if x.get("id") == book_id), None)
+            if b and b.get("shared_glossary_id"):
+                shared_path = os.path.join(GLOSSARY_DIR, f"{b['shared_glossary_id']}.json")
+                if os.path.exists(shared_path):
+                    with open(shared_path, "r", encoding="utf-8") as f:
+                        entries = json.load(f)
+        except Exception:
+            pass
 
     if not entries:
         return

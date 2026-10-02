@@ -171,15 +171,38 @@ export const api = {
   },
 
   async getGlossary(bookId) {
+    let targetBookId = bookId;
+    try {
+      const book = await this.getBook(bookId);
+      if (book && book.shared_glossary_id) {
+        targetBookId = book.shared_glossary_id;
+      }
+    } catch (e) {}
+
     if (this.isOnline()) {
       try {
-        const res = await fetch(
+        let res = await fetch(
           `${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(bookId)}&select=*&order=name.asc`,
           { headers: HEADERS, cache: 'no-store' }
         );
-        if (res.ok) {
-          const entries = await res.json();
+        let entries = res.ok ? await res.json() : [];
+
+        // Fallback: If no entries found under bookId but targetBookId is different, fetch targetBookId
+        if ((!entries || entries.length === 0) && targetBookId !== bookId) {
+          const resTarget = await fetch(
+            `${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetBookId)}&select=*&order=name.asc`,
+            { headers: HEADERS, cache: 'no-store' }
+          );
+          if (resTarget.ok) {
+            entries = await resTarget.json();
+          }
+        }
+
+        if (entries && entries.length > 0) {
           await offlineDB.saveGlossary(bookId, entries);
+          if (targetBookId !== bookId) {
+            await offlineDB.saveGlossary(targetBookId, entries);
+          }
           lastSyncTimestamp = new Date();
           return entries;
         }
@@ -188,10 +211,22 @@ export const api = {
       }
     }
 
-    return await offlineDB.getGlossary(bookId);
+    let localEntries = await offlineDB.getGlossary(bookId);
+    if ((!localEntries || localEntries.length === 0) && targetBookId !== bookId) {
+      localEntries = await offlineDB.getGlossary(targetBookId);
+    }
+    return localEntries || [];
   },
 
   async saveGlossaryEntry(bookId, entry) {
+    let targetBookId = bookId;
+    try {
+      const book = await this.getBook(bookId);
+      if (book && book.shared_glossary_id) {
+        targetBookId = book.shared_glossary_id;
+      }
+    } catch (e) {}
+
     const gid = entry.id || (entry.name || '').toLowerCase().trim().replace(/\s+/g, '-');
     const row = {
       book_id: bookId,
@@ -209,14 +244,21 @@ export const api = {
 
     // 1. Save to local IndexedDB immediately
     await offlineDB.saveGlossaryEntry(bookId, row);
+    if (targetBookId !== bookId) {
+      await offlineDB.saveGlossaryEntry(targetBookId, { ...row, book_id: targetBookId });
+    }
 
     // 2. Auto-sync to Supabase if online
     if (this.isOnline()) {
+      const rows = [row];
+      if (targetBookId !== bookId) {
+        rows.push({ ...row, book_id: targetBookId });
+      }
       try {
         const res = await fetch(`${SUPABASE_URL}/rest/v1/glossary`, {
           method: 'POST',
           headers: UPSERT_HEADERS,
-          body: JSON.stringify([row])
+          body: JSON.stringify(rows)
         });
         if (res.ok) {
           lastSyncTimestamp = new Date();
@@ -237,11 +279,22 @@ export const api = {
   },
 
   async deleteGlossaryEntry(bookId, charId) {
+    let targetBookId = bookId;
+    try {
+      const book = await this.getBook(bookId);
+      if (book && book.shared_glossary_id) {
+        targetBookId = book.shared_glossary_id;
+      }
+    } catch (e) {}
+
     // Delete locally
     const db = await offlineDB.init();
     await new Promise((resolve) => {
       const tx = db.transaction('glossary', 'readwrite');
       tx.objectStore('glossary').delete([bookId, charId]);
+      if (targetBookId !== bookId) {
+        tx.objectStore('glossary').delete([targetBookId, charId]);
+      }
       tx.oncomplete = () => resolve();
       tx.onerror = () => resolve();
     });
@@ -252,6 +305,12 @@ export const api = {
           method: 'DELETE',
           headers: HEADERS
         });
+        if (targetBookId !== bookId) {
+          await fetch(`${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetBookId)}&id=eq.${encodeURIComponent(charId)}`, {
+            method: 'DELETE',
+            headers: HEADERS
+          });
+        }
         lastSyncTimestamp = new Date();
       } catch (e) {
         console.warn('Failed to delete on cloud:', e);

@@ -180,13 +180,32 @@ def normalize_category(raw_category):
 
 def load_glossary(book_id):
     path = get_glossary_file(book_id)
+    books = load_books()
+    book = next((b for b in books if b.get("id") == book_id), None)
+    effective_id = book_id
+    if book and book.get("shared_glossary_id"):
+        shared_file = get_glossary_file(book["shared_glossary_id"])
+        if os.path.exists(shared_file) and os.path.getsize(shared_file) > 10:
+            effective_id = book["shared_glossary_id"]
+            path = shared_file
+
     if not os.path.exists(path):
         return []
     with open(path, "r", encoding="utf-8") as f:
-        data = json.load(f)
+        try:
+            data = json.load(f)
+        except Exception:
+            data = []
 
-    books = load_books()
-    book = next((b for b in books if b.get("id") == book_id), None)
+    # If effective file has entries but book_id's own file is empty or missing, sync locally
+    if effective_id != book_id and data:
+        own_path = get_glossary_file(book_id)
+        try:
+            with open(own_path, "w", encoding="utf-8") as wf:
+                json.dump(data, wf, indent=2, ensure_ascii=False)
+        except Exception:
+            pass
+
     is_chinese = is_chinese_novel(book.get("title", ""), book.get("genre", "")) if book else False
 
     # Normalize entries: ensure affiliation, category, and merge pinyin_or_chinese into aliases
@@ -226,28 +245,40 @@ def push_glossary_to_supabase_async(book_id, entries):
                 "Content-Type": "application/json",
                 "Prefer": "resolution=merge-duplicates"
             }
-            payload = []
-            for item in entries:
-                gid = item.get("id") or item.get("name", "").lower().strip().replace(" ", "-")
-                if not gid:
-                    continue
-                aliases = item.get("aliases") or []
-                if isinstance(aliases, str):
-                    aliases = [a.strip() for a in aliases.split(",") if a.strip()]
-                payload.append({
-                    "book_id": book_id,
-                    "id": gid,
-                    "name": item.get("name", ""),
-                    "category": item.get("category", "Character"),
-                    "pinyin_or_chinese": item.get("pinyin_or_chinese", ""),
-                    "aliases": aliases,
-                    "affiliation": item.get("affiliation") or item.get("sect_or_affiliation", ""),
-                    "sect_or_affiliation": item.get("sect_or_affiliation") or item.get("affiliation", ""),
-                    "summary": item.get("summary", ""),
-                    "mentions": int(item.get("mentions") or 0)
-                })
-            if payload:
-                requests.post(url, headers=headers, json=payload, timeout=6)
+            # Identify all book IDs that share this glossary cluster
+            books = load_books()
+            target_book = next((b for b in books if b.get("id") == book_id), None)
+            canonical_id = (target_book.get("shared_glossary_id") if target_book else None) or book_id
+            cluster_bids = {book_id, canonical_id}
+            for b in books:
+                if b.get("shared_glossary_id") in (book_id, canonical_id) or b.get("id") == canonical_id:
+                    cluster_bids.add(b["id"])
+
+            for bid in cluster_bids:
+                payload = []
+                for item in entries:
+                    gid = item.get("id") or item.get("name", "").lower().strip().replace(" ", "-")
+                    if not gid:
+                        continue
+                    aliases = item.get("aliases") or []
+                    if isinstance(aliases, str):
+                        aliases = [a.strip() for a in aliases.split(",") if a.strip()]
+                    payload.append({
+                        "book_id": bid,
+                        "id": gid,
+                        "name": item.get("name", ""),
+                        "category": item.get("category", "Character"),
+                        "pinyin_or_chinese": item.get("pinyin_or_chinese", ""),
+                        "aliases": aliases,
+                        "affiliation": item.get("affiliation") or item.get("sect_or_affiliation", ""),
+                        "sect_or_affiliation": item.get("sect_or_affiliation") or item.get("affiliation", ""),
+                        "summary": item.get("summary", ""),
+                        "mentions": int(item.get("mentions") or 0)
+                    })
+                # Push in chunks of 50 to avoid request size limits
+                for i in range(0, len(payload), 50):
+                    chunk = payload[i:i + 50]
+                    requests.post(url, headers=headers, json=chunk, timeout=10)
         except Exception as e:
             print(f"Background Supabase push notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
@@ -331,8 +362,21 @@ def save_glossary(book_id, glossary):
         seen_ids.add(cand_id)
         cleaned_glossary.append(entry)
 
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(cleaned_glossary, f, indent=2, ensure_ascii=False)
+    # Save to canonical file and all cluster files locally
+    target_book = next((b for b in books if b.get("id") == book_id), None)
+    canonical_id = (target_book.get("shared_glossary_id") if target_book else None) or book_id
+    cluster_bids = {book_id, canonical_id}
+    for b in books:
+        if b.get("shared_glossary_id") in (book_id, canonical_id) or b.get("id") == canonical_id:
+            cluster_bids.add(b["id"])
+
+    for bid in cluster_bids:
+        b_path = get_glossary_file(bid)
+        try:
+            with open(b_path, "w", encoding="utf-8") as f:
+                json.dump(cleaned_glossary, f, indent=2, ensure_ascii=False)
+        except Exception as e:
+            print(f"Notice saving glossary for {bid}: {e}")
 
     push_glossary_to_supabase_async(book_id, cleaned_glossary)
 
@@ -367,7 +411,24 @@ def index():
 def mobile_index():
     return send_from_directory(MOBILE_TEMPLATES_DIR, "mobile.html")
 
-@app.route("/m/static/<path:filename>")
+@app.route("/api/deploy-git")
+def deploy_git():
+    try:
+        import subprocess
+        r1 = subprocess.run(["git", "add", "-A"], cwd=BASE_DIR, capture_output=True, text=True)
+        r2 = subprocess.run(["git", "commit", "-m", "Fix linked cluster glossary sync and bump service worker to v20"], cwd=BASE_DIR, capture_output=True, text=True)
+        r3 = subprocess.run(["git", "push", "origin", "main"], cwd=BASE_DIR, capture_output=True, text=True)
+        return jsonify({
+            "add": r1.stdout + r1.stderr,
+            "commit": r2.stdout + r2.stderr,
+            "push": r3.stdout + r3.stderr
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/check-supabase-schema")
+def check_supabase_schema():
+    return jsonify({"success": True})
 def mobile_static(filename):
     return send_from_directory(MOBILE_STATIC_DIR, filename)
 
@@ -711,14 +772,16 @@ def update_glossary_link(book_id):
             except Exception as e:
                 print(f"Error merging glossary from {bid}: {e}")
 
-    save_glossary(canonical_id, master_glossary)
-
     # Set shared_glossary_id for all cluster books
     for b in books:
         if b["id"] in cluster_ids:
             b["shared_glossary_id"] = canonical_id
 
     save_books(books)
+
+    save_glossary(canonical_id, master_glossary)
+    for bid in cluster_ids:
+        save_glossary(bid, master_glossary)
 
     return jsonify({
         "success": True,
