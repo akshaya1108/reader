@@ -403,6 +403,26 @@ export const api = {
         const fullChapters = await chunkRes.json();
         await offlineDB.saveChapters(bookId, fullChapters);
         downloadedCount += fullChapters.length;
+
+        // Pre-cache chapter images for offline viewing
+        if (typeof caches !== 'undefined') {
+          try {
+            const cache = await caches.open('xianxia-mobile-v19');
+            for (const ch of fullChapters) {
+              const matches = (ch.content || '').matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
+              for (const m of matches) {
+                let imgUrl = m[1];
+                if (imgUrl.startsWith('/api/books/')) {
+                  const sub = imgUrl.match(/\/api\/books\/([^\/]+)\/images\/(.+)$/);
+                  if (sub) {
+                    imgUrl = `../data/chapters/${sub[1]}/images/${sub[2]}`;
+                  }
+                }
+                cache.add(imgUrl).catch(() => {});
+              }
+            }
+          } catch (_) {}
+        }
       }
 
       const pct = Math.min(95, Math.round(10 + (downloadedCount / totalChapters) * 85));
