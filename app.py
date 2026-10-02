@@ -783,6 +783,20 @@ def delete_book(book_id):
             print(f"Error moving chapters to trash: {e}")
 
     save_books(books)
+
+    # Delete from Supabase in background
+    def _bg_del():
+        try:
+            import requests
+            headers = {"apikey": SUPABASE_KEY, "Authorization": f"Bearer {SUPABASE_KEY}"}
+            requests.delete(f"{SUPABASE_URL}/rest/v1/books?id=eq.{book_id}", headers=headers)
+            requests.delete(f"{SUPABASE_URL}/rest/v1/chapters?book_id=eq.{book_id}", headers=headers)
+            requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{book_id}", headers=headers)
+        except Exception as ex:
+            print(f"Error deleting book from Supabase: {ex}")
+    import threading
+    threading.Thread(target=_bg_del, daemon=True).start()
+
     return jsonify({"success": True})
 
 

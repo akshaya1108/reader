@@ -1,284 +1,6 @@
 [
   {
     "book_id": "the-two-towers",
-    "id": "shelob",
-    "name": "Shelob",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Her Ladyship"
-    ],
-    "affiliation": "Cirith Ungol",
-    "sect_or_affiliation": "Cirith Ungol",
-    "summary": "An ancient, monstrous giant spider dwelling in the dark tunnels above Mordor.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "th-oden",
-    "name": "Théoden",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "King Théoden",
-      "Ednew"
-    ],
-    "affiliation": "Rohan",
-    "sect_or_affiliation": "Rohan",
-    "summary": "The aging King of Rohan weighed down by trials and dark counsel.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "adelard-took",
-    "name": "Adelard Took",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Addie"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A notoriously nosy relative belonging to the eccentric Took family of the Shire.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "peregrin-took",
-    "name": "Peregrin Took",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Pippin"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A young, impulsive hobbit of the Shire prone to accidental mischief.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "treebeard",
-    "name": "Treebeard",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Fangorn"
-    ],
-    "affiliation": "Ents",
-    "sect_or_affiliation": "Ents",
-    "summary": "An ancient, tree-like shepherd and guardian of the forest of Fangorn.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "witch-king-of-angmar",
-    "name": "Witch-king of Angmar",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Lord of Nazgûl",
-      "The Black Captain"
-    ],
-    "affiliation": "Nazgûl",
-    "sect_or_affiliation": "Nazgûl",
-    "summary": "The terrifying chief lieutenant and sorcerer-king under the Dark Lord's command.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "witch-king-s-winged-steed",
-    "name": "Witch-king's winged steed",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Fell beast"
-    ],
-    "affiliation": "Mordor",
-    "sect_or_affiliation": "Mordor",
-    "summary": "A monstrous, foul-winged creature serving as the mount of the Witch-king.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gr-ma",
-    "name": "Gríma",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Wormtongue"
-    ],
-    "affiliation": "Rohan",
-    "sect_or_affiliation": "Rohan",
-    "summary": "A pale, treacherous counselor and political advisor in the court of Rohan.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "bag-end",
-    "name": "Bag End",
-    "category": "Location / Realm",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Under-Hill"
-    ],
-    "affiliation": "Baggins Family",
-    "sect_or_affiliation": "Baggins Family",
-    "summary": "Bag End is a comfortable and luxurious hobbit-hole situated at the top of The Hill in Hobbiton, serving as the residence of Bilbo Baggins and later Frodo Baggins.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "hobbiton",
-    "name": "Hobbiton",
-    "category": "Location / Realm",
-    "pinyin_or_chinese": "",
-    "aliases": [],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "Hobbiton is a village in the Shire and the birthplace and early home of Bilbo and Frodo Baggins.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gollum",
-    "name": "Gollum",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Sméagol"
-    ],
-    "affiliation": "None",
-    "sect_or_affiliation": "None",
-    "summary": "A wretched, corrupted creature obsessed with finding a lost magical golden ring.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "goldberry",
-    "name": "Goldberry",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "River-daughter"
-    ],
-    "affiliation": "Old Forest",
-    "sect_or_affiliation": "Old Forest",
-    "summary": "An ethereal, graceful maiden associated with the springs of the Old Forest.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "gimli",
-    "name": "Gimli",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Lockbearer",
-      "Son of Glóin"
-    ],
-    "affiliation": "Dwarves of Erebor",
-    "sect_or_affiliation": "Dwarves of Erebor",
-    "summary": "A stout, proud Dwarf warrior skilled with the axe and fiercely loyal to his companions.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "aragorn-ii",
-    "name": "Aragorn II",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Strider",
-      "Elessar",
-      "Heir of Isildur"
-    ],
-    "affiliation": "Rangers of the North",
-    "sect_or_affiliation": "Rangers of the North",
-    "summary": "A rugged ranger of the North with a mysterious royal heritage and exceptional tracking skills.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "bilbo-baggins",
-    "name": "Bilbo Baggins",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Burglar",
-      "Bilbo"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A well-to-do hobbit of the Shire known for his unexpected past adventures and penchant for writing.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "frodo-baggins",
-    "name": "Frodo Baggins",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Ring-bearer",
-      "Frodo",
-      "Nine-fingered Frodo"
-    ],
-    "affiliation": "The Shire",
-    "sect_or_affiliation": "The Shire",
-    "summary": "A young, studious hobbit of the Shire and nephew to Bilbo Baggins.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
-    "id": "beregond",
-    "name": "Beregond",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Captain Beregond"
-    ],
-    "affiliation": "Gondor",
-    "sect_or_affiliation": "Gondor",
-    "summary": "A dedicated guard and soldier serving in the Citadel of Minas Tirith.",
-    "mentions": 0,
-    "created_at": "2026-10-02T11:23:24.177356+00:00",
-    "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "book_id": "the-two-towers",
     "id": "shire",
     "name": "Shire",
     "category": "Location / Realm",
@@ -596,6 +318,39 @@
   },
   {
     "book_id": "the-two-towers",
+    "id": "shelob",
+    "name": "Shelob",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Her Ladyship"
+    ],
+    "affiliation": "Cirith Ungol",
+    "sect_or_affiliation": "Cirith Ungol",
+    "summary": "An ancient, monstrous giant spider dwelling in the dark tunnels above Mordor.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "th-oden",
+    "name": "Théoden",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "King Théoden",
+      "Ednew"
+    ],
+    "affiliation": "Rohan",
+    "sect_or_affiliation": "Rohan",
+    "summary": "The aging King of Rohan weighed down by trials and dark counsel.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
     "id": "gamling",
     "name": "Gamling",
     "category": "Character",
@@ -731,6 +486,251 @@
     "affiliation": "Great Eagles",
     "sect_or_affiliation": "Great Eagles",
     "summary": "A noble and majestic giant eagle of the Misty Mountains.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "adelard-took",
+    "name": "Adelard Took",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Addie"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A notoriously nosy relative belonging to the eccentric Took family of the Shire.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "peregrin-took",
+    "name": "Peregrin Took",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Pippin"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A young, impulsive hobbit of the Shire prone to accidental mischief.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "treebeard",
+    "name": "Treebeard",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Fangorn"
+    ],
+    "affiliation": "Ents",
+    "sect_or_affiliation": "Ents",
+    "summary": "An ancient, tree-like shepherd and guardian of the forest of Fangorn.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "witch-king-of-angmar",
+    "name": "Witch-king of Angmar",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lord of Nazgûl",
+      "The Black Captain"
+    ],
+    "affiliation": "Nazgûl",
+    "sect_or_affiliation": "Nazgûl",
+    "summary": "The terrifying chief lieutenant and sorcerer-king under the Dark Lord's command.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "witch-king-s-winged-steed",
+    "name": "Witch-king's winged steed",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Fell beast"
+    ],
+    "affiliation": "Mordor",
+    "sect_or_affiliation": "Mordor",
+    "summary": "A monstrous, foul-winged creature serving as the mount of the Witch-king.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gr-ma",
+    "name": "Gríma",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Wormtongue"
+    ],
+    "affiliation": "Rohan",
+    "sect_or_affiliation": "Rohan",
+    "summary": "A pale, treacherous counselor and political advisor in the court of Rohan.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "bag-end",
+    "name": "Bag End",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Under-Hill"
+    ],
+    "affiliation": "Baggins Family",
+    "sect_or_affiliation": "Baggins Family",
+    "summary": "Bag End is a comfortable and luxurious hobbit-hole situated at the top of The Hill in Hobbiton, serving as the residence of Bilbo Baggins and later Frodo Baggins.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "hobbiton",
+    "name": "Hobbiton",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "Hobbiton is a village in the Shire and the birthplace and early home of Bilbo and Frodo Baggins.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gollum",
+    "name": "Gollum",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sméagol"
+    ],
+    "affiliation": "None",
+    "sect_or_affiliation": "None",
+    "summary": "A wretched, corrupted creature obsessed with finding a lost magical golden ring.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "goldberry",
+    "name": "Goldberry",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "River-daughter"
+    ],
+    "affiliation": "Old Forest",
+    "sect_or_affiliation": "Old Forest",
+    "summary": "An ethereal, graceful maiden associated with the springs of the Old Forest.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "gimli",
+    "name": "Gimli",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lockbearer",
+      "Son of Glóin"
+    ],
+    "affiliation": "Dwarves of Erebor",
+    "sect_or_affiliation": "Dwarves of Erebor",
+    "summary": "A stout, proud Dwarf warrior skilled with the axe and fiercely loyal to his companions.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "aragorn-ii",
+    "name": "Aragorn II",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Strider",
+      "Elessar",
+      "Heir of Isildur"
+    ],
+    "affiliation": "Rangers of the North",
+    "sect_or_affiliation": "Rangers of the North",
+    "summary": "A rugged ranger of the North with a mysterious royal heritage and exceptional tracking skills.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "bilbo-baggins",
+    "name": "Bilbo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Burglar",
+      "Bilbo"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A well-to-do hobbit of the Shire known for his unexpected past adventures and penchant for writing.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "frodo-baggins",
+    "name": "Frodo Baggins",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ring-bearer",
+      "Frodo",
+      "Nine-fingered Frodo"
+    ],
+    "affiliation": "The Shire",
+    "sect_or_affiliation": "The Shire",
+    "summary": "A young, studious hobbit of the Shire and nephew to Bilbo Baggins.",
+    "mentions": 0,
+    "created_at": "2026-10-02T11:23:24.177356+00:00",
+    "updated_at": "2026-10-02T11:23:24.177356+00:00"
+  },
+  {
+    "book_id": "the-two-towers",
+    "id": "beregond",
+    "name": "Beregond",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Captain Beregond"
+    ],
+    "affiliation": "Gondor",
+    "sect_or_affiliation": "Gondor",
+    "summary": "A dedicated guard and soldier serving in the Citadel of Minas Tirith.",
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.177356+00:00",
     "updated_at": "2026-10-02T11:23:24.177356+00:00"
@@ -975,20 +975,5 @@
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.177356+00:00",
     "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "id": "gandalf",
-    "name": "Gandalf",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Gandalf the Wizard",
-      "Gandalf the Grey",
-      "Mithrandir",
-      "The Grey Pilgrim"
-    ],
-    "sect_or_affiliation": "Fellowship of the Ring",
-    "affiliation": "Fellowship of the Ring",
-    "summary": "A wise and powerful Wizard of the Istari order who guides Frodo Baggins on his perilous quest concerning the One Ring."
   }
 ]

@@ -975,20 +975,5 @@
     "mentions": 0,
     "created_at": "2026-10-02T11:23:24.177356+00:00",
     "updated_at": "2026-10-02T11:23:24.177356+00:00"
-  },
-  {
-    "id": "gandalf",
-    "name": "Gandalf",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Gandalf the Wizard",
-      "Gandalf the Grey",
-      "Mithrandir",
-      "The Grey Pilgrim"
-    ],
-    "sect_or_affiliation": "Fellowship of the Ring",
-    "affiliation": "Fellowship of the Ring",
-    "summary": "A wise and powerful Wizard of the Istari order who guides Frodo Baggins on his perilous quest concerning the One Ring."
   }
 ]

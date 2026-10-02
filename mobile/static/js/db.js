@@ -71,6 +71,7 @@ class OfflineDB {
     return new Promise((resolve, reject) => {
       const tx = db.transaction('books', 'readwrite');
       const store = tx.objectStore('books');
+      store.clear();
       books.forEach(b => store.put(b));
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
