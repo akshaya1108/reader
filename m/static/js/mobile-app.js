@@ -1404,6 +1404,16 @@ function setupReaderInteractions() {
     }
   });
 
+  // Click on lore term support (desktop and tap fallback)
+  readerBody.addEventListener('click', (e) => {
+    const targetTag = e.target.closest('.char-tag');
+    if (targetTag) {
+      document.querySelectorAll('.char-tag.active-tag').forEach(el => el.classList.remove('active-tag'));
+      targetTag.classList.add('active-tag');
+      openLoreSheet(targetTag.dataset.charName);
+    }
+  });
+
   // Desktop double click support
   readerBody.addEventListener('dblclick', (e) => {
     const p = e.target.closest('p[data-p-idx]');
@@ -1470,6 +1480,28 @@ function setupReaderInteractions() {
 // --- Lore Card Popup Sheet (Matched to Desktop Web App Layout) ---
 let currentLoreItem = null;
 
+function switchLoreDualTab(tabName) {
+  const tabLore = document.getElementById('tab-btn-lore');
+  const tabNote = document.getElementById('tab-btn-note');
+  const paneLore = document.getElementById('lore-pane-view');
+  const paneNote = document.getElementById('note-pane-view');
+  const btnEdit = document.getElementById('btn-sheet-lore-edit');
+
+  if (tabName === 'note' && paneNote) {
+    tabLore?.classList.remove('active');
+    tabNote?.classList.add('active');
+    paneLore?.classList.add('hidden-pane');
+    paneNote?.classList.remove('hidden-pane');
+    if (btnEdit) btnEdit.style.display = 'none';
+  } else if (paneLore) {
+    tabLore?.classList.add('active');
+    tabNote?.classList.remove('active');
+    paneLore?.classList.remove('hidden-pane');
+    paneNote?.classList.add('hidden-pane');
+    if (btnEdit) btnEdit.style.display = '';
+  }
+}
+
 function openLoreSheet(charName, asCenteredModal = false) {
   if (!charName) return;
   const entry = state.glossaryMap.get(charName.toLowerCase().trim()) ||
@@ -1481,6 +1513,8 @@ function openLoreSheet(charName, asCenteredModal = false) {
   const backdrop = document.getElementById('sheet-backdrop-lore');
   const sheetCard = document.getElementById('sheet-card-lore');
   const content = document.getElementById('sheet-lore-content');
+  const btnEdit = document.getElementById('btn-sheet-lore-edit');
+  if (btnEdit) btnEdit.style.display = '';
 
   const normCat = normalizeCategory(entry.category);
   const catSlug = getCategorySlug(normCat);
@@ -1509,16 +1543,109 @@ function openLoreSheet(charName, asCenteredModal = false) {
     .join('');
   const summary = entry.summary || entry.notes || '';
 
-  if (content) {
-    content.innerHTML = `
-      <div class="lore-card-header-row">
-        <h3 class="lore-card-primary-name">${escapeHtml(entry.name || charName)}</h3>
-        <span class="card-cat-badge ${badgeClass}">${escapeHtml(normCat)}</span>
+  // Check if an exact note or highlight is attached to this lore word
+  const currentChNum = Number(state.activeChapterNum);
+  const exactHl = (state.currentBook?.bookmarks || []).find(
+    b => Number(b.chapter_number) === currentChNum &&
+         b.text && b.text.trim().toLowerCase() === charName.toLowerCase().trim()
+  );
+
+  // Also check if part of a broader containing sentence highlight
+  const containingHl = !exactHl && (state.currentBook?.bookmarks || []).find(
+    b => Number(b.chapter_number) === currentChNum &&
+         b.text && b.text.toLowerCase().includes(charName.toLowerCase().trim())
+  );
+
+  const lorePaneHtml = `
+    <div class="lore-card-header-row">
+      <h3 class="lore-card-primary-name">${escapeHtml(entry.name || charName)}</h3>
+      <span class="card-cat-badge ${badgeClass}">${escapeHtml(normCat)}</span>
+    </div>
+    ${affil ? `<div class="lore-card-affiliation">${escapeHtml(affil)}</div>` : ''}
+    ${aliasesHtml ? `<div class="lore-card-aliases"><span class="lore-card-aliases-label">Aliases:</span> <div class="card-aliases-row" style="margin-top: 4px;">${aliasesHtml}</div></div>` : ''}
+    <div class="lore-card-summary-box">${escapeHtml(summary || 'No description provided.')}</div>
+    ${containingHl ? `
+      <div class="lore-containing-note-pill" id="lore-pill-containing-note">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+        <span>View note on highlighted passage &rsaquo;</span>
       </div>
-      ${affil ? `<div class="lore-card-affiliation">${escapeHtml(affil)}</div>` : ''}
-      ${aliasesHtml ? `<div class="lore-card-aliases"><span class="lore-card-aliases-label">Aliases:</span> <div class="card-aliases-row" style="margin-top: 4px;">${aliasesHtml}</div></div>` : ''}
-      <div class="lore-card-summary-box">${escapeHtml(summary || 'No description provided.')}</div>
+    ` : ''}
+  `;
+
+  if (exactHl) {
+    const hasNote = Boolean(exactHl.note && exactHl.note.trim());
+    const d = exactHl.created_at ? new Date(exactHl.created_at) : new Date();
+    const dateStr = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+
+    const notePaneHtml = `
+      <div class="note-quote-box" style="border-left-color: ${hasNote ? 'var(--primary)' : '#f5c542'};">
+        <span class="note-quote-icon" style="color: ${hasNote ? 'var(--primary)' : '#c69527'};">“</span>
+        <div class="note-quote-text">${escapeHtml(exactHl.text)}</div>
+      </div>
+      <div class="note-view-body">
+        <div class="note-view-content" style="font-style: ${hasNote ? 'normal' : 'italic'};">
+          ${escapeHtml(hasNote ? exactHl.note : 'Highlighted word in text.')}
+        </div>
+      </div>
+      <div class="note-view-footer">
+        <span class="note-view-date">Saved ${dateStr}</span>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" class="btn-sheet-text-action" id="btn-exact-note-edit" style="font-size: 0.82rem;">${hasNote ? 'Edit Note' : 'Add Note'}</button>
+          <button type="button" class="btn-note-remove" id="btn-exact-note-delete" style="font-size: 0.82rem;">Delete</button>
+        </div>
+      </div>
     `;
+
+    if (content) {
+      content.innerHTML = `
+        <div class="lore-dual-tabs" id="lore-dual-tabs">
+          <button type="button" class="lore-dual-tab-btn active" id="tab-btn-lore">Lore</button>
+          <button type="button" class="lore-dual-tab-btn" id="tab-btn-note">${hasNote ? 'Personal Note' : 'Highlight'}</button>
+        </div>
+        <div class="lore-swipe-panes-wrapper">
+          <div class="lore-pane-view" id="lore-pane-view">${lorePaneHtml}</div>
+          <div class="lore-pane-view hidden-pane" id="note-pane-view">${notePaneHtml}</div>
+        </div>
+      `;
+
+      // Attach tab click listeners
+      document.getElementById('tab-btn-lore')?.addEventListener('click', () => switchLoreDualTab('lore'));
+      document.getElementById('tab-btn-note')?.addEventListener('click', () => switchLoreDualTab('note'));
+
+      // Attach edit note listener
+      document.getElementById('btn-exact-note-edit')?.addEventListener('click', () => {
+        const toEdit = exactHl;
+        if (backdrop) backdrop.classList.remove('active');
+        openNoteEditor(toEdit);
+      });
+
+      // Attach delete note listener with confirm dialog
+      document.getElementById('btn-exact-note-delete')?.addEventListener('click', async () => {
+        const confirmed = await showConfirmDialog({
+          title: hasNote ? 'Delete Note?' : 'Remove Highlight?',
+          message: hasNote
+            ? 'Are you sure you want to delete this note and remove its highlight?'
+            : 'Are you sure you want to remove this highlight?',
+          confirmText: 'Delete'
+        });
+        if (!confirmed) return;
+        if (backdrop) backdrop.classList.remove('active');
+        deleteNoteOrHighlight(exactHl.id);
+      });
+    }
+  } else {
+    if (content) {
+      content.innerHTML = lorePaneHtml;
+    }
+  }
+
+  // If there's a containing note pill, wire its click to open Note Viewer
+  const containingPill = document.getElementById('lore-pill-containing-note');
+  if (containingPill && containingHl) {
+    containingPill.addEventListener('click', () => {
+      if (backdrop) backdrop.classList.remove('active');
+      openNoteViewer(containingHl);
+    });
   }
 
   if (backdrop) backdrop.classList.add('active');
@@ -1542,78 +1669,104 @@ function applyHighlightsToReader(container) {
   sorted.forEach(hl => {
     const quote = (hl.text || '').trim();
     if (!quote) return;
+    const isNote = Boolean(hl.note && hl.note.trim());
+    const hlClass = isNote ? 'reader-note' : 'reader-highlight';
 
+    // 1. Locate the paragraph
     let targetP = null;
     if (hl.paragraph_index !== undefined) {
       targetP = container.querySelector(`p[data-p-idx="${hl.paragraph_index}"]`);
     }
-
     if (!targetP || !targetP.textContent.includes(quote)) {
-      targetP = Array.from(container.querySelectorAll('p')).find(p => p.textContent.includes(quote));
+      targetP = Array.from(container.querySelectorAll('p[data-p-idx]')).find(p => p.textContent.includes(quote));
     }
     if (!targetP) return;
 
-    // Check if an existing element (.char-tag or span) matches exact text
-    const exactTag = Array.from(targetP.querySelectorAll('.char-tag, span')).find(
-      el => el.textContent.trim() === quote && !el.getAttribute('data-hl-id')
+    // Check if an existing .char-tag exactly matches the quote
+    const exactTag = Array.from(targetP.querySelectorAll('.char-tag')).find(
+      el => el.textContent.trim().toLowerCase() === quote.toLowerCase()
     );
-    if (exactTag) {
-      if (hl.note && hl.note.trim()) {
-        exactTag.classList.add('reader-note');
-      } else {
-        exactTag.classList.add('reader-highlight');
-      }
+    if (exactTag && quote.length === exactTag.textContent.trim().length) {
+      exactTag.classList.add(hlClass);
       exactTag.setAttribute('data-hl-id', hl.id);
       return;
     }
 
-    // Search and split text nodes inside target paragraph
+    // 2. Multi-Node Range Highlighter across paragraph text content
+    const pText = targetP.textContent;
+    let matchStart = pText.indexOf(quote);
+    if (matchStart === -1) {
+      matchStart = pText.toLowerCase().indexOf(quote.toLowerCase());
+    }
+    if (matchStart === -1) return;
+    const matchEnd = matchStart + quote.length;
+
+    // Collect all text nodes with their global offsets in the paragraph
     const walker = document.createTreeWalker(targetP, NodeFilter.SHOW_TEXT, null, false);
-    let node;
-    const textNodes = [];
-    while ((node = walker.nextNode())) {
-      if (!node.parentElement?.classList.contains('reader-highlight') &&
-          !node.parentElement?.classList.contains('reader-note')) {
-        textNodes.push(node);
-      }
+    const nodeInfos = [];
+    let currOffset = 0;
+    let tNode;
+    while ((tNode = walker.nextNode())) {
+      const len = tNode.nodeValue.length;
+      nodeInfos.push({
+        node: tNode,
+        start: currOffset,
+        end: currOffset + len,
+        len: len
+      });
+      currOffset += len;
     }
 
-    for (const tn of textNodes) {
-      const idx = tn.nodeValue.indexOf(quote);
-      if (idx !== -1) {
-        const before = tn.nodeValue.substring(0, idx);
-        const match = tn.nodeValue.substring(idx, idx + quote.length);
-        const after = tn.nodeValue.substring(idx + quote.length);
+    // Walk nodes backwards so splitting does not invalidate earlier offsets
+    for (let i = nodeInfos.length - 1; i >= 0; i--) {
+      const info = nodeInfos[i];
+      if (info.end <= matchStart || info.start >= matchEnd) {
+        continue; // No overlap
+      }
 
-        const frag = document.createDocumentFragment();
-        if (before) frag.appendChild(document.createTextNode(before));
+      const overlapStart = Math.max(matchStart, info.start);
+      const overlapEnd = Math.min(matchEnd, info.end);
+      const localStart = overlapStart - info.start;
+      const localEnd = overlapEnd - info.start;
+
+      const parentEl = info.node.parentElement;
+      if (parentEl && parentEl.classList.contains('char-tag')) {
+        // Text node is inside a lore term
+        parentEl.classList.add(hlClass);
+        parentEl.setAttribute('data-hl-id', hl.id);
+      } else {
+        // Raw text node or inside non-tag element: split and wrap
+        let targetTextNode = info.node;
+        if (localEnd < targetTextNode.nodeValue.length) {
+          targetTextNode.splitText(localEnd);
+        }
+        if (localStart > 0) {
+          targetTextNode = targetTextNode.splitText(localStart);
+        }
 
         const span = document.createElement('span');
-        span.className = (hl.note && hl.note.trim()) ? 'reader-note' : 'reader-highlight';
+        span.className = hlClass;
         span.setAttribute('data-hl-id', hl.id);
-        span.textContent = match;
-        frag.appendChild(span);
-
-        if (after) frag.appendChild(document.createTextNode(after));
-
-        if (tn.parentNode) {
-          tn.parentNode.replaceChild(frag, tn);
+        if (targetTextNode.parentNode) {
+          targetTextNode.parentNode.insertBefore(span, targetTextNode);
+          span.appendChild(targetTextNode);
         }
-        break;
       }
     }
   });
 
-  // Attach tap listeners to highlighted and noted spans
+  // Attach tap listeners to highlighted and noted spans (excluding char-tag which has lore priority)
   container.querySelectorAll('.reader-highlight, .reader-note').forEach(el => {
-    el.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const hlId = el.getAttribute('data-hl-id');
-      const hl = (state.currentBook?.bookmarks || []).find(b => b.id === hlId);
-      if (hl) {
-        openNoteViewer(hl);
-      }
-    });
+    if (!el.classList.contains('char-tag')) {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const hlId = el.getAttribute('data-hl-id');
+        const hl = (state.currentBook?.bookmarks || []).find(b => b.id === hlId);
+        if (hl) {
+          openNoteViewer(hl);
+        }
+      });
+    }
   });
 }
 
@@ -2098,6 +2251,7 @@ function setupNotesFeature() {
 
 function setupLoreSheet() {
   const backdrop = document.getElementById('sheet-backdrop-lore');
+  const sheetCard = document.getElementById('sheet-card-lore');
   const btnClose = document.getElementById('btn-sheet-lore-close');
   const btnEdit = document.getElementById('btn-sheet-lore-edit');
 
@@ -2124,6 +2278,28 @@ function setupLoreSheet() {
         openEditLoreSheet(currentLoreItem);
       }
     });
+  }
+
+  // Swipe gesture support between Lore and Note tabs
+  let loreTouchStartX = 0;
+  let loreTouchStartY = 0;
+  if (sheetCard) {
+    sheetCard.addEventListener('touchstart', (e) => {
+      loreTouchStartX = e.touches[0].clientX;
+      loreTouchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    sheetCard.addEventListener('touchend', (e) => {
+      const diffX = e.changedTouches[0].clientX - loreTouchStartX;
+      const diffY = e.changedTouches[0].clientY - loreTouchStartY;
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX < 0) {
+          switchLoreDualTab('note');
+        } else {
+          switchLoreDualTab('lore');
+        }
+      }
+    }, { passive: true });
   }
 }
 

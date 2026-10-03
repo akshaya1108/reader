@@ -1643,6 +1643,102 @@ body.theme-dark .card-summary {
   border-radius: 2px;
 }
 
+/* Lore term inside or as a highlight / note */
+.char-tag.reader-highlight {
+  background-color: rgba(245, 197, 66, 0.35) !important;
+  border-radius: 2px;
+}
+
+.char-tag.reader-note {
+  background-color: rgba(72, 160, 122, 0.28) !important;
+  border-bottom: 2px solid #3c825d !important;
+  border-radius: 2px;
+}
+
+body.theme-dark .char-tag.reader-highlight {
+  background-color: rgba(245, 197, 66, 0.26) !important;
+}
+
+body.theme-dark .char-tag.reader-note {
+  background-color: rgba(82, 175, 134, 0.32) !important;
+  border-bottom: 2px solid #5eb88b !important;
+}
+
+/* Lore Sheet Dual Tabs (Strictly Sans Font) */
+.lore-dual-tabs {
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-surface);
+  border-radius: 20px;
+  padding: 3px;
+  margin-bottom: 14px;
+  gap: 4px;
+  font-family: var(--font-sans) !important;
+}
+
+.lore-dual-tab-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  padding: 6px 10px;
+  font-family: var(--font-sans) !important;
+  font-size: 0.80rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.lore-dual-tab-btn.active {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.lore-swipe-panes-wrapper {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  font-family: var(--font-sans) !important;
+}
+
+.lore-pane-view {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-family: var(--font-sans) !important;
+}
+
+.lore-pane-view.hidden-pane {
+  display: none;
+}
+
+.lore-containing-note-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans) !important;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--primary);
+  background-color: var(--primary-light);
+  padding: 5px 12px;
+  border-radius: 14px;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.lore-containing-note-pill:active {
+  opacity: 0.75;
+}
+
+
 /* Floating Text Selection "+ Add to Glossary" Bubble */
 .floating-selection-bubble {
   position: fixed;
