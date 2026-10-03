@@ -223,15 +223,15 @@
   {
     "id": "the-hobbit",
     "title": "The Hobbit",
-    "author": "J. R. R. Tolkien",
+    "author": "J.R.R. Tolkien",
     "genre": "EPIC FANTASY",
-    "description": "Bilbo Baggins is a comfort-loving hobbit whose quiet life is upended when the wizard Gandalf and a company of thirteen dwarves sweep him into a grand and unexpected adventure. Tasked with helping reclaim a stolen treasure hoard from the formidable dragon Smaug, Bilbo discovers unexpected courage and resourcefulness along the way.",
+    "description": "Bilbo Baggins, a comfortable hobbit, is unexpectedly swept into an epic quest by the wizard Gandalf and a company of thirteen dwarves to reclaim their lost treasure from the dragon Smog. Along the way, he stumbles upon a mysterious ring and discovers an inner courage and resourcefulness he never knew he possessed. This timeless classic sets the stage for the legendary events of The Lord of the Rings.",
     "color": "#c4884d",
     "created_at": "04/10/2026",
     "last_read_chapter": 1,
     "last_chapter": 1,
-    "chapters_count": 48,
-    "total_words": 107250,
+    "chapters_count": 32,
+    "total_words": 98266,
     "enable_glossary": true
   }
 ]
