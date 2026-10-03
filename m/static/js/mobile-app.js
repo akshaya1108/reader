@@ -961,38 +961,60 @@ function renderReaderText(rawHtml) {
     el.removeAttribute('face');
   });
 
-  // Resolve chapter images for portable hosting (GitHub Pages, mobile)
+  // Resolve chapter images with robust multi-tier fallback (GitHub Pages, Raw GitHub, Local Wi-Fi API)
   temp.querySelectorAll('img').forEach(img => {
     const rawSrc = img.getAttribute('src') || '';
-    if (rawSrc.startsWith('/api/books/')) {
-      const match = rawSrc.match(/\/api\/books\/([^\/]+)\/images\/(.+)$/);
-      if (match) {
-        const bookId = match[1];
-        const filename = match[2];
-        const isGithub = window.location.hostname.includes('github.io');
-        const isSubpath = window.location.pathname.includes('/m');
-        if (isGithub || isSubpath) {
-          img.setAttribute('src', `../data/chapters/${bookId}/images/${filename}`);
-        }
-      }
-    }
     img.classList.add('reader-image');
     img.setAttribute('loading', 'lazy');
 
-    img.addEventListener('error', () => {
-      const currentSrc = img.getAttribute('src') || '';
-      if (currentSrc.includes('/data/chapters/')) {
-        const fallback = currentSrc.replace(/^.*\/data\/chapters\//, '/api/books/');
-        if (fallback !== currentSrc && !window.location.hostname.includes('github.io')) {
-          img.setAttribute('src', fallback);
-          return;
+    // Inline base64 images load directly everywhere without network
+    if (rawSrc.startsWith('data:')) {
+      return;
+    }
+
+    // Identify bookId and filename from any image path pattern
+    let bookId = state.activeBookId || '';
+    let filename = '';
+
+    const apiMatch = rawSrc.match(/(?:api\/books|data\/chapters)\/([^\/]+)\/images\/(.+)$/);
+    if (apiMatch) {
+      bookId = apiMatch[1];
+      filename = apiMatch[2];
+    } else if (rawSrc.includes('/images/')) {
+      filename = rawSrc.split('/images/').pop().split('?')[0];
+    } else if (!rawSrc.startsWith('http://') && !rawSrc.startsWith('https://')) {
+      filename = rawSrc.split('/').pop().split('?')[0];
+    }
+
+    if (bookId && filename) {
+      const candidates = [
+        `../data/chapters/${bookId}/images/${filename}`,
+        `https://raw.githubusercontent.com/akshaya1108/reader/main/data/chapters/${bookId}/images/${filename}`,
+        `/api/books/${bookId}/images/${filename}`
+      ];
+
+      let candidateIdx = 0;
+      img.setAttribute('src', candidates[0]);
+
+      img.addEventListener('error', function onImgError() {
+        candidateIdx++;
+        if (candidateIdx < candidates.length) {
+          img.setAttribute('src', candidates[candidateIdx]);
+        } else {
+          img.style.display = 'none';
+          if (img.parentElement && img.parentElement.classList.contains('reader-image-wrap')) {
+            img.parentElement.style.display = 'none';
+          }
         }
-      }
-      img.style.display = 'none';
-      if (img.parentElement && img.parentElement.classList.contains('reader-image-wrap')) {
-        img.parentElement.style.display = 'none';
-      }
-    }, { once: true });
+      });
+    } else {
+      img.addEventListener('error', () => {
+        img.style.display = 'none';
+        if (img.parentElement && img.parentElement.classList.contains('reader-image-wrap')) {
+          img.parentElement.style.display = 'none';
+        }
+      }, { once: true });
+    }
   });
 
   // 2. Check if <p> tags exist; if not, extract leaf divs (critical for MDZS)

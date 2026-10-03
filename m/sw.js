@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianxia-mobile-v40';
+const CACHE_NAME = 'xianxia-mobile-v41';
 const STATIC_ASSETS = [
   './',
   './manifest.json',
@@ -43,16 +43,22 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Cache chapter illustration images on-demand for offline reading
-  if (url.pathname.includes('/images/') && (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.jpeg') || url.pathname.endsWith('.svg'))) {
+  const isImageFile = /\.(jpe?g|png|gif|webp|svg)($|\?)/i.test(url.pathname);
+  if (url.pathname.includes('/images/') && isImageFile) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
-        return cached || fetch(event.request).then((response) => {
+        if (cached) {
+          return cached;
+        }
+        return fetch(event.request).then((response) => {
           if (response.ok) {
             const clone = response.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
           }
           return response;
-        }).catch(() => cached);
+        }).catch(() => {
+          return new Response('', { status: 404, statusText: 'Image Not Found' });
+        });
       })
     );
     return;

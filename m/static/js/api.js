@@ -1048,10 +1048,16 @@ Return a JSON array with 1 object (or [] if not canon):
               const matches = (ch.content || '').matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
               for (const m of matches) {
                 let imgUrl = m[1];
+                if (!imgUrl || imgUrl.startsWith('data:')) continue;
                 if (imgUrl.startsWith('/api/books/')) {
                   const sub = imgUrl.match(/\/api\/books\/([^\/]+)\/images\/(.+)$/);
                   if (sub) {
-                    imgUrl = `../data/chapters/${sub[1]}/images/${sub[2]}`;
+                    const bId = sub[1];
+                    const fName = sub[2];
+                    const relUrl = `../data/chapters/${bId}/images/${fName}`;
+                    const rawUrl = `https://raw.githubusercontent.com/akshaya1108/reader/main/data/chapters/${bId}/images/${fName}`;
+                    cache.add(relUrl).catch(() => cache.add(rawUrl).catch(() => {}));
+                    continue;
                   }
                 }
                 cache.add(imgUrl).catch(() => {});

@@ -220,21 +220,14 @@ def delete_chapter_from_supabase_async(book_id, ch_num):
             print(f"Background Supabase chapter delete notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
 
-def push_images_to_github_async(book_id, book_title="new book"):
+def push_images_to_github_async(book_id=None, book_title="new book"):
     import threading
     import subprocess
     def _run():
         try:
-            img_dir = os.path.join(CHAPTERS_DIR, book_id, "images")
-            if not os.path.exists(img_dir):
-                return
-            images = [f for f in os.listdir(img_dir) if not f.startswith(".")]
-            if not images:
-                return
-
-            print(f"[Git Sync] Staging images for {book_id} to GitHub...")
+            print(f"[Git Sync] Staging images to GitHub...")
             subprocess.run(
-                ["git", "add", f"data/chapters/{book_id}/images", "data/books.json"],
+                ["git", "add", "data/chapters/*/images", "data/books.json"],
                 cwd=BASE_DIR,
                 capture_output=True,
                 check=False
@@ -255,7 +248,7 @@ def push_images_to_github_async(book_id, book_title="new book"):
                     capture_output=True,
                     check=False
                 )
-                print(f"[Git Sync] Pushing images to GitHub for {book_id}...")
+                print(f"[Git Sync] Pushing images to GitHub...")
                 push_res = subprocess.run(
                     ["git", "push", "origin", "main"],
                     cwd=BASE_DIR,
@@ -264,14 +257,14 @@ def push_images_to_github_async(book_id, book_title="new book"):
                     check=False
                 )
                 if push_res.returncode == 0:
-                    print(f"[Git Sync] Successfully pushed images for {book_id} to GitHub.")
+                    print(f"[Git Sync] Successfully pushed images to GitHub.")
                 else:
                     print(f"[Git Sync] Git push notice: {push_res.stderr}")
             else:
-                print(f"[Git Sync] No new image changes to commit for {book_id}.")
+                print(f"[Git Sync] No new image changes to commit.")
         except Exception as e:
             print(f"[Git Sync] Background push images error: {e}")
-    threading.Thread(target=_run, daemon=True).start()
+    threading.Thread(target=_run, daemon=False).start()
 
 def load_books():
     if not os.path.exists(BOOKS_FILE):
@@ -969,6 +962,7 @@ def sync_supabase_endpoint():
                 book_ids = push_all_books() or []
                 for bid in book_ids:
                     push_all_chapters(bid)
+                push_images_to_github_async("all books")
             except Exception as ex:
                 print(f"Background Supabase full push notice: {ex}")
         threading.Thread(target=_bg_push, daemon=True).start()
@@ -1901,6 +1895,28 @@ def get_book_image(book_id, filename):
         return jsonify({"error": "Image not found"}), 404
     return send_from_directory(img_dir, filename)
 
+@app.route("/api/books/<book_id>/images", methods=["POST"])
+def upload_book_image(book_id):
+    if "image" not in request.files and "file" not in request.files:
+        return jsonify({"error": "No image file provided"}), 400
+    file = request.files.get("image") or request.files.get("file")
+    orig_name = file.filename or "image.jpg"
+    safe_name = re.sub(r'[^a-zA-Z0-9_.-]', '_', orig_name)
+    if not safe_name.lower().endswith(('.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg')):
+        safe_name += '.jpg'
+    
+    img_dir = os.path.join(CHAPTERS_DIR, book_id, "images")
+    os.makedirs(img_dir, exist_ok=True)
+    target_path = os.path.join(img_dir, safe_name)
+    file.save(target_path)
+
+    push_images_to_github_async(book_id, safe_name)
+    return jsonify({
+        "success": True,
+        "url": f"/api/books/{book_id}/images/{safe_name}",
+        "filename": safe_name
+    }), 201
+
 # Chapters CRUD
 @app.route("/api/books/<book_id>/chapters", methods=["GET"])
 def list_chapters(book_id):
@@ -1998,6 +2014,8 @@ def save_chapter(book_id):
             b["last_read_chapter"] = ch_num
             b["last_read_at"] = datetime.datetime.now().isoformat()
     save_books(books)
+    if "<img" in content:
+        push_images_to_github_async(book_id, title)
 
     return jsonify({
         "success": True,
