@@ -1549,6 +1549,8 @@ body.mode-readonly .badge-shared-item {
   display: flex;
   align-items: center;
   gap: 18px;
+  min-width: 0;
+  flex: 1 1 auto;
 }
 
 .btn-reader-close {
@@ -1561,6 +1563,7 @@ body.mode-readonly .badge-shared-item {
   cursor: pointer;
   color: inherit;
   transition: background 0.15s;
+  flex-shrink: 0;
 }
 
 .btn-reader-close:hover {
@@ -1573,16 +1576,23 @@ body.mode-readonly .badge-shared-item {
   gap: 8px;
   color: var(--reader-text);
   line-height: 1.2;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .reader-book-title {
   font-weight: 700;
   font-size: 1rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .reader-book-sep {
   opacity: 0.5;
   font-size: 0.82rem;
+  flex-shrink: 0;
 }
 
 .reader-book-author {
@@ -1590,12 +1600,16 @@ body.mode-readonly .badge-shared-item {
   font-size: 0.86rem;
   font-weight: 400;
   opacity: 0.85;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .reader-nav-right {
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-shrink: 0;
 }
 
 .chapter-stepper {
@@ -1605,6 +1619,9 @@ body.mode-readonly .badge-shared-item {
   border: 1px solid var(--reader-border);
   border-radius: 8px;
   overflow: hidden;
+  width: 250px;
+  max-width: 250px;
+  flex-shrink: 0;
 }
 
 .stepper-btn {
@@ -1614,11 +1631,15 @@ body.mode-readonly .badge-shared-item {
   cursor: pointer;
   color: inherit;
   font-size: 1.1rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .stepper-btn:hover { background: rgba(0, 0, 0, 0.08); }
 
-.stepper-select, .reader-select {
+.stepper-select {
   background: transparent;
   border: none;
   padding: 7px 10px;
@@ -1626,13 +1647,39 @@ body.mode-readonly .badge-shared-item {
   color: inherit;
   cursor: pointer;
   outline: none;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .reader-select {
+  background: transparent;
   border: 1px solid var(--reader-border);
   border-radius: 8px;
   background: rgba(0, 0, 0, 0.03);
   padding: 7px 12px;
+  font-size: 0.9rem;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+}
+
+@media (max-width: 1100px) {
+  .chapter-stepper {
+    width: 200px;
+    max-width: 200px;
+  }
+}
+
+@media (max-width: 860px) {
+  .chapter-stepper {
+    width: 170px;
+    max-width: 170px;
+  }
 }
 
 .font-size-group {

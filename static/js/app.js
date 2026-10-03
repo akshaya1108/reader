@@ -1551,10 +1551,12 @@ function renderPaginationControls(totalPages) {
 // --- READER OVERLAY & CHARACTER TAGGING ENGINE ---
 function renderReaderBookInfo(book) {
   if (!elements.readerBookInfo || !book) return;
+  const title = book.title || '';
+  const author = book.author || '';
   elements.readerBookInfo.innerHTML = `
-    <span class="reader-book-title">${book.title}</span>
+    <span class="reader-book-title" title="${escapeHtml(title)}">${escapeHtml(title)}</span>
     <span class="reader-book-sep">&bull;</span>
-    <span class="reader-book-author">${book.author}</span>
+    <span class="reader-book-author" title="${escapeHtml(author)}">${escapeHtml(author)}</span>
   `;
 }
 
@@ -1629,7 +1631,10 @@ async function openReader(chapterNumber) {
       const opt = document.createElement('option');
       opt.value = c.chapter_number;
       opt.textContent = `Chapter ${c.chapter_number}: ${c.title}`;
-      if (c.chapter_number === chData.chapter_number) opt.selected = true;
+      if (c.chapter_number === chData.chapter_number) {
+        opt.selected = true;
+        elements.readerChapterSelect.title = `Chapter ${c.chapter_number}: ${c.title}`;
+      }
       elements.readerChapterSelect.appendChild(opt);
     });
 
@@ -4097,6 +4102,8 @@ function setupEventListeners() {
   }, { passive: true });
 
   elements.readerChapterSelect.addEventListener('change', (e) => {
+    const selectedOpt = e.target.options[e.target.selectedIndex];
+    if (selectedOpt) e.target.title = selectedOpt.textContent;
     openReader(parseInt(e.target.value, 10));
   });
 
