@@ -134,8 +134,22 @@
     "chapters_count": 33,
     "total_words": 75876,
     "enable_glossary": false,
-    "last_read_at": "2026-10-03T05:39:05.523Z",
+    "last_read_at": "2026-10-03T05:39:05.523+00:00",
     "bookmark": null,
     "bookmarks": []
+  },
+  {
+    "id": "california-diaries-14-amalia-diary-three",
+    "title": "California Diaries #14: Amalia, Diary Three",
+    "author": "Ann M. Martin",
+    "genre": "YOUNG ADULT FICTION",
+    "description": "In the fourteenth installment of the California Diaries series, Amalia continues her personal journal entries, navigating the complexities of teenage life, friendships, and growing up in California. This intimate diary offers a heartfelt look into her thoughts, struggles, and daily experiences during a pivotal time in her youth.",
+    "color": "#c4884d",
+    "created_at": "03/10/2026",
+    "last_read_chapter": 1,
+    "last_chapter": 1,
+    "chapters_count": 14,
+    "total_words": 13904,
+    "enable_glossary": false
   }
 ]
