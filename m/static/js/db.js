@@ -99,7 +99,7 @@ class OfflineDB {
     });
   }
 
-  async updateBookProgress(bookId, { lastReadChapter, bookmark, lastReadAt }) {
+  async updateBookProgress(bookId, { lastReadChapter, bookmark, bookmarks, lastReadAt }) {
     const db = await this.init();
     return new Promise((resolve, reject) => {
       const tx = db.transaction('books', 'readwrite');
@@ -109,6 +109,7 @@ class OfflineDB {
         const book = getReq.result || { id: bookId };
         if (lastReadChapter !== undefined) book.last_read_chapter = lastReadChapter;
         if (bookmark !== undefined) book.bookmark = bookmark;
+        if (bookmarks !== undefined) book.bookmarks = bookmarks;
         if (lastReadAt !== undefined) book.last_read_at = lastReadAt;
         store.put(book);
       };

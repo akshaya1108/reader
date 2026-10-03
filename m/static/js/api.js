@@ -367,6 +367,7 @@ export const api = {
     await offlineDB.updateBookProgress(bookId, {
       lastReadChapter: data.last_read_chapter,
       bookmark: bookmarkPayload,
+      bookmarks: data.bookmarks,
       lastReadAt: nowIso
     });
 

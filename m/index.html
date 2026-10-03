@@ -263,6 +263,15 @@
           </div>
 
           <div class="reader-actions-right">
+            <!-- Reader Highlights & Notes Button -->
+            <button class="btn-reader-action" id="btn-reader-notes" title="Notes & Highlights">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path>
+                <path d="M6 6h10"></path>
+                <path d="M6 10h10"></path>
+              </svg>
+            </button>
+
             <!-- Reader Search Button -->
             <button class="btn-reader-action" id="btn-reader-search" title="Search novel">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -292,17 +301,39 @@
           </div>
         </main>
 
-        <!-- Floating Text Selection "+ Add to Glossary" Bubble -->
+        <!-- Floating Text Selection Actions Bubble (Strictly Sans Font) -->
         <div class="floating-selection-bubble" id="mobile-selection-bar" style="display:none;">
-          <button type="button" class="btn-selection-bubble" id="btn-selection-add-lore">
-            <span id="mobile-selection-btn-icon" style="display:inline-flex; align-items:center;">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="12" y1="5" x2="12" y2="19"></line>
-                <line x1="5" y1="12" x2="19" y2="12"></line>
-              </svg>
-            </span>
-            <span id="mobile-selection-btn-text">Add to Glossary</span>
-          </button>
+          <div class="selection-actions-pill">
+            <button type="button" class="btn-selection-action" id="btn-selection-add-lore" title="Add to Glossary">
+              <span id="mobile-selection-btn-icon" class="selection-action-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+              </span>
+              <span id="mobile-selection-btn-text">Add to Glossary</span>
+            </button>
+            <div class="selection-action-sep" id="selection-sep-1"></div>
+            <button type="button" class="btn-selection-action" id="btn-selection-highlight" title="Highlight text">
+              <span class="selection-action-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m9 11-6 6v3h3l6-6"></path>
+                  <path d="m22 7-4.5-4.5c-.8-.8-2-.8-2.8 0l-3.2 3.2 7.3 7.3 3.2-3.2c.8-.8.8-2 0-2.8Z"></path>
+                </svg>
+              </span>
+              <span>Highlight</span>
+            </button>
+            <div class="selection-action-sep" id="selection-sep-2"></div>
+            <button type="button" class="btn-selection-action" id="btn-selection-note" title="Add Note">
+              <span class="selection-action-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 20h9"></path>
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
+                </svg>
+              </span>
+              <span>Add Note</span>
+            </button>
+          </div>
         </div>
 
         <!-- Grounded Reader Bottom Stepper (Firmly pinned to bottom) -->
@@ -574,6 +605,109 @@
         </div>
         <div class="sync-status-actions">
           <button class="btn-sync-now" id="btn-sync-now-action">Sync Now</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet: Add / Edit Reader Note (Strictly Sans Font) -->
+    <div class="sheet-backdrop" id="sheet-backdrop-note-edit">
+      <div class="sheet-card note-modal-card" id="sheet-card-note-edit">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <h3 class="sheet-title" id="note-edit-title">Add Note</h3>
+          <button type="button" class="btn-sheet-close" id="btn-note-edit-close" title="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="note-quote-box" id="note-edit-quote-box">
+          <svg class="note-quote-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"></path>
+          </svg>
+          <span class="note-quote-text" id="note-edit-quote-text">Quoted text excerpt...</span>
+        </div>
+
+        <div class="note-form-group">
+          <label class="form-label">YOUR NOTE</label>
+          <textarea class="note-textarea" id="note-edit-textarea" rows="4" placeholder="Write personal reflections, connections, or notes on this passage..."></textarea>
+        </div>
+
+        <div class="form-actions-row" style="margin-top: 14px;">
+          <button type="button" class="btn-form-delete" id="btn-note-edit-delete" style="display:none;">Delete</button>
+          <div style="flex:1;"></div>
+          <button type="button" class="btn-form-cancel" id="btn-note-edit-cancel">Cancel</button>
+          <button type="button" class="btn-form-save" id="btn-note-edit-save">Save Note</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet: View Reader Note (Popup on Tapping Underlined Words) -->
+    <div class="sheet-backdrop" id="sheet-backdrop-note-view">
+      <div class="sheet-card note-modal-card" id="sheet-card-note-view">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div class="note-view-header-left">
+            <span class="note-chapter-badge" id="note-view-ch-badge">CHAPTER 1</span>
+            <span class="note-type-badge" id="note-view-type-badge">Personal Note</span>
+          </div>
+          <div class="note-view-header-actions">
+            <button type="button" class="btn-sheet-text-action" id="btn-note-view-edit">Edit</button>
+            <button type="button" class="btn-sheet-close" id="btn-note-view-close" title="Close">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="note-view-body">
+          <div class="note-quote-box" id="note-view-quote-box">
+            <span class="note-quote-text" id="note-view-quote-text">Quoted text...</span>
+          </div>
+
+          <div class="note-view-content" id="note-view-content">
+            <!-- User note displayed here -->
+          </div>
+
+          <div class="note-view-footer">
+            <span class="note-view-date" id="note-view-date"></span>
+            <button type="button" class="btn-note-remove" id="btn-note-view-delete">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Sheet: Book Highlights & Notes Drawer -->
+    <div class="sheet-backdrop" id="sheet-backdrop-all-notes">
+      <div class="sheet-card notes-drawer-card" id="sheet-card-all-notes" style="max-height: 85vh;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+          <div class="notes-drawer-title-row">
+            <h3 class="sheet-title">Notes &amp; Highlights</h3>
+            <span class="notes-total-count-pill" id="notes-total-count">0</span>
+          </div>
+          <button type="button" class="btn-sheet-close" id="btn-all-notes-close" title="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Filter Scope Pills (Strictly Sans) -->
+        <div class="notes-filter-pills" id="notes-filter-pills">
+          <button type="button" class="notes-filter-pill active" data-filter="all">All <span class="pill-count" id="notes-count-all">0</span></button>
+          <button type="button" class="notes-filter-pill" data-filter="notes">Notes <span class="pill-count" id="notes-count-notes">0</span></button>
+          <button type="button" class="notes-filter-pill" data-filter="highlights">Highlights <span class="pill-count" id="notes-count-highlights">0</span></button>
+        </div>
+
+        <!-- Scrollable Notes List -->
+        <div class="notes-drawer-list" id="notes-drawer-list">
+          <!-- Dynamically populated -->
         </div>
       </div>
     </div>

@@ -1051,6 +1051,7 @@ function renderReaderText(rawHtml) {
   });
 
   container.innerHTML = temp.innerHTML;
+  applyHighlightsToReader(container);
 
   // Click on reader image to view full-resolution in a new tab
   container.querySelectorAll('img').forEach(img => {
@@ -1161,8 +1162,35 @@ function setupReaderInteractions() {
       return;
     }
     const text = sel.toString().trim();
-    if (text.length >= 2 && text.length <= 50 && !text.includes('\n')) {
+    if (text.length >= 2 && text.length <= 350) {
       state.activeSelectedText = text;
+
+      // Find enclosing paragraph index
+      let targetP = null;
+      if (sel.rangeCount > 0) {
+        const range = sel.getRangeAt(0);
+        let node = range.commonAncestorContainer;
+        while (node && node !== document.body) {
+          if (node.nodeType === Node.ELEMENT_NODE && node.hasAttribute('data-p-idx')) {
+            targetP = node;
+            break;
+          }
+          node = node.parentNode;
+        }
+      }
+      state.activeSelectedParagraphIdx = targetP ? parseInt(targetP.getAttribute('data-p-idx'), 10) : 0;
+
+      // If text > 50 chars or has newlines, hide Add to Glossary button (lore entities are short names)
+      const btnAddLore = document.getElementById('btn-selection-add-lore');
+      const sep1 = document.getElementById('selection-sep-1');
+      if (text.length > 50 || text.includes('\n')) {
+        if (btnAddLore) btnAddLore.style.display = 'none';
+        if (sep1) sep1.style.display = 'none';
+      } else {
+        if (btnAddLore) btnAddLore.style.display = 'flex';
+        if (sep1) sep1.style.display = 'block';
+      }
+
       if (selectionBar) selectionBar.style.display = 'block';
     } else {
       if (selectionBar) selectionBar.style.display = 'none';
@@ -1195,7 +1223,7 @@ function setupReaderInteractions() {
       if (!word || !state.activeBookId) return;
 
       state.isCheckingLore = true;
-      btnSelectionAdd.className = 'btn-selection-bubble loading';
+      btnSelectionAdd.className = 'btn-selection-action loading';
       btnSelectionAdd.disabled = true;
       if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_SPINNER;
       if (btnSelectionText) btnSelectionText.textContent = 'Checking...';
@@ -1204,7 +1232,7 @@ function setupReaderInteractions() {
         const data = await api.lookupCharacter(state.activeBookId, word, true);
 
         if (data && data.found && data.character) {
-          btnSelectionAdd.className = 'btn-selection-bubble success';
+          btnSelectionAdd.className = 'btn-selection-action success';
           if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_CHECK;
           if (btnSelectionText) btnSelectionText.textContent = 'Added!';
 
@@ -1228,20 +1256,20 @@ function setupReaderInteractions() {
           setTimeout(() => {
             state.isCheckingLore = false;
             if (selectionBar) selectionBar.style.display = 'none';
-            btnSelectionAdd.className = 'btn-selection-bubble';
+            btnSelectionAdd.className = 'btn-selection-action';
             btnSelectionAdd.disabled = false;
             if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_PLUS;
             if (btnSelectionText) btnSelectionText.textContent = 'Add to Glossary';
             if (window.getSelection) window.getSelection().removeAllRanges();
           }, 800);
         } else {
-          btnSelectionAdd.className = 'btn-selection-bubble unavailable';
+          btnSelectionAdd.className = 'btn-selection-action unavailable';
           if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_UNAVAILABLE;
           if (btnSelectionText) btnSelectionText.textContent = 'Unavailable';
           setTimeout(() => {
             state.isCheckingLore = false;
             if (selectionBar) selectionBar.style.display = 'none';
-            btnSelectionAdd.className = 'btn-selection-bubble';
+            btnSelectionAdd.className = 'btn-selection-action';
             btnSelectionAdd.disabled = false;
             if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_PLUS;
             if (btnSelectionText) btnSelectionText.textContent = 'Add to Glossary';
@@ -1249,18 +1277,49 @@ function setupReaderInteractions() {
         }
       } catch (err) {
         console.error('Lookup character error:', err);
-        btnSelectionAdd.className = 'btn-selection-bubble unavailable';
+        btnSelectionAdd.className = 'btn-selection-action unavailable';
         if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_UNAVAILABLE;
         if (btnSelectionText) btnSelectionText.textContent = 'Unavailable';
         setTimeout(() => {
           state.isCheckingLore = false;
           if (selectionBar) selectionBar.style.display = 'none';
-          btnSelectionAdd.className = 'btn-selection-bubble';
+          btnSelectionAdd.className = 'btn-selection-action';
           btnSelectionAdd.disabled = false;
           if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_PLUS;
           if (btnSelectionText) btnSelectionText.textContent = 'Add to Glossary';
         }, 1400);
       }
+    });
+  }
+
+  const btnSelectionHighlight = document.getElementById('btn-selection-highlight');
+  if (btnSelectionHighlight) {
+    btnSelectionHighlight.addEventListener('pointerdown', (e) => e.preventDefault());
+    btnSelectionHighlight.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      await handleCreateHighlight();
+    });
+  }
+
+  const btnSelectionNote = document.getElementById('btn-selection-note');
+  if (btnSelectionNote) {
+    btnSelectionNote.addEventListener('pointerdown', (e) => e.preventDefault());
+    btnSelectionNote.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const text = state.activeSelectedText;
+      const pIdx = state.activeSelectedParagraphIdx ?? 0;
+      if (!text || !state.activeBookId) return;
+
+      if (selectionBar) selectionBar.style.display = 'none';
+      if (window.getSelection) window.getSelection().removeAllRanges();
+
+      openNoteEditor({
+        id: null,
+        chapter_number: Number(state.activeChapterNum),
+        paragraph_index: pIdx,
+        text: text,
+        note: ''
+      });
     });
   }
 
@@ -1458,11 +1517,485 @@ function openLoreSheet(charName, asCenteredModal = false) {
       </div>
       ${affil ? `<div class="lore-card-affiliation">${escapeHtml(affil)}</div>` : ''}
       ${aliasesHtml ? `<div class="lore-card-aliases"><span class="lore-card-aliases-label">Aliases:</span> <div class="card-aliases-row" style="margin-top: 4px;">${aliasesHtml}</div></div>` : ''}
-      <div class="lore-card-summary-box">${escapeHtml(summary || 'No description provided.')}</div>
-    `;
+// --- Highlights & Notes Engine (Cloud Synced to Supabase & Offline-First) ---
+function applyHighlightsToReader(container) {
+  if (!container || !state.currentBook) return;
+  const rawBookmarks = state.currentBook.bookmarks;
+  if (!Array.isArray(rawBookmarks) || rawBookmarks.length === 0) return;
+
+  const currentChNum = Number(state.activeChapterNum);
+  const chapterHighlights = rawBookmarks.filter(
+    b => Number(b.chapter_number) === currentChNum && b.text && String(b.text).trim().length > 0
+  );
+  if (chapterHighlights.length === 0) return;
+
+  // Sort highlights by quote length descending
+  const sorted = [...chapterHighlights].sort((a, b) => (b.text || '').length - (a.text || '').length);
+
+  sorted.forEach(hl => {
+    const quote = (hl.text || '').trim();
+    if (!quote) return;
+
+    let targetP = null;
+    if (hl.paragraph_index !== undefined) {
+      targetP = container.querySelector(`p[data-p-idx="${hl.paragraph_index}"]`);
+    }
+
+    if (!targetP || !targetP.textContent.includes(quote)) {
+      targetP = Array.from(container.querySelectorAll('p')).find(p => p.textContent.includes(quote));
+    }
+    if (!targetP) return;
+
+    // Check if an existing element (.char-tag or span) matches exact text
+    const exactTag = Array.from(targetP.querySelectorAll('.char-tag, span')).find(
+      el => el.textContent.trim() === quote && !el.getAttribute('data-hl-id')
+    );
+    if (exactTag) {
+      if (hl.note && hl.note.trim()) {
+        exactTag.classList.add('reader-note');
+      } else {
+        exactTag.classList.add('reader-highlight');
+      }
+      exactTag.setAttribute('data-hl-id', hl.id);
+      return;
+    }
+
+    // Search and split text nodes inside target paragraph
+    const walker = document.createTreeWalker(targetP, NodeFilter.SHOW_TEXT, null, false);
+    let node;
+    const textNodes = [];
+    while ((node = walker.nextNode())) {
+      if (!node.parentElement?.classList.contains('reader-highlight') &&
+          !node.parentElement?.classList.contains('reader-note')) {
+        textNodes.push(node);
+      }
+    }
+
+    for (const tn of textNodes) {
+      const idx = tn.nodeValue.indexOf(quote);
+      if (idx !== -1) {
+        const before = tn.nodeValue.substring(0, idx);
+        const match = tn.nodeValue.substring(idx, idx + quote.length);
+        const after = tn.nodeValue.substring(idx + quote.length);
+
+        const frag = document.createDocumentFragment();
+        if (before) frag.appendChild(document.createTextNode(before));
+
+        const span = document.createElement('span');
+        span.className = (hl.note && hl.note.trim()) ? 'reader-note' : 'reader-highlight';
+        span.setAttribute('data-hl-id', hl.id);
+        span.textContent = match;
+        frag.appendChild(span);
+
+        if (after) frag.appendChild(document.createTextNode(after));
+
+        if (tn.parentNode) {
+          tn.parentNode.replaceChild(frag, tn);
+        }
+        break;
+      }
+    }
+  });
+
+  // Attach tap listeners to highlighted and noted spans
+  container.querySelectorAll('.reader-highlight, .reader-note').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const hlId = el.getAttribute('data-hl-id');
+      const hl = (state.currentBook?.bookmarks || []).find(b => b.id === hlId);
+      if (hl) {
+        openNoteViewer(hl);
+      }
+    });
+  });
+}
+
+async function handleCreateHighlight() {
+  const text = state.activeSelectedText;
+  const pIdx = state.activeSelectedParagraphIdx ?? 0;
+  if (!text || !state.activeBookId || !state.currentBook) return;
+
+  const nowIso = new Date().toISOString();
+  const newHl = {
+    id: 'hl_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+    chapter_number: Number(state.activeChapterNum),
+    paragraph_index: pIdx,
+    text: text,
+    note: '',
+    color: 'amber',
+    created_at: nowIso,
+    updated_at: nowIso
+  };
+
+  if (!Array.isArray(state.currentBook.bookmarks)) {
+    state.currentBook.bookmarks = [];
+  }
+  state.currentBook.bookmarks.push(newHl);
+
+  const selectionBar = document.getElementById('mobile-selection-bar');
+  if (selectionBar) selectionBar.style.display = 'none';
+  if (window.getSelection) window.getSelection().removeAllRanges();
+
+  try {
+    await api.updateBook(state.activeBookId, {
+      bookmarks: state.currentBook.bookmarks,
+      last_read_at: nowIso
+    });
+  } catch (err) {
+    console.error('Error saving highlight:', err);
+  }
+
+  showToast('Highlighted!');
+
+  if (state.currentChapterData) {
+    renderReaderText(state.currentChapterData.content);
+  }
+}
+
+function openNoteEditor(noteData) {
+  state.activeEditingNote = noteData;
+  const backdrop = document.getElementById('sheet-backdrop-note-edit');
+  const title = document.getElementById('note-edit-title');
+  const quoteText = document.getElementById('note-edit-quote-text');
+  const textarea = document.getElementById('note-edit-textarea');
+  const btnDelete = document.getElementById('btn-note-edit-delete');
+
+  if (title) title.textContent = noteData.id ? 'Edit Note' : 'Add Note';
+  if (quoteText) quoteText.textContent = noteData.text || '';
+  if (textarea) {
+    textarea.value = noteData.note || '';
+    setTimeout(() => textarea.focus(), 150);
+  }
+  if (btnDelete) {
+    btnDelete.style.display = noteData.id ? 'block' : 'none';
   }
 
   if (backdrop) backdrop.classList.add('active');
+}
+
+function closeNoteEditor() {
+  const backdrop = document.getElementById('sheet-backdrop-note-edit');
+  if (backdrop) backdrop.classList.remove('active');
+  state.activeEditingNote = null;
+}
+
+async function saveNoteFromEditor() {
+  const textarea = document.getElementById('note-edit-textarea');
+  const noteText = textarea ? textarea.value.trim() : '';
+  const current = state.activeEditingNote;
+  if (!current || !state.activeBookId || !state.currentBook) return;
+
+  if (!Array.isArray(state.currentBook.bookmarks)) {
+    state.currentBook.bookmarks = [];
+  }
+  const bookmarks = state.currentBook.bookmarks;
+  const nowIso = new Date().toISOString();
+
+  if (current.id) {
+    const idx = bookmarks.findIndex(b => b.id === current.id);
+    if (idx !== -1) {
+      bookmarks[idx].note = noteText;
+      bookmarks[idx].updated_at = nowIso;
+    }
+  } else {
+    const newHl = {
+      id: 'hl_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+      chapter_number: Number(current.chapter_number),
+      paragraph_index: Number(current.paragraph_index),
+      text: current.text,
+      note: noteText,
+      color: 'amber',
+      created_at: nowIso,
+      updated_at: nowIso
+    };
+    bookmarks.push(newHl);
+  }
+
+  closeNoteEditor();
+  closeNoteViewer();
+
+  try {
+    await api.updateBook(state.activeBookId, {
+      bookmarks: bookmarks,
+      last_read_at: nowIso
+    });
+  } catch (err) {
+    console.error('Error updating note:', err);
+  }
+
+  showToast(noteText ? 'Note saved!' : 'Highlight saved!');
+
+  if (state.currentChapterData) {
+    renderReaderText(state.currentChapterData.content);
+  }
+  renderAllNotesList();
+}
+
+function openNoteViewer(hl) {
+  state.activeViewingNote = hl;
+  const backdrop = document.getElementById('sheet-backdrop-note-view');
+  const chBadge = document.getElementById('note-view-ch-badge');
+  const typeBadge = document.getElementById('note-view-type-badge');
+  const quoteText = document.getElementById('note-view-quote-text');
+  const content = document.getElementById('note-view-content');
+  const dateEl = document.getElementById('note-view-date');
+  const btnEdit = document.getElementById('btn-note-view-edit');
+  const btnDelete = document.getElementById('btn-note-view-delete');
+
+  const hasNote = Boolean(hl.note && hl.note.trim());
+  if (chBadge) chBadge.textContent = `CHAPTER ${hl.chapter_number}`;
+  if (typeBadge) {
+    typeBadge.textContent = hasNote ? 'Personal Note' : 'Highlight';
+    typeBadge.className = `note-type-badge ${hasNote ? 'type-note' : 'type-highlight'}`;
+  }
+  if (quoteText) quoteText.textContent = `“${hl.text}”`;
+  if (content) {
+    content.textContent = hasNote ? hl.note : 'Highlighted passage in text.';
+    content.style.fontStyle = hasNote ? 'normal' : 'italic';
+  }
+  if (dateEl) {
+    const d = hl.created_at ? new Date(hl.created_at) : new Date();
+    dateEl.textContent = `Saved ${d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`;
+  }
+  if (btnEdit) btnEdit.textContent = hasNote ? 'Edit Note' : 'Add Note';
+  if (btnDelete) btnDelete.textContent = hasNote ? 'Delete Note' : 'Remove Highlight';
+
+  if (backdrop) backdrop.classList.add('active');
+}
+
+function closeNoteViewer() {
+  const backdrop = document.getElementById('sheet-backdrop-note-view');
+  if (backdrop) backdrop.classList.remove('active');
+  state.activeViewingNote = null;
+}
+
+async function deleteNoteOrHighlight(id) {
+  if (!id || !state.currentBook || !state.activeBookId) return;
+  state.currentBook.bookmarks = (state.currentBook.bookmarks || []).filter(b => b.id !== id);
+
+  closeNoteViewer();
+  closeNoteEditor();
+
+  const nowIso = new Date().toISOString();
+  try {
+    await api.updateBook(state.activeBookId, {
+      bookmarks: state.currentBook.bookmarks,
+      last_read_at: nowIso
+    });
+  } catch (err) {
+    console.error('Error deleting note/highlight:', err);
+  }
+
+  showToast('Removed.');
+
+  if (state.currentChapterData) {
+    renderReaderText(state.currentChapterData.content);
+  }
+  renderAllNotesList();
+}
+
+function openAllNotesSheet(filter = 'all') {
+  state.currentNotesFilter = filter;
+  const backdrop = document.getElementById('sheet-backdrop-all-notes');
+  renderAllNotesList();
+  if (backdrop) backdrop.classList.add('active');
+}
+
+function closeAllNotesSheet() {
+  const backdrop = document.getElementById('sheet-backdrop-all-notes');
+  if (backdrop) backdrop.classList.remove('active');
+}
+
+function renderAllNotesList() {
+  const listEl = document.getElementById('notes-drawer-list');
+  if (!listEl || !state.currentBook) return;
+
+  const allItems = Array.isArray(state.currentBook.bookmarks)
+    ? state.currentBook.bookmarks.filter(b => b.text && String(b.text).trim().length > 0)
+    : [];
+
+  const notesCount = allItems.filter(b => b.note && b.note.trim().length > 0).length;
+  const hlCount = allItems.filter(b => !b.note || !b.note.trim().length > 0).length;
+
+  const countTotalEl = document.getElementById('notes-total-count');
+  const countAllEl = document.getElementById('notes-count-all');
+  const countNotesEl = document.getElementById('notes-count-notes');
+  const countHlEl = document.getElementById('notes-count-highlights');
+
+  if (countTotalEl) countTotalEl.textContent = String(allItems.length);
+  if (countAllEl) countAllEl.textContent = String(allItems.length);
+  if (countNotesEl) countNotesEl.textContent = String(notesCount);
+  if (countHlEl) countHlEl.textContent = String(hlCount);
+
+  document.querySelectorAll('.notes-filter-pill').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-filter') === (state.currentNotesFilter || 'all'));
+  });
+
+  const filter = state.currentNotesFilter || 'all';
+  let filtered = allItems;
+  if (filter === 'notes') {
+    filtered = allItems.filter(b => b.note && b.note.trim().length > 0);
+  } else if (filter === 'highlights') {
+    filtered = allItems.filter(b => !b.note || !b.note.trim().length > 0);
+  }
+
+  filtered.sort((a, b) => {
+    if (Number(a.chapter_number) !== Number(b.chapter_number)) {
+      return Number(a.chapter_number) - Number(b.chapter_number);
+    }
+    return Number(a.paragraph_index || 0) - Number(b.paragraph_index || 0);
+  });
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = `
+      <div class="notes-empty-state">
+        <p>No ${filter === 'all' ? 'notes or highlights' : filter} in this novel yet.<br>Select any text while reading to add a highlight or note.</p>
+      </div>
+    `;
+    return;
+  }
+
+  listEl.innerHTML = '';
+  filtered.forEach(item => {
+    const hasNote = Boolean(item.note && item.note.trim());
+    const card = document.createElement('div');
+    card.className = 'notes-list-item-card';
+    card.setAttribute('data-hl-id', item.id);
+
+    const d = item.created_at ? new Date(item.created_at) : new Date();
+    const dateStr = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+
+    card.innerHTML = `
+      <div class="notes-list-item-header">
+        <div class="notes-list-item-meta">
+          <span class="notes-list-ch-badge">Ch ${item.chapter_number}</span>
+          <span class="notes-list-type-pill ${hasNote ? 'type-note' : 'type-highlight'}">
+            ${hasNote ? 'Note' : 'Highlight'}
+          </span>
+        </div>
+        <button type="button" class="notes-list-item-delete" title="Remove">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="notes-list-quote">“${escapeHtml(item.text)}”</div>
+      ${hasNote ? `<div class="notes-list-note-text">${escapeHtml(item.note)}</div>` : ''}
+      <div class="notes-list-footer">
+        <span>${dateStr}</span>
+        <span style="color: var(--primary); font-weight: 600;">Tap to jump &rsaquo;</span>
+      </div>
+    `;
+
+    card.addEventListener('click', async (e) => {
+      if (e.target.closest('.notes-list-item-delete')) return;
+      closeAllNotesSheet();
+      const chNum = Number(item.chapter_number);
+      const pIdx = Number(item.paragraph_index || 0);
+
+      if (state.activeChapterNum !== chNum) {
+        showToast(`Loading Chapter ${chNum}...`);
+        await loadChapter(chNum, pIdx, true);
+      } else {
+        locateAndHighlightParagraph(pIdx);
+      }
+    });
+
+    const btnDel = card.querySelector('.notes-list-item-delete');
+    if (btnDel) {
+      btnDel.addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteNoteOrHighlight(item.id);
+      });
+    }
+
+    listEl.appendChild(card);
+  });
+}
+
+function setupNotesFeature() {
+  const btnNotes = document.getElementById('btn-reader-notes');
+  if (btnNotes) {
+    btnNotes.addEventListener('click', () => {
+      openAllNotesSheet('all');
+    });
+  }
+
+  const btnAllNotesClose = document.getElementById('btn-all-notes-close');
+  if (btnAllNotesClose) {
+    btnAllNotesClose.addEventListener('click', closeAllNotesSheet);
+  }
+
+  const allNotesBackdrop = document.getElementById('sheet-backdrop-all-notes');
+  if (allNotesBackdrop) {
+    allNotesBackdrop.addEventListener('click', (e) => {
+      if (e.target === allNotesBackdrop) closeAllNotesSheet();
+    });
+  }
+
+  document.querySelectorAll('.notes-filter-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const filter = btn.getAttribute('data-filter') || 'all';
+      state.currentNotesFilter = filter;
+      renderAllNotesList();
+    });
+  });
+
+  const btnNoteEditClose = document.getElementById('btn-note-edit-close');
+  if (btnNoteEditClose) btnNoteEditClose.addEventListener('click', closeNoteEditor);
+
+  const btnNoteEditCancel = document.getElementById('btn-note-edit-cancel');
+  if (btnNoteEditCancel) btnNoteEditCancel.addEventListener('click', closeNoteEditor);
+
+  const btnNoteEditSave = document.getElementById('btn-note-edit-save');
+  if (btnNoteEditSave) btnNoteEditSave.addEventListener('click', saveNoteFromEditor);
+
+  const btnNoteEditDelete = document.getElementById('btn-note-edit-delete');
+  if (btnNoteEditDelete) {
+    btnNoteEditDelete.addEventListener('click', () => {
+      if (state.activeEditingNote?.id) {
+        deleteNoteOrHighlight(state.activeEditingNote.id);
+      }
+    });
+  }
+
+  const noteEditBackdrop = document.getElementById('sheet-backdrop-note-edit');
+  if (noteEditBackdrop) {
+    noteEditBackdrop.addEventListener('click', (e) => {
+      if (e.target === noteEditBackdrop) closeNoteEditor();
+    });
+  }
+
+  const btnNoteViewClose = document.getElementById('btn-note-view-close');
+  if (btnNoteViewClose) btnNoteViewClose.addEventListener('click', closeNoteViewer);
+
+  const btnNoteViewEdit = document.getElementById('btn-note-view-edit');
+  if (btnNoteViewEdit) {
+    btnNoteViewEdit.addEventListener('click', () => {
+      const viewing = state.activeViewingNote;
+      closeNoteViewer();
+      if (viewing) {
+        openNoteEditor(viewing);
+      }
+    });
+  }
+
+  const btnNoteViewDelete = document.getElementById('btn-note-view-delete');
+  if (btnNoteViewDelete) {
+    btnNoteViewDelete.addEventListener('click', () => {
+      if (state.activeViewingNote?.id) {
+        deleteNoteOrHighlight(state.activeViewingNote.id);
+      }
+    });
+  }
+
+  const noteViewBackdrop = document.getElementById('sheet-backdrop-note-view');
+  if (noteViewBackdrop) {
+    noteViewBackdrop.addEventListener('click', (e) => {
+      if (e.target === noteViewBackdrop) closeNoteViewer();
+    });
+  }
 }
 
 function setupLoreSheet() {
@@ -2730,6 +3263,7 @@ async function initApp() {
   setupLibraryFilters();
   setupReaderInteractions();
   setupLoreSheet();
+  setupNotesFeature();
   setupEditLoreSheet();
   setupSettingsSheet();
   setupSearch();
