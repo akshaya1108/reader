@@ -249,13 +249,27 @@
     "description": "When young Alice tumbles down a rabbit hole, she is plunged into a whimsical, nonsensical world populated by surreal creatures like the Mad Hatter, the Cheshire Cat, and the Queen of Hearts. In this fantastical realm where logic is turned upside down, she must navigate bizarre encounters and absurd trials. Lewis Carroll's timeless masterpiece remains one of the most influential and beloved classics of children's literature.",
     "color": "#647b9a",
     "created_at": "04/10/2026",
-    "last_read_chapter": 2,
+    "last_read_chapter": 4,
     "last_chapter": 1,
     "chapters_count": 19,
     "total_words": 28247,
     "enable_glossary": true,
-    "last_read_at": "2026-10-04T02:10:09.20457+00:00",
+    "last_read_at": "2026-10-03T20:50:57.335+00:00",
     "bookmark": null,
     "bookmarks": []
+  },
+  {
+    "id": "the-little-prince",
+    "title": "The Little Prince",
+    "author": "Antoine de Saint-Exupéry",
+    "genre": "PHILOSOPHICAL FICTION",
+    "description": "After crash-landing in the Sahara Desert, a pilot encounters a young prince from a distant asteroid who shares stories of his interstellar travels. Through these whimsical encounters, the story explores profound themes of love, friendship, and the often-baffling nature of the adult world. This beloved classic reminds readers that what is truly essential is invisible to the eye.",
+    "color": "#8c6b96",
+    "created_at": "04/10/2026",
+    "last_read_chapter": 1,
+    "last_chapter": 1,
+    "chapters_count": 28,
+    "total_words": 14392,
+    "enable_glossary": true
   }
 ]
