@@ -305,20 +305,6 @@
   },
   {
     "book_id": "the-return-of-the-king",
-    "id": "testing",
-    "name": "Testing",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [],
-    "affiliation": "",
-    "sect_or_affiliation": "",
-    "summary": "Testing",
-    "mentions": 0,
-    "created_at": "2026-10-02T13:48:09.704964+00:00",
-    "updated_at": "2026-10-02T13:48:09.704964+00:00"
-  },
-  {
-    "book_id": "the-return-of-the-king",
     "id": "tom-bombadil",
     "name": "Tom Bombadil",
     "category": "Character",
@@ -359,22 +345,6 @@
     "affiliation": "The Shire",
     "sect_or_affiliation": "The Shire",
     "summary": "A notoriously nosy relative belonging to the eccentric Took family of the Shire.",
-    "mentions": 0,
-    "created_at": "2026-10-02T13:06:27.275692+00:00",
-    "updated_at": "2026-10-02T13:06:27.275692+00:00"
-  },
-  {
-    "book_id": "the-return-of-the-king",
-    "id": "gr-ma",
-    "name": "Gríma",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Wormtongue"
-    ],
-    "affiliation": "Rohan",
-    "sect_or_affiliation": "Rohan",
-    "summary": "A pale, treacherous counselor and political advisor in the court of Rohan.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:27.275692+00:00",
     "updated_at": "2026-10-02T13:06:27.275692+00:00"
@@ -816,6 +786,22 @@
     "affiliation": "The Shire (Westfarthing)",
     "sect_or_affiliation": "The Shire (Westfarthing)",
     "summary": "A peaceful village in the Westfarthing of the Shire, situated alongside a wide pool and home to well-known establishments such as the Green Dragon and the Ivy Bush.",
+    "mentions": 0,
+    "created_at": "2026-10-02T13:06:27.275692+00:00",
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
+  },
+  {
+    "book_id": "the-return-of-the-king",
+    "id": "gr-ma",
+    "name": "Gríma",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Wormtongue"
+    ],
+    "affiliation": "Rohan",
+    "sect_or_affiliation": "Rohan",
+    "summary": "A pale, treacherous counselor and political advisor in the court of Rohan.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:27.275692+00:00",
     "updated_at": "2026-10-02T13:06:27.275692+00:00"

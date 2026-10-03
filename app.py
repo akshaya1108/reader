@@ -525,8 +525,9 @@ def load_glossary(book_id, sync_remote=True):
                 remote_name_set = {r.get("name", "").strip().lower() for r in remote_entries if r.get("name")}
 
                 changed = False
-                if cluster_prev_synced:
+                if cluster_prev_synced and len(remote_entries) > 0:
                     pruned_data = []
+                    candidates_to_prune = []
                     for item in data:
                         iid = item.get("id") or slugify(item.get("name", ""))
                         islug = slugify(item.get("name", ""))
@@ -537,7 +538,18 @@ def load_glossary(book_id, sync_remote=True):
                         in_tombstones = (iid in tombstones or islug in tombstones or iname_low in tombstones)
 
                         if in_tombstones or (was_synced and not in_remote):
-                            # Entry was deleted (either locally or on phone)
+                            candidates_to_prune.append(item)
+                        else:
+                            pruned_data.append(item)
+
+                    if len(candidates_to_prune) > max(3, len(data) * 0.3):
+                        print(f"[Safety Warning] Aborting mass-prune of {len(candidates_to_prune)}/{len(data)} glossary items for {canonical_id}.")
+                        pruned_data = data
+                    else:
+                        for item in candidates_to_prune:
+                            iid = item.get("id") or slugify(item.get("name", ""))
+                            islug = slugify(item.get("name", ""))
+                            iname_low = item.get("name", "").strip().lower()
                             tombstones[iid] = now.isoformat()
                             if islug:
                                 tombstones[islug] = now.isoformat()
@@ -551,8 +563,6 @@ def load_glossary(book_id, sync_remote=True):
                                 except Exception:
                                     pass
                             changed = True
-                        else:
-                            pruned_data.append(item)
                     data = pruned_data
 
                 # 3. Merge active remote entries into data
@@ -766,6 +776,17 @@ def save_glossary(book_id, glossary, push_remote=True):
                     pass
     except Exception as e:
         print(f"Notice: Glossary backup snapshot encountered ({e})")
+
+    # Guard against accidental empty overwrite
+    if len(glossary) == 0 and os.path.exists(path) and os.path.getsize(path) > 100:
+        try:
+            with open(path, "r", encoding="utf-8") as rf:
+                existing_gl = json.load(rf)
+            if isinstance(existing_gl, list) and len(existing_gl) > 0:
+                print(f"[Safety Warning] Refusing to overwrite non-empty glossary {book_id} ({len(existing_gl)} entries) with empty list.")
+                return
+        except Exception:
+            pass
 
     books = load_books()
     book = next((b for b in books if b.get("id") == book_id), None)

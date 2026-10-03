@@ -13,7 +13,7 @@
     "summary": "The Shire gatekeeper.",
     "mentions": 1,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T18:11:52.878115+00:00"
   },
   {
     "book_id": "test-5",
@@ -29,7 +29,7 @@
     "summary": "An ancient, enigmatic woodland situated just east of Buckland, notorious among hobbits for its dense, shifting paths and seemingly conscious, treacherous trees.",
     "mentions": 5,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -45,7 +45,7 @@
     "summary": "A pale, treacherous counselor and political advisor in the court of Rohan.",
     "mentions": 28,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -61,7 +61,7 @@
     "summary": "An ethereal, graceful maiden associated with the springs of the Old Forest.",
     "mentions": 4,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -80,7 +80,7 @@
     "summary": "A well-to-do hobbit of the Shire known for his unexpected past adventures and penchant for writing.",
     "mentions": 51,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-03T20:04:02.994+00:00"
   },
   {
     "book_id": "test-5",
@@ -98,7 +98,7 @@
     "summary": "The supreme dark sorcerer and master of Mordor seeking world domination.",
     "mentions": 235,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -112,7 +112,7 @@
     "summary": "A brutish Uruk captain commanding the tower garrison of Cirith Ungol.",
     "mentions": 28,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -128,7 +128,7 @@
     "summary": "A plump hobbit of the Shire and a close friend of Frodo Baggins.",
     "mentions": 4,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -146,7 +146,7 @@
     "summary": "A young, studious hobbit of the Shire and nephew to Bilbo Baggins.",
     "mentions": 447,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -162,7 +162,7 @@
     "summary": "A dedicated guard and soldier serving in the Citadel of Minas Tirith.",
     "mentions": 82,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -178,7 +178,7 @@
     "summary": "A fierce and loyal equestrian commander of Rohan's martial forces.",
     "mentions": 128,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -197,7 +197,7 @@
     "summary": "A wise and powerful Wizard of the Istari order who guides Frodo Baggins on his perilous quest concerning the One Ring.",
     "mentions": 390,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -211,7 +211,7 @@
     "summary": "Hobbiton is a village in the Shire and the birthplace and early home of Bilbo and Frodo Baggins.",
     "mentions": 25,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -227,7 +227,7 @@
     "summary": "A noble and majestic giant eagle of the Misty Mountains.",
     "mentions": 13,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -243,7 +243,7 @@
     "summary": "A charismatic and chivalrous prince of the coastal fiefdom of Dol Amroth in Gondor.",
     "mentions": 43,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -259,7 +259,7 @@
     "summary": "An aristocratic and ethereal Elven noblewoman of Rivendell of legendary grace.",
     "mentions": 57,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -275,7 +275,7 @@
     "summary": "A merry, enigmatic entity of immense ancient power residing within the Old Forest.",
     "mentions": 6,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -291,7 +291,7 @@
     "summary": "A proud, martial nobleman and captain from the realm of Gondor.",
     "mentions": 51,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -307,7 +307,7 @@
     "summary": "The Brandywine River is a major river that forms the eastern border of the Shire, separating it from the mysterious lands beyond.",
     "mentions": 5,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -323,7 +323,7 @@
     "summary": "Westfarthing is one of the four administrative regions, or farthings, that make up the rural homeland of the Hobbits known as the Shire.",
     "mentions": 5,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -337,7 +337,7 @@
     "summary": "An aggressive Orc captain leading a detachment of fighters from Isengard.",
     "mentions": 1,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -353,7 +353,7 @@
     "summary": "A scholarly and gentle captain of the Gondorian rangers, and younger brother to Boromir.",
     "mentions": 176,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -369,7 +369,7 @@
     "summary": "A chieftain of the wild, forest-dwelling Drúedain people.",
     "mentions": 9,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -385,7 +385,7 @@
     "summary": "An elderly, experienced warrior and counsellor loyal to the king of Rohan.",
     "mentions": 62,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -401,7 +401,7 @@
     "summary": "A noblewoman of Rohan with a yearning for martial glory and freedom.",
     "mentions": 106,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -415,7 +415,7 @@
     "summary": "A cynical Orc captain stationed in the garrison of Minas Morgul.",
     "mentions": 13,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -431,7 +431,7 @@
     "summary": "The Shire is the peaceful, rural homeland of the hobbits, located in the northwestern region of Middle-earth.",
     "mentions": 311,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -449,7 +449,7 @@
     "summary": "A prominent and wealthy family of Hobbits who rule Buckland from Brandy Hall, known among Shire-folk for their unusually adventurous spirit and fondness for boating.",
     "mentions": 48,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -463,7 +463,7 @@
     "summary": "Drogo Baggins is a Hobbit of the Shire and the father of Frodo Baggins.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -479,7 +479,7 @@
     "summary": "Prowling Elven warrior brothers from Rivendell who frequently ride against wild adversaries.",
     "mentions": 4,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -495,7 +495,7 @@
     "summary": "Bag End is a comfortable and luxurious hobbit-hole situated at the top of The Hill in Hobbiton, serving as the residence of Bilbo Baggins and later Frodo Baggins.",
     "mentions": 29,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -512,7 +512,7 @@
     "summary": "A wealthy and ambitious branch of the Hobbit Baggins family residing in the Shire, known for their persistent rivalry with Bilbo Baggins over the ownership of Bag End.",
     "mentions": 6,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -528,7 +528,7 @@
     "summary": "An ancient, sturdy race of miners and craftsmen renowned for their skill in working stone and metal.",
     "mentions": 131,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -545,7 +545,7 @@
     "summary": "A noble and wise wanderer among the wandering Elven companies of the Shire.",
     "mentions": 1,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -561,7 +561,7 @@
     "summary": "A notoriously nosy relative belonging to the eccentric Took family of the Shire.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -578,7 +578,7 @@
     "summary": "A stout, proud Dwarf warrior skilled with the axe and fiercely loyal to his companions.",
     "mentions": 99,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -598,7 +598,7 @@
     "summary": "An ancient, fair, and immortal race renowned for their profound wisdom, grace, and mastery of song, craft, and lore.",
     "mentions": 241,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -616,7 +616,7 @@
     "summary": "A rugged ranger of the North with a mysterious royal heritage and exceptional tracking skills.",
     "mentions": 71,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -630,7 +630,7 @@
     "summary": "A peaceful village in the Westfarthing of the Shire, situated alongside a wide pool and home to well-known establishments such as the Green Dragon and the Ivy Bush.",
     "mentions": 26,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -649,7 +649,7 @@
     "summary": "Ham Gamgee, commonly known as the Gaffer, is an elderly hobbit of the Shire and the father of Samwise Gamgee.",
     "mentions": 8,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T18:13:45.727318+00:00"
   },
   {
     "book_id": "test-5",
@@ -665,7 +665,7 @@
     "summary": "Primula Brandybuck is a hobbit of the Shire who is the mother of Frodo Baggins.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -681,7 +681,7 @@
     "summary": "The legendary patriarch of the Took family and former Thain of the Shire, famous for his exceptionally long life and his longstanding friendship with the wizard Gandalf.",
     "mentions": 10,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -698,7 +698,7 @@
     "summary": "The aging King of Rohan weighed down by trials and dark counsel.",
     "mentions": 125,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -715,7 +715,7 @@
     "summary": "Master Gorbadoc is a revered past head of the Brandybuck family, remembered as the grandfather of Meriadoc Brandybuck.",
     "mentions": 1,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -729,7 +729,7 @@
     "summary": "A valiant marshal and leader of men from the Westfold region of Rohan.",
     "mentions": 6,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -743,7 +743,7 @@
     "summary": "A young boy of Minas Tirith and the son of Beregond.",
     "mentions": 19,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -759,7 +759,7 @@
     "summary": "A young, impulsive hobbit of the Shire prone to accidental mischief.",
     "mentions": 288,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -775,7 +775,7 @@
     "summary": "An ancient, monstrous giant spider dwelling in the dark tunnels above Mordor.",
     "mentions": 15,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -791,7 +791,7 @@
     "summary": "An ancient, tree-like shepherd and guardian of the forest of Fangorn.",
     "mentions": 39,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -808,7 +808,7 @@
     "summary": "The terrifying chief lieutenant and sorcerer-king under the Dark Lord's command.",
     "mentions": 6,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.054572+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -824,7 +824,7 @@
     "summary": "A monstrous, foul-winged creature serving as the mount of the Witch-king.",
     "mentions": 2,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -841,7 +841,7 @@
     "summary": "Hobbits are an unobtrusive yet ancient people, smaller than Dwarves and distinct from Men, who prefer peace, quiet, and good tilled earth.",
     "mentions": 222,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -858,7 +858,7 @@
     "summary": "One of the dreaded Ringwraiths serving the Dark Lord.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -874,7 +874,7 @@
     "summary": "An agile Elven prince from Mirkwood possessing peerless marksmanship with a bow.",
     "mentions": 79,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -888,7 +888,7 @@
     "summary": "An Orc soldier from Isengard sent on a raiding mission.",
     "mentions": 1,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -905,7 +905,7 @@
     "summary": "A steadfast and loyal hobbit gardener of the Shire serving Frodo Baggins.",
     "mentions": 477,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -921,7 +921,7 @@
     "summary": "A wretched, corrupted creature obsessed with finding a lost magical golden ring.",
     "mentions": 47,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "book_id": "test-5",
@@ -938,7 +938,7 @@
     "summary": "A clever and resourceful young hobbit of the Shire belonging to the Brandybuck family.",
     "mentions": 239,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:07:16.95+00:00"
   },
   {
     "book_id": "test-5",
@@ -952,7 +952,7 @@
     "summary": "A bustling, forgetful innkeeper of the Prancing Pony in the village of Bree.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -968,7 +968,7 @@
     "summary": "An ancient Elven lord who rules the golden realm of Lothlórien alongside Galadriel.",
     "mentions": 20,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.878444+00:00"
   },
   {
     "book_id": "test-5",
@@ -984,7 +984,7 @@
     "summary": "The stern, brooding ruling Steward of the realm of Gondor.",
     "mentions": 9,
     "created_at": "2026-10-02T13:06:25.635965+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T17:35:00+00:00"
   },
   {
     "book_id": "test-5",
@@ -1000,7 +1000,7 @@
     "summary": "A Hobbit of the Shire and the former master gardener at Bag End who taught the gardening trade to Hamfast Gamgee.",
     "mentions": 0,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T13:06:27.275692+00:00"
   },
   {
     "id": "lobelia-sackville-baggins",
@@ -1014,7 +1014,7 @@
     "sect_or_affiliation": "Sackville-Baggins family",
     "affiliation": "Sackville-Baggins family",
     "summary": "A sharp-tongued Hobbit of the Shire and wife of Otho, known for her persistent desire to acquire Bilbo Baggins' estate, Bag End.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00",
+    "updated_at": "2026-10-02T17:21:22.117496+00:00",
     "mentions": 3
   },
   {
@@ -1028,7 +1028,7 @@
     "sect_or_affiliation": "The Shire",
     "affiliation": "The Shire",
     "summary": "A well-known Hobbit family residing in the Shire, famous for their notable presence and loud interruption during Bilbo Baggins's farewell party.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00",
+    "updated_at": "2026-10-03T08:31:13.525+00:00",
     "mentions": 6
   },
   {
@@ -1045,7 +1045,7 @@
     "affiliation": "",
     "sect_or_affiliation": "",
     "summary": "",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00",
+    "updated_at": "2026-10-02T18:14:35.423+00:00",
     "mentions": 0
   },
   {
@@ -1057,7 +1057,7 @@
     "sect_or_affiliation": "The Shire",
     "affiliation": "The Shire",
     "summary": "A Hobbit of the Shire who was left an empty bookcase by Bilbo Baggins as a humorous hint about his habit of borrowing books without returning them.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00",
+    "updated_at": "2026-10-02T18:10:09.253186+00:00",
     "mentions": 0
   },
   {
@@ -1069,7 +1069,7 @@
     "sect_or_affiliation": "The Shire",
     "affiliation": "The Shire",
     "summary": "A Hobbit of the Shire and sister of Drogo Baggins who is well known for writing exceedingly long letters of advice.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00",
+    "updated_at": "2026-10-02T18:10:25.403558+00:00",
     "mentions": 0
   },
   {
@@ -1085,7 +1085,7 @@
     "affiliation": "Fangorn Forest",
     "sect_or_affiliation": "Fangorn Forest",
     "summary": "An ancient race of towering, tree-like beings who dwell in Fangorn Forest and act as the guardians and shepherds of the trees.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T20:35:27.603+00:00"
   },
   {
     "id": "rivendell",
@@ -1100,7 +1100,7 @@
     "affiliation": "Elrond",
     "sect_or_affiliation": "Elrond",
     "summary": "A tranquil and protected Elven settlement hidden in a deep valley near the foothills of the Misty Mountains, ruled by Elrond.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T20:11:43.193+00:00"
   },
   {
     "id": "wizards",
@@ -1115,7 +1115,7 @@
     "affiliation": "Valar",
     "sect_or_affiliation": "Valar",
     "summary": "Wizards are powerful emissaries sent to Middle-earth in human form to counsel and assist its peoples against the rising threat of Sauron.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T20:13:00.227+00:00"
   },
   {
     "id": "trolls",
@@ -1130,7 +1130,7 @@
     "affiliation": "Forces of Sauron",
     "sect_or_affiliation": "Forces of Sauron",
     "summary": "Large, immensely strong humanoid creatures originally bred in dark times in mockery of Ents, known for turning to stone when exposed to sunlight.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T20:55:25.647+00:00"
   },
   {
     "id": "bagginses",
@@ -1144,7 +1144,7 @@
     "affiliation": "The Shire",
     "sect_or_affiliation": "The Shire",
     "summary": "An ancient and respectable family of Hobbits in the Shire, primarily known for residing at Bag End in Hobbiton.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T20:57:18.524+00:00"
   },
   {
     "id": "buckland",
@@ -1155,7 +1155,7 @@
     "affiliation": "The Shire",
     "sect_or_affiliation": "The Shire",
     "summary": "A densely populated, semi-independent hobbit settlement situated east of the Brandywine River between the water and the Old Forest.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T21:13:26.803+00:00"
   },
   {
     "id": "ted-sandyman",
@@ -1169,7 +1169,7 @@
     "affiliation": "Hobbiton",
     "sect_or_affiliation": "Hobbiton",
     "summary": "An opinionated hobbit from Hobbiton who operates the local mill and openly scoffs at Sam Gamgee's stories of strange creatures beyond the Shire.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-02T21:16:43.715+00:00"
   },
   {
     "id": "goblin",
@@ -1183,7 +1183,7 @@
     "affiliation": "Sauron",
     "sect_or_affiliation": "Sauron",
     "summary": "A malicious, subterranean race of creatures bred by the Dark Power, often serving as the primary foot soldiers of evil forces in Middle-earth.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T04:08:38.028+00:00"
   },
   {
     "id": "dale",
@@ -1196,7 +1196,7 @@
     "affiliation": "Men of Dale",
     "sect_or_affiliation": "Men of Dale",
     "summary": "Dale is a kingdom of Men situated at the foot of the Lonely Mountain in northern Middle-earth, renowned for its trade and close alliance with the Dwarves of Erebor.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T08:35:15.988+00:00"
   },
   {
     "id": "esgaroth",
@@ -1209,7 +1209,7 @@
     "affiliation": "Men of Lake-town, Rhovanion",
     "sect_or_affiliation": "Men of Lake-town, Rhovanion",
     "summary": "Also known as Lake-town, it is a settlement of Men built entirely upon wooden pilings over the waters of the Long Lake south of the Lonely Mountain.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T08:37:20.46+00:00"
   },
   {
     "id": "took-family",
@@ -1224,7 +1224,7 @@
     "affiliation": "The Shire",
     "sect_or_affiliation": "The Shire",
     "summary": "A prominent and wealthy hobbit family dwelling in the Shire, famous for holding the hereditary office of Thain and possessing an unusual penchant for adventure.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T14:29:06.492+00:00"
   },
   {
     "id": "southfarthing",
@@ -1235,7 +1235,7 @@
     "affiliation": "The Shire",
     "sect_or_affiliation": "The Shire",
     "summary": "One of the four administrative divisions of the Shire, celebrated for its warmer climate, agriculture, and production of renowned varieties of pipe-weed.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T14:35:28.571+00:00"
   },
   {
     "id": "otho-sackville-baggins",
@@ -1248,7 +1248,7 @@
     "affiliation": "Sackville-Baggins family, The Shire",
     "sect_or_affiliation": "Sackville-Baggins family, The Shire",
     "summary": "A hobbit of the Shire, cousin to Bilbo Baggins and husband to Lobelia, who long coveted the ownership of Bag End.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:03:06.774+00:00"
   },
   {
     "id": "middle-earth",
@@ -1263,7 +1263,7 @@
     "affiliation": "Arda",
     "sect_or_affiliation": "Arda",
     "summary": "The vast mortal continent where the Free Peoples dwell and where the struggle against the shadow of Sauron unfolds.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:10:34.731+00:00"
   },
   {
     "id": "grey-havens",
@@ -1278,7 +1278,7 @@
     "affiliation": "Lindon",
     "sect_or_affiliation": "Lindon",
     "summary": "An ancient Elven port city located on the Gulf of Lune in northwestern Middle-earth, from which Elven ships depart across the sea to the West.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:11:32.278+00:00"
   },
   {
     "id": "great-east-road",
@@ -1293,7 +1293,7 @@
     "affiliation": "Eriador",
     "sect_or_affiliation": "Eriador",
     "summary": "An ancient highway running across Eriador, connecting the Grey Havens in the west through the Shire and Bree to the foothills of the Misty Mountains near Rivendell.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:12:02.121+00:00"
   },
   {
     "id": "mordor",
@@ -1308,7 +1308,7 @@
     "affiliation": "Sauron",
     "sect_or_affiliation": "Sauron",
     "summary": "A bleak and mountainous realm in the southeast of Middle-earth that serves as the stronghold and domain of the Dark Lord Sauron.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:12:41.339+00:00"
   },
   {
     "id": "mirkwood",
@@ -1321,7 +1321,7 @@
     "affiliation": "Woodland Realm",
     "sect_or_affiliation": "Woodland Realm",
     "summary": "A vast and ancient forest lying east of the Anduin river, governed in part by the Wood-elves and long overshadowed by dark forces.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:13:13.503+00:00"
   },
   {
     "id": "white-council",
@@ -1335,7 +1335,7 @@
     "affiliation": "Elves and Wizards of Middle-earth",
     "sect_or_affiliation": "Elves and Wizards of Middle-earth",
     "summary": "A deliberative body of powerful Elves and Wizards formed to monitor and counter the rising threat of the Dark Lord Sauron.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:14:04.796+00:00"
   },
   {
     "id": "barad-d-r",
@@ -1350,6 +1350,6 @@
     "affiliation": "Sauron / Mordor",
     "sect_or_affiliation": "Sauron / Mordor",
     "summary": "A colossal and sinister fortress rising in the land of Mordor that serves as the primary stronghold and seat of power for the Dark Lord Sauron.",
-    "updated_at": "2026-10-03T22:52:04.406431+00:00"
+    "updated_at": "2026-10-03T20:14:32.444+00:00"
   }
 ]
