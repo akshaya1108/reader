@@ -135,15 +135,67 @@ def push_books_to_supabase_async(books):
 def push_chapters_to_supabase_async(book_id):
     import threading
     def _run():
+        max_attempts = 3
+        for attempt in range(max_attempts):
+            try:
+                import sys
+                import time
+                scripts_path = os.path.join(BASE_DIR, "scripts")
+                if scripts_path not in sys.path:
+                    sys.path.insert(0, scripts_path)
+                from sync_to_supabase import sync_chapters
+                print(f"[Supabase Sync] Syncing chapters for '{book_id}' (attempt {attempt+1}/{max_attempts})...")
+                sync_chapters(book_id)
+                print(f"[Supabase Sync] Successfully finished syncing chapters for '{book_id}'.")
+                break
+            except Exception as e:
+                print(f"[Supabase Sync] Background Supabase chapters push notice for '{book_id}' (attempt {attempt+1}): {e}")
+                import time
+                time.sleep(2)
+    threading.Thread(target=_run, daemon=True).start()
+
+def auto_heal_supabase_chapters_async():
+    import threading
+    def _run():
         try:
+            import time
+            time.sleep(2)
             import sys
             scripts_path = os.path.join(BASE_DIR, "scripts")
             if scripts_path not in sys.path:
                 sys.path.insert(0, scripts_path)
             from sync_to_supabase import sync_chapters
-            sync_chapters(book_id)
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            }
+            books = load_books()
+            for b in books:
+                bid = b.get("id")
+                if not bid:
+                    continue
+                ch_dir = os.path.join(CHAPTERS_DIR, bid)
+                if not os.path.exists(ch_dir):
+                    continue
+                local_files = [f for f in os.listdir(ch_dir) if f.endswith(".json")]
+                local_ch_count = len(local_files)
+                if local_ch_count == 0:
+                    continue
+                try:
+                    res = requests.get(
+                        f"{SUPABASE_URL}/rest/v1/chapters?book_id=eq.{bid}&select=chapter_number",
+                        headers=headers,
+                        timeout=8
+                    )
+                    if res.ok:
+                        remote_count = len(res.json())
+                        if remote_count < local_ch_count:
+                            print(f"[Supabase Sync] Auto-healing book '{bid}': local has {local_ch_count} chapters, Supabase has {remote_count}. Syncing now...")
+                            sync_chapters(bid)
+                except Exception as ex:
+                    print(f"[Supabase Sync] Notice checking remote chapters for '{bid}': {ex}")
         except Exception as e:
-            print(f"Background Supabase chapters push notice: {e}")
+            print(f"[Supabase Sync] Auto-heal chapters error: {e}")
     threading.Thread(target=_run, daemon=True).start()
 
 def delete_chapter_from_supabase_async(book_id, ch_num):
@@ -227,6 +279,7 @@ def save_books(books):
 
 try:
     push_books_to_supabase_async(load_books())
+    auto_heal_supabase_chapters_async()
 except Exception:
     pass
 

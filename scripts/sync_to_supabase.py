@@ -138,6 +138,18 @@ def sync_chapters(book_id):
     if not files:
         return
 
+    def _post_chapter_batch(batch, max_retries=3):
+        for attempt in range(max_retries):
+            try:
+                res = requests.post(f"{SUPABASE_URL}/rest/v1/chapters", headers=HEADERS, json=batch, timeout=25)
+                if res.status_code in (200, 201):
+                    return True, len(batch)
+                print(f"  Batch post status {res.status_code} (attempt {attempt+1}/{max_retries}): {res.text[:120]}")
+            except Exception as e:
+                print(f"  Batch post exception (attempt {attempt+1}/{max_retries}): {e}")
+            time.sleep(1 + attempt * 1.5)
+        return False, 0
+
     print(f"Syncing {len(files)} chapters for '{book_id}'...")
     batch = []
     total_synced = 0
@@ -164,22 +176,18 @@ def sync_chapters(book_id):
             batch.append(row)
 
             if len(batch) >= batch_size:
-                res = requests.post(f"{SUPABASE_URL}/rest/v1/chapters", headers=HEADERS, json=batch)
-                if res.status_code in (200, 201):
-                    total_synced += len(batch)
-                else:
-                    print(f"  Error on batch ({res.status_code}): {res.text[:100]}")
+                ok, count = _post_chapter_batch(batch)
+                if ok:
+                    total_synced += count
                 batch = []
                 time.sleep(0.05)
         except Exception as e:
             print(f"  Skipping {f_name}: {e}")
 
     if batch:
-        res = requests.post(f"{SUPABASE_URL}/rest/v1/chapters", headers=HEADERS, json=batch)
-        if res.status_code in (200, 201):
-            total_synced += len(batch)
-        else:
-            print(f"  Error on final batch ({res.status_code}): {res.text[:100]}")
+        ok, count = _post_chapter_batch(batch)
+        if ok:
+            total_synced += count
 
     print(f"Done chapters for '{book_id}': {total_synced} uploaded.")
 
