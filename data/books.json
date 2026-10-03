@@ -242,16 +242,33 @@
   },
   {
     "id": "the-hobbit-1",
-    "title": "The Hobbit",
+    "title": "The Hobbit 2",
     "author": "J.R.R. Tolkien",
     "genre": "HIGH FANTASY",
     "description": "Bilbo Baggins, a comfortable and unambitious hobbit, is abruptly whisked away from his peaceful home by the wizard Gandalf and a company of thirteen dwarves. Together, they embark on a perilous quest to reclaim the lost Dwarf Kingdom of Erebor from the fearsome dragon Smaug. This timeless classic sets the stage for the legendary war of the Ring.",
     "color": "#647b9a",
     "created_at": "04/10/2026",
-    "last_read_chapter": 1,
+    "last_read_chapter": 2,
     "last_chapter": 1,
     "chapters_count": 18,
     "total_words": 62423,
+    "enable_glossary": true,
+    "last_read_at": "2026-10-03T21:17:28.633+00:00",
+    "bookmark": null,
+    "bookmarks": []
+  },
+  {
+    "id": "the-hobbit-2",
+    "title": "The Hobbit",
+    "author": "J.R.R. Tolkien",
+    "genre": "EPIC FANTASY",
+    "description": "Bilbo Baggins is a comfortable and unambitious hobbit whose quiet life is disrupted when the wizard Gandalf and a company of thirteen dwarves arrive on his doorstep. They enlist him as a burglar on a dangerous quest to reclaim their stolen treasure from the fearsome dragon, Smaug the Magnificent. This classic adventure marks the beginning of one of the greatest fantasy journeys in literary history.",
+    "color": "#8c6b96",
+    "created_at": "04/10/2026",
+    "last_read_chapter": 1,
+    "last_chapter": 1,
+    "chapters_count": 48,
+    "total_words": 107250,
     "enable_glossary": true
   }
 ]
