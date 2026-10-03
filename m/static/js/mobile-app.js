@@ -87,15 +87,34 @@ function escapeHtml(str) {
 }
 
 let toastTimer = null;
-function showToast(message) {
+function showToast(message, options = {}) {
   const toast = document.getElementById('mobile-toast');
   if (!toast) return;
-  toast.textContent = message;
+
+  const loading = typeof options === 'boolean' ? options : (options?.loading || false);
+  const duration = typeof options === 'number' ? options : (options?.duration !== undefined ? options.duration : 2200);
+
+  if (loading) {
+    toast.innerHTML = `<span class="toast-loading-spinner"></span><span>${escapeHtml(message)}</span>`;
+  } else {
+    toast.textContent = message;
+  }
+
   toast.classList.add('visible');
   if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
+  if (duration > 0) {
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('visible');
+    }, duration);
+  }
+}
+
+function hideToast() {
+  const toast = document.getElementById('mobile-toast');
+  if (toast) {
     toast.classList.remove('visible');
-  }, 2200);
+    if (toastTimer) clearTimeout(toastTimer);
+  }
 }
 
 function syncThemeMetaColor() {
@@ -399,8 +418,14 @@ function renderLibrary() {
   listEl.querySelectorAll('.book-card').forEach(card => {
     card.addEventListener('click', async () => {
       const bookId = card.dataset.bookId;
-      await selectBook(bookId);
+      card.classList.add('card-opening');
+      showToast('Opening novel...', { loading: true, duration: 4000 });
+      state.activeBookId = bookId;
+      state.currentBook = state.books.find(b => b.id === bookId) || state.books[0];
       switchView('book');
+      await selectBook(bookId);
+      hideToast();
+      card.classList.remove('card-opening');
     });
   });
 }
@@ -464,10 +489,23 @@ async function selectBook(bookId) {
     state.currentBook.last_read_at = new Date(nowMs).toISOString();
   }
 
-  // Immediately clear chapters list to prevent stale flash
+  // Populate hero section immediately
+  renderBookOverview();
+
+  // Show animated loading spinner and jumping dots in chapters container
   const listEl = document.getElementById('chapters-list-container');
   if (listEl) {
-    listEl.innerHTML = '<div style="padding: 32px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">Loading chapters...</div>';
+    listEl.innerHTML = `
+      <div class="chapters-loading-container">
+        <div class="loading-spinner-ring"></div>
+        <div class="loading-dots-row">
+          <span>Loading chapters</span>
+          <span class="loading-dot">.</span>
+          <span class="loading-dot">.</span>
+          <span class="loading-dot">.</span>
+        </div>
+      </div>
+    `;
   }
 
   try {
@@ -1796,19 +1834,21 @@ async function handleCreateHighlight() {
   if (selectionBar) selectionBar.style.display = 'none';
   if (window.getSelection) window.getSelection().removeAllRanges();
 
+  // Optimistic immediate UI update (zero perceived lag)
+  if (state.currentChapterData) {
+    renderReaderText(state.currentChapterData.content);
+  }
+  showToast('Saving highlight...', { loading: true, duration: 3500 });
+
   try {
     await api.updateBook(state.activeBookId, {
       bookmarks: state.currentBook.bookmarks,
       last_read_at: nowIso
     });
+    showToast('Highlighted!');
   } catch (err) {
     console.error('Error saving highlight:', err);
-  }
-
-  showToast('Highlighted!');
-
-  if (state.currentChapterData) {
-    renderReaderText(state.currentChapterData.content);
+    showToast('Saved locally');
   }
 }
 
@@ -1841,9 +1881,15 @@ function closeNoteEditor() {
 
 async function saveNoteFromEditor() {
   const textarea = document.getElementById('note-edit-textarea');
+  const btnSave = document.getElementById('btn-note-edit-save');
   const noteText = textarea ? textarea.value.trim() : '';
   const current = state.activeEditingNote;
   if (!current || !state.activeBookId || !state.currentBook) return;
+
+  if (btnSave) {
+    btnSave.innerHTML = '<span class="btn-spinner-ring"></span> Saving...';
+    btnSave.disabled = true;
+  }
 
   if (!Array.isArray(state.currentBook.bookmarks)) {
     state.currentBook.bookmarks = [];
@@ -1874,21 +1920,28 @@ async function saveNoteFromEditor() {
   closeNoteEditor();
   closeNoteViewer();
 
+  // Optimistic immediate UI update
+  if (state.currentChapterData) {
+    renderReaderText(state.currentChapterData.content);
+  }
+  renderAllNotesList();
+  showToast(noteText ? 'Saving note...' : 'Saving highlight...', { loading: true, duration: 3500 });
+
   try {
     await api.updateBook(state.activeBookId, {
       bookmarks: bookmarks,
       last_read_at: nowIso
     });
+    showToast(noteText ? 'Note saved!' : 'Highlight saved!');
   } catch (err) {
     console.error('Error updating note:', err);
+    showToast('Saved locally');
+  } finally {
+    if (btnSave) {
+      btnSave.textContent = 'Save';
+      btnSave.disabled = false;
+    }
   }
-
-  showToast(noteText ? 'Note saved!' : 'Highlight saved!');
-
-  if (state.currentChapterData) {
-    renderReaderText(state.currentChapterData.content);
-  }
-  renderAllNotesList();
 }
 
 function openNoteViewer(hl) {
@@ -1944,22 +1997,24 @@ async function deleteNoteOrHighlight(id) {
   closeNoteViewer();
   closeNoteEditor();
 
+  // Optimistic immediate UI update
+  if (state.currentChapterData) {
+    renderReaderText(state.currentChapterData.content);
+  }
+  renderAllNotesList();
+  showToast('Removing...', { loading: true, duration: 3500 });
+
   const nowIso = new Date().toISOString();
   try {
     await api.updateBook(state.activeBookId, {
       bookmarks: state.currentBook.bookmarks,
       last_read_at: nowIso
     });
+    showToast('Removed.');
   } catch (err) {
     console.error('Error deleting note/highlight:', err);
+    showToast('Removed locally');
   }
-
-  showToast('Removed.');
-
-  if (state.currentChapterData) {
-    renderReaderText(state.currentChapterData.content);
-  }
-  renderAllNotesList();
 }
 
 function openAllNotesSheet(filter = 'all') {
