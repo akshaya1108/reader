@@ -1399,10 +1399,10 @@ body.theme-dark .card-summary {
   top: 0;
   left: 0;
   right: 0;
-  height: calc(62px + env(safe-area-inset-top));
-  padding-top: calc(env(safe-area-inset-top) + 14px);
-  padding-left: 14px;
-  padding-right: 14px;
+  height: calc(60px + env(safe-area-inset-top));
+  padding-top: calc(env(safe-area-inset-top) + 12px);
+  padding-left: 10px;
+  padding-right: 10px;
   background-color: var(--bg-header);
   border-bottom: 1px solid var(--border-subtle);
   display: flex;
@@ -1413,8 +1413,8 @@ body.theme-dark .card-summary {
 }
 
 .btn-reader-action {
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: none;
   border: none;
   border-radius: 8px;
@@ -1424,6 +1424,7 @@ body.theme-dark .card-summary {
   color: var(--text-main);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
 }
 
 .btn-reader-action:active {
@@ -1433,12 +1434,14 @@ body.theme-dark .card-summary {
 .reader-title-wrap {
   position: absolute;
   left: 48px;
-  right: 88px;
+  right: 124px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
   pointer-events: none;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .reader-chapter-dropdown-wrap {
@@ -1447,18 +1450,19 @@ body.theme-dark .card-summary {
   align-items: center;
   gap: 4px;
   max-width: 100%;
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 16px;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   cursor: pointer;
   box-sizing: border-box;
   pointer-events: auto;
+  overflow: hidden;
 }
 
 .reader-chapter-name {
   font-family: var(--font-sans) !important;
-  font-size: 0.84rem !important;
+  font-size: 0.80rem !important;
   font-weight: 700 !important;
   color: var(--text-main) !important;
   white-space: nowrap !important;
@@ -1467,7 +1471,7 @@ body.theme-dark .card-summary {
   display: inline-block;
   min-width: 0;
   flex: 0 1 auto;
-  max-width: calc(100% - 18px);
+  max-width: calc(100% - 16px);
 }
 
 .reader-chapter-dropdown-arrow {
@@ -1493,6 +1497,9 @@ body.theme-dark .card-summary {
   display: flex;
   align-items: center;
   gap: 2px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 25;
 }
 
 /* Reader Content Canvas */
@@ -1718,9 +1725,17 @@ body.theme-dark .card-summary {
   justify-content: center;
 }
 
+.selection-icon-amber {
+  color: #f5c542;
+}
+
+.selection-icon-note {
+  color: #5cba89;
+}
+
 /* In-Text Highlights & Notes */
 .reader-highlight {
-  background-color: rgba(245, 197, 66, 0.32) !important;
+  background-color: rgba(245, 197, 66, 0.35) !important;
   border-radius: 2px;
   padding: 1px 2px;
   cursor: pointer;
@@ -1729,16 +1744,16 @@ body.theme-dark .card-summary {
 }
 
 body.theme-dark .reader-highlight {
-  background-color: rgba(245, 197, 66, 0.24) !important;
+  background-color: rgba(245, 197, 66, 0.26) !important;
 }
 
 .reader-highlight:active {
-  background-color: rgba(245, 197, 66, 0.5) !important;
+  background-color: rgba(245, 197, 66, 0.55) !important;
 }
 
 .reader-note {
-  background-color: rgba(245, 197, 66, 0.26) !important;
-  border-bottom: 2px solid var(--primary) !important;
+  background-color: rgba(72, 160, 122, 0.28) !important;
+  border-bottom: 2px solid #3c825d !important;
   border-radius: 2px;
   padding: 1px 2px;
   cursor: pointer;
@@ -1747,12 +1762,12 @@ body.theme-dark .reader-highlight {
 }
 
 body.theme-dark .reader-note {
-  background-color: rgba(245, 197, 66, 0.2) !important;
-  border-bottom-color: var(--primary) !important;
+  background-color: rgba(82, 175, 134, 0.32) !important;
+  border-bottom: 2px solid #5eb88b !important;
 }
 
 .reader-note:active {
-  background-color: rgba(245, 197, 66, 0.45) !important;
+  background-color: rgba(72, 160, 122, 0.48) !important;
 }
 
 @keyframes noteTargetPulse {
@@ -3447,4 +3462,110 @@ mark.search-match {
 
 .btn-sync-now:active {
   opacity: 0.85;
+}
+
+/* Confirmation Modal (Strictly Sans Font) */
+.confirm-modal-card {
+  width: 88%;
+  max-width: 320px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: 18px;
+  padding: 24px 20px 20px 20px;
+  text-align: center;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  font-family: var(--font-sans) !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.92);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.confirm-modal-card * {
+  font-family: var(--font-sans) !important;
+}
+
+.sheet-backdrop.modal-mode.active .confirm-modal-card {
+  transform: scale(1);
+}
+
+.confirm-modal-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: var(--color-danger-light);
+  color: var(--color-danger);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.confirm-modal-title {
+  font-family: var(--font-sans) !important;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.confirm-modal-message {
+  font-family: var(--font-sans) !important;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  padding: 0 4px;
+}
+
+.confirm-modal-buttons {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-confirm-cancel,
+.btn-confirm-danger,
+.btn-confirm-primary {
+  flex: 1;
+  padding: 11px 0;
+  border-radius: 10px;
+  font-family: var(--font-sans) !important;
+  font-size: 0.92rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+}
+
+.btn-confirm-cancel {
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.btn-confirm-cancel:active {
+  background-color: var(--border-subtle);
+  transform: scale(0.98);
+}
+
+.btn-confirm-danger {
+  background-color: var(--color-danger);
+  color: #ffffff;
+}
+
+.btn-confirm-danger:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+.btn-confirm-primary {
+  background-color: var(--primary);
+  color: #ffffff;
+}
+
+.btn-confirm-primary:active {
+  opacity: 0.9;
+  transform: scale(0.98);
 }

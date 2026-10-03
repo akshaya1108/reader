@@ -1760,6 +1760,14 @@ function openNoteViewer(hl) {
     content.textContent = hasNote ? hl.note : 'Highlighted passage in text.';
     content.style.fontStyle = hasNote ? 'normal' : 'italic';
   }
+  const quoteBox = backdrop ? backdrop.querySelector('.note-quote-box') : null;
+  if (quoteBox) {
+    quoteBox.style.borderLeftColor = hasNote ? 'var(--primary)' : '#f5c542';
+  }
+  const quoteIcon = backdrop ? backdrop.querySelector('.note-quote-icon') : null;
+  if (quoteIcon) {
+    quoteIcon.style.color = hasNote ? 'var(--primary)' : '#c69527';
+  }
   if (dateEl) {
     const d = hl.created_at ? new Date(hl.created_at) : new Date();
     dateEl.textContent = `Saved ${d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}`;
@@ -1911,13 +1919,81 @@ function renderAllNotesList() {
 
     const btnDel = card.querySelector('.notes-list-item-delete');
     if (btnDel) {
-      btnDel.addEventListener('click', (e) => {
+      btnDel.addEventListener('click', async (e) => {
         e.stopPropagation();
+        const isNote = Boolean(item.note && item.note.trim());
+        const confirmed = await showConfirmDialog({
+          title: isNote ? 'Delete Note?' : 'Remove Highlight?',
+          message: isNote
+            ? 'Are you sure you want to delete this note?'
+            : 'Are you sure you want to remove this highlight?',
+          confirmText: 'Delete'
+        });
+        if (!confirmed) return;
         deleteNoteOrHighlight(item.id);
       });
     }
 
     listEl.appendChild(card);
+  });
+}
+
+function showConfirmDialog({ title = 'Delete Item?', message = 'Are you sure?', confirmText = 'Delete', danger = true }) {
+  return new Promise((resolve) => {
+    const modal = document.getElementById('modal-confirm-action');
+    const titleEl = document.getElementById('confirm-modal-title');
+    const msgEl = document.getElementById('confirm-modal-message');
+    const btnCancel = document.getElementById('btn-confirm-cancel');
+    const btnConfirm = document.getElementById('btn-confirm-danger');
+
+    if (!modal || !btnCancel || !btnConfirm) {
+      resolve(window.confirm(message));
+      return;
+    }
+
+    if (titleEl) titleEl.textContent = title;
+    if (msgEl) msgEl.textContent = message;
+    btnConfirm.textContent = confirmText;
+    btnConfirm.className = danger ? 'btn-confirm-danger' : 'btn-confirm-primary';
+
+    modal.style.display = 'flex';
+    void modal.offsetWidth;
+    modal.classList.add('active');
+
+    let resolved = false;
+
+    const cleanup = (result) => {
+      if (resolved) return;
+      resolved = true;
+      modal.classList.remove('active');
+      setTimeout(() => {
+        if (!modal.classList.contains('active')) {
+          modal.style.display = 'none';
+        }
+      }, 200);
+      btnCancel.removeEventListener('click', onCancel);
+      btnConfirm.removeEventListener('click', onConfirm);
+      modal.removeEventListener('click', onBackdrop);
+      resolve(result);
+    };
+
+    const onCancel = (e) => {
+      e.stopPropagation();
+      cleanup(false);
+    };
+
+    const onConfirm = (e) => {
+      e.stopPropagation();
+      cleanup(true);
+    };
+
+    const onBackdrop = (e) => {
+      if (e.target === modal) cleanup(false);
+    };
+
+    btnCancel.addEventListener('click', onCancel);
+    btnConfirm.addEventListener('click', onConfirm);
+    modal.addEventListener('click', onBackdrop);
   });
 }
 
@@ -1960,8 +2036,14 @@ function setupNotesFeature() {
 
   const btnNoteEditDelete = document.getElementById('btn-note-edit-delete');
   if (btnNoteEditDelete) {
-    btnNoteEditDelete.addEventListener('click', () => {
+    btnNoteEditDelete.addEventListener('click', async () => {
       if (state.activeEditingNote?.id) {
+        const confirmed = await showConfirmDialog({
+          title: 'Delete Note?',
+          message: 'Are you sure you want to delete this note and remove its highlight?',
+          confirmText: 'Delete'
+        });
+        if (!confirmed) return;
         deleteNoteOrHighlight(state.activeEditingNote.id);
       }
     });
@@ -1990,10 +2072,19 @@ function setupNotesFeature() {
 
   const btnNoteViewDelete = document.getElementById('btn-note-view-delete');
   if (btnNoteViewDelete) {
-    btnNoteViewDelete.addEventListener('click', () => {
-      if (state.activeViewingNote?.id) {
-        deleteNoteOrHighlight(state.activeViewingNote.id);
-      }
+    btnNoteViewDelete.addEventListener('click', async () => {
+      if (!state.activeViewingNote?.id) return;
+      const hl = state.activeViewingNote;
+      const isNote = Boolean(hl.note && hl.note.trim());
+      const confirmed = await showConfirmDialog({
+        title: isNote ? 'Delete Note?' : 'Remove Highlight?',
+        message: isNote
+          ? 'Are you sure you want to delete this note and remove its highlight?'
+          : 'Are you sure you want to remove this highlight?',
+        confirmText: 'Delete'
+      });
+      if (!confirmed) return;
+      deleteNoteOrHighlight(hl.id);
     });
   }
 
