@@ -278,29 +278,58 @@ def push_images_to_github_async(book_id=None, book_title="new book"):
 def load_books():
     if not os.path.exists(BOOKS_FILE):
         return []
+    bak_file = f"{BOOKS_FILE}.bak"
     try:
         with open(BOOKS_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            data = json.load(f)
+            if isinstance(data, list) and len(data) > 0:
+                try:
+                    with open(bak_file, "w", encoding="utf-8") as bf:
+                        json.dump(data, bf, indent=2, ensure_ascii=False)
+                except Exception:
+                    pass
+            return data if isinstance(data, list) else []
     except Exception as e:
-        try:
-            with open(BOOKS_FILE, "r", encoding="utf-8") as f:
-                raw = f.read()
-            decoder = json.JSONDecoder()
-            data, _ = decoder.raw_decode(raw)
-            if isinstance(data, list):
-                save_books(data)
-                return data
-        except Exception:
-            pass
         print(f"Error loading books.json: {e}")
+        if os.path.exists(bak_file):
+            try:
+                with open(bak_file, "r", encoding="utf-8") as bf:
+                    data = json.load(bf)
+                if isinstance(data, list) and len(data) > 0:
+                    print(f"[Recovery] Successfully restored {len(data)} books from books.json.bak")
+                    save_books(data)
+                    return data
+            except Exception:
+                pass
         return []
 
 def save_books(books):
+    if not isinstance(books, list):
+        return
+    bak_file = f"{BOOKS_FILE}.bak"
+    if len(books) == 0 and os.path.exists(BOOKS_FILE) and os.path.getsize(BOOKS_FILE) > 50:
+        try:
+            with open(BOOKS_FILE, "r", encoding="utf-8") as f:
+                existing = json.load(f)
+            if isinstance(existing, list) and len(existing) > 0:
+                print(f"[Safety Warning] Refusing to overwrite non-empty books.json with empty list.")
+                return
+        except Exception:
+            pass
+
     tmp_file = f"{BOOKS_FILE}.tmp"
     with open(tmp_file, "w", encoding="utf-8") as f:
         json.dump(books, f, indent=2, ensure_ascii=False)
         f.flush()
         os.fsync(f.fileno())
+
+    if os.path.exists(BOOKS_FILE) and os.path.getsize(BOOKS_FILE) > 100:
+        try:
+            import shutil
+            shutil.copy2(BOOKS_FILE, bak_file)
+        except Exception:
+            pass
+
     os.replace(tmp_file, BOOKS_FILE)
     push_books_to_supabase_async(books)
 
