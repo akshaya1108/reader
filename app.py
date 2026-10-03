@@ -9,6 +9,13 @@ from dotenv import load_dotenv
 import requests
 import threading
 
+_orig_print = print
+def print(*args, **kwargs):
+    try:
+        _orig_print(*args, **kwargs)
+    except (OSError, BrokenPipeError):
+        pass
+
 from ai_glossary import extract_characters_from_text, slugify, get_gemini_client, ai_enhance_book_metadata, is_chinese_novel, clean_entry_for_novel, CHINESE_CHAR_RE
 from scraper import scrape_fandom_character_list, scrape_fandom_data, sanitize_wiki_data_with_gemini, extract_title_from_url, lookup_single_entity
 
@@ -152,7 +159,7 @@ def push_chapters_to_supabase_async(book_id):
                 print(f"[Supabase Sync] Background Supabase chapters push notice for '{book_id}' (attempt {attempt+1}): {e}")
                 import time
                 time.sleep(2)
-    threading.Thread(target=_run, daemon=True).start()
+    threading.Thread(target=_run, daemon=False).start()
 
 def auto_heal_supabase_chapters_async():
     import threading
@@ -269,12 +276,30 @@ def push_images_to_github_async(book_id, book_title="new book"):
 def load_books():
     if not os.path.exists(BOOKS_FILE):
         return []
-    with open(BOOKS_FILE, "r", encoding="utf-8") as f:
-        return json.load(f)
+    try:
+        with open(BOOKS_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        try:
+            with open(BOOKS_FILE, "r", encoding="utf-8") as f:
+                raw = f.read()
+            decoder = json.JSONDecoder()
+            data, _ = decoder.raw_decode(raw)
+            if isinstance(data, list):
+                save_books(data)
+                return data
+        except Exception:
+            pass
+        print(f"Error loading books.json: {e}")
+        return []
 
 def save_books(books):
-    with open(BOOKS_FILE, "w", encoding="utf-8") as f:
+    tmp_file = f"{BOOKS_FILE}.tmp"
+    with open(tmp_file, "w", encoding="utf-8") as f:
         json.dump(books, f, indent=2, ensure_ascii=False)
+        f.flush()
+        os.fsync(f.fileno())
+    os.replace(tmp_file, BOOKS_FILE)
     push_books_to_supabase_async(books)
 
 try:
@@ -917,8 +942,7 @@ def sync_supabase_endpoint():
                             lb["last_read_at"] = r_at or datetime.datetime.now().isoformat()
                             changed_books = True
                 if changed_books:
-                    with open(BOOKS_FILE, "w", encoding="utf-8") as bf:
-                        json.dump(local_books, bf, indent=2, ensure_ascii=False)
+                    save_books(local_books)
                     books = local_books
         except Exception as e:
             print(f"Notice syncing remote book progress: {e}")
@@ -1010,8 +1034,7 @@ def list_books():
                             lb["last_read_at"] = r_at or datetime.datetime.now().isoformat()
                             changed = True
                 if changed:
-                    with open(BOOKS_FILE, "w", encoding="utf-8") as bf:
-                        json.dump(local_books, bf, indent=2, ensure_ascii=False)
+                    save_books(local_books)
         except Exception:
             pass
 
@@ -2802,7 +2825,12 @@ if __name__ == "__main__":
     port = get_server_port()
     print(f"Starting My Library on http://127.0.0.1:{port} ...")
     print(f"Mobile PWA available on your local Wi-Fi at: http://192.168.29.98:{port}/m")
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=True,
+        exclude_patterns=["*/data/*", "*data/*", "*/.git/*"]
+    )
 
 
 

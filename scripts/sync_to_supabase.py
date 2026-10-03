@@ -23,13 +23,29 @@ BOOKS_FILE = os.path.join(DATA_DIR, "books.json")
 CHAPTERS_DIR = os.path.join(DATA_DIR, "chapters")
 GLOSSARY_DIR = os.path.join(DATA_DIR, "glossary")
 
+_orig_print = print
+def print(*args, **kwargs):
+    try:
+        _orig_print(*args, **kwargs)
+    except (OSError, BrokenPipeError):
+        pass
+
 def sync_books():
     if not os.path.exists(BOOKS_FILE):
         print("No books.json found.")
         return []
     
-    with open(BOOKS_FILE, "r", encoding="utf-8") as f:
-        books = json.load(f)
+    try:
+        with open(BOOKS_FILE, "r", encoding="utf-8") as f:
+            books = json.load(f)
+    except Exception:
+        try:
+            with open(BOOKS_FILE, "r", encoding="utf-8") as f:
+                raw = f.read()
+            books, _ = json.JSONDecoder().raw_decode(raw)
+        except Exception as e:
+            print(f"Error reading books.json: {e}")
+            return []
     
     payload = []
     for b in books:
