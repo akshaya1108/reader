@@ -254,7 +254,7 @@
     "chapters_count": 19,
     "total_words": 28247,
     "enable_glossary": true,
-    "last_read_at": "2026-10-03T20:50:57.335+00:00",
+    "last_read_at": "2026-10-03T20:56:48.198Z",
     "bookmark": null,
     "bookmarks": []
   },
@@ -266,10 +266,27 @@
     "description": "After crash-landing in the Sahara Desert, a pilot encounters a young prince from a distant asteroid who shares stories of his interstellar travels. Through these whimsical encounters, the story explores profound themes of love, friendship, and the often-baffling nature of the adult world. This beloved classic reminds readers that what is truly essential is invisible to the eye.",
     "color": "#8c6b96",
     "created_at": "04/10/2026",
-    "last_read_chapter": 1,
+    "last_read_chapter": 5,
     "last_chapter": 1,
     "chapters_count": 28,
     "total_words": 14392,
+    "enable_glossary": true,
+    "last_read_at": "2026-10-03T20:56:29.459+00:00",
+    "bookmark": null,
+    "bookmarks": []
+  },
+  {
+    "id": "alice-s-adventures-in-wonderland-1",
+    "title": "Alice's Adventures in Wonderland",
+    "author": "Lewis Carroll",
+    "genre": "CLASSIC FANTASY",
+    "description": "When young Alice falls down a rabbit hole, she enters a whimsical, nonsensical world filled with unforgettable characters like the Mad Hatter, the Cheshire Cat, and the Queen of Hearts. This timeless masterpiece of children's literature challenges logic and sparks the imagination with its playful wordplay and surreal adventures.",
+    "color": "#ba6d78",
+    "created_at": "04/10/2026",
+    "last_read_chapter": 1,
+    "last_chapter": 1,
+    "chapters_count": 19,
+    "total_words": 28247,
     "enable_glossary": true
   }
 ]
