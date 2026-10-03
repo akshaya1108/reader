@@ -1517,6 +1517,13 @@ function openLoreSheet(charName, asCenteredModal = false) {
       </div>
       ${affil ? `<div class="lore-card-affiliation">${escapeHtml(affil)}</div>` : ''}
       ${aliasesHtml ? `<div class="lore-card-aliases"><span class="lore-card-aliases-label">Aliases:</span> <div class="card-aliases-row" style="margin-top: 4px;">${aliasesHtml}</div></div>` : ''}
+      <div class="lore-card-summary-box">${escapeHtml(summary || 'No description provided.')}</div>
+    `;
+  }
+
+  if (backdrop) backdrop.classList.add('active');
+}
+
 // --- Highlights & Notes Engine (Cloud Synced to Supabase & Offline-First) ---
 function applyHighlightsToReader(container) {
   if (!container || !state.currentBook) return;
