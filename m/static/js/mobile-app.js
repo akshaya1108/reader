@@ -940,6 +940,21 @@ function renderReaderText(rawHtml) {
     }
     img.classList.add('reader-image');
     img.setAttribute('loading', 'lazy');
+
+    img.addEventListener('error', () => {
+      const currentSrc = img.getAttribute('src') || '';
+      if (currentSrc.includes('/data/chapters/')) {
+        const fallback = currentSrc.replace(/^.*\/data\/chapters\//, '/api/books/');
+        if (fallback !== currentSrc && !window.location.hostname.includes('github.io')) {
+          img.setAttribute('src', fallback);
+          return;
+        }
+      }
+      img.style.display = 'none';
+      if (img.parentElement && img.parentElement.classList.contains('reader-image-wrap')) {
+        img.parentElement.style.display = 'none';
+      }
+    }, { once: true });
   });
 
   // 2. Check if <p> tags exist; if not, extract leaf divs (critical for MDZS)

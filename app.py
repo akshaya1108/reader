@@ -161,6 +161,59 @@ def delete_chapter_from_supabase_async(book_id, ch_num):
             print(f"Background Supabase chapter delete notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
 
+def push_images_to_github_async(book_id, book_title="new book"):
+    import threading
+    import subprocess
+    def _run():
+        try:
+            img_dir = os.path.join(CHAPTERS_DIR, book_id, "images")
+            if not os.path.exists(img_dir):
+                return
+            images = [f for f in os.listdir(img_dir) if not f.startswith(".")]
+            if not images:
+                return
+
+            print(f"[Git Sync] Staging images for {book_id} to GitHub...")
+            subprocess.run(
+                ["git", "add", f"data/chapters/{book_id}/images", "data/books.json"],
+                cwd=BASE_DIR,
+                capture_output=True,
+                check=False
+            )
+            status = subprocess.run(
+                ["git", "diff", "--cached", "--name-only"],
+                cwd=BASE_DIR,
+                capture_output=True,
+                text=True,
+                check=False
+            )
+            if status.stdout.strip():
+                clean_title = re.sub(r'[\r\n"]+', '', str(book_title)).strip()
+                commit_msg = f"Add chapter images for {clean_title}"
+                subprocess.run(
+                    ["git", "commit", "-m", commit_msg],
+                    cwd=BASE_DIR,
+                    capture_output=True,
+                    check=False
+                )
+                print(f"[Git Sync] Pushing images to GitHub for {book_id}...")
+                push_res = subprocess.run(
+                    ["git", "push", "origin", "main"],
+                    cwd=BASE_DIR,
+                    capture_output=True,
+                    text=True,
+                    check=False
+                )
+                if push_res.returncode == 0:
+                    print(f"[Git Sync] Successfully pushed images for {book_id} to GitHub.")
+                else:
+                    print(f"[Git Sync] Git push notice: {push_res.stderr}")
+            else:
+                print(f"[Git Sync] No new image changes to commit for {book_id}.")
+        except Exception as e:
+            print(f"[Git Sync] Background push images error: {e}")
+    threading.Thread(target=_run, daemon=True).start()
+
 def load_books():
     if not os.path.exists(BOOKS_FILE):
         return []
@@ -1723,6 +1776,8 @@ def import_epub_endpoint():
             books.append(new_book)
             save_books(books)
             push_chapters_to_supabase_async(book_id)
+            if epub_images_to_extract:
+                push_images_to_github_async(book_id, final_title)
 
             return jsonify({
                 "success": True,
@@ -1763,6 +1818,7 @@ def generate_rich_snippet(content, max_chars=260):
 
 # Book Images
 @app.route("/api/books/<book_id>/images/<path:filename>")
+@app.route("/data/chapters/<book_id>/images/<path:filename>")
 def get_book_image(book_id, filename):
     img_dir = os.path.join(CHAPTERS_DIR, book_id, "images")
     if not os.path.exists(os.path.join(img_dir, filename)):
