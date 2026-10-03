@@ -229,11 +229,13 @@
     "description": "Bilbo Baggins, a quiet and home-loving hobbit, is unexpectedly swept into an epic quest by the wizard Gandalf and a company of thirteen dwarves. Together, they must brave dangerous lands filled with goblins, elves, and giant spiders to reclaim a lost kingdom and its treasure from the fearsome dragon Smaug.",
     "color": "#c4884d",
     "created_at": "04/10/2026",
-    "last_read_chapter": 8,
+    "last_read_chapter": 31,
     "last_chapter": 1,
     "chapters_count": 32,
     "total_words": 98266,
     "enable_glossary": true,
-    "last_read_at": "2026-10-03T22:24:01.311Z"
+    "last_read_at": "2026-10-03T22:24:16.35+00:00",
+    "bookmark": null,
+    "bookmarks": []
   }
 ]
