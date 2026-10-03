@@ -987,19 +987,33 @@ function renderReaderText(rawHtml) {
     }
 
     if (bookId && filename) {
-      const candidates = [
-        `../data/chapters/${bookId}/images/${filename}`,
-        `https://raw.githubusercontent.com/akshaya1108/reader/main/data/chapters/${bookId}/images/${filename}`,
-        `/api/books/${bookId}/images/${filename}`
-      ];
+      const isGithub = window.location.hostname.includes('github.io');
+      const rawGitHubUrl = `https://raw.githubusercontent.com/akshaya1108/reader/main/data/chapters/${bookId}/images/${filename}`;
+      const ghPagesUrl = `../data/chapters/${bookId}/images/${filename}`;
+      const localApiUrl = `/api/books/${bookId}/images/${filename}`;
+
+      // On GitHub Pages, raw GitHub CDN is ready immediately upon git push without waiting for the 1-3 min Pages build
+      const candidates = isGithub
+        ? [rawGitHubUrl, ghPagesUrl, localApiUrl]
+        : [ghPagesUrl, localApiUrl, rawGitHubUrl];
 
       let candidateIdx = 0;
+      let hasRetried = false;
       img.setAttribute('src', candidates[0]);
 
       img.addEventListener('error', function onImgError() {
         candidateIdx++;
         if (candidateIdx < candidates.length) {
           img.setAttribute('src', candidates[candidateIdx]);
+        } else if (!hasRetried) {
+          // If all failed initially (e.g. user opened chapter within seconds of import while push was in flight),
+          // retry once after 3 seconds with fresh timestamp
+          hasRetried = true;
+          candidateIdx = 0;
+          setTimeout(() => {
+            const cacheBust = `?t=${Date.now()}`;
+            img.setAttribute('src', candidates[0] + cacheBust);
+          }, 3000);
         } else {
           img.style.display = 'none';
           if (img.parentElement && img.parentElement.classList.contains('reader-image-wrap')) {

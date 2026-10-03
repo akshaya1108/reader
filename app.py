@@ -223,11 +223,14 @@ def delete_chapter_from_supabase_async(book_id, ch_num):
 def push_images_to_github_async(book_id=None, book_title="new book"):
     import threading
     import subprocess
+    import glob
     def _run():
         try:
             print(f"[Git Sync] Staging images to GitHub...")
+            img_dirs = [os.path.relpath(d, BASE_DIR) for d in glob.glob(os.path.join(CHAPTERS_DIR, "*", "images")) if os.path.exists(d)]
+            stage_targets = img_dirs + ["data/books.json"]
             subprocess.run(
-                ["git", "add", "data/chapters/*/images", "data/books.json"],
+                ["git", "add"] + stage_targets,
                 cwd=BASE_DIR,
                 capture_output=True,
                 check=False
@@ -249,6 +252,12 @@ def push_images_to_github_async(book_id=None, book_title="new book"):
                     check=False
                 )
                 print(f"[Git Sync] Pushing images to GitHub...")
+                subprocess.run(
+                    ["git", "pull", "--rebase", "origin", "main"],
+                    cwd=BASE_DIR,
+                    capture_output=True,
+                    check=False
+                )
                 push_res = subprocess.run(
                     ["git", "push", "origin", "main"],
                     cwd=BASE_DIR,
