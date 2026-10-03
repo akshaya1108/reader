@@ -221,43 +221,6 @@
     "bookmarks": []
   },
   {
-    "id": "the-hobbit",
-    "title": "The Hobbit 1",
-    "author": "J. R. R. Tolkien",
-    "genre": "EPIC FANTASY",
-    "description": "Bilbo Baggins, a comfortable and unambitious hobbit, is whisked away on an unexpected adventure by the wizard Gandalf and a company of dwarves. Together, they embark on a perilous quest to reclaim the lost Dwarf Kingdom of Erebor and its treasure from the fearsome dragon Smaug.",
-    "color": "#c4884d",
-    "created_at": "04/10/2026",
-    "last_read_chapter": 8,
-    "last_chapter": 1,
-    "chapters_count": 32,
-    "total_words": 98266,
-    "enable_glossary": true,
-    "bookmark": {
-      "chapter_number": 9,
-      "paragraph_index": 1
-    },
-    "bookmarks": [],
-    "last_read_at": "2026-10-03T21:16:10.853+00:00"
-  },
-  {
-    "id": "the-hobbit-1",
-    "title": "The Hobbit 2",
-    "author": "J.R.R. Tolkien",
-    "genre": "HIGH FANTASY",
-    "description": "Bilbo Baggins, a comfortable and unambitious hobbit, is abruptly whisked away from his peaceful home by the wizard Gandalf and a company of thirteen dwarves. Together, they embark on a perilous quest to reclaim the lost Dwarf Kingdom of Erebor from the fearsome dragon Smaug. This timeless classic sets the stage for the legendary war of the Ring.",
-    "color": "#647b9a",
-    "created_at": "04/10/2026",
-    "last_read_chapter": 2,
-    "last_chapter": 1,
-    "chapters_count": 18,
-    "total_words": 62423,
-    "enable_glossary": true,
-    "last_read_at": "2026-10-03T21:17:28.633+00:00",
-    "bookmark": null,
-    "bookmarks": []
-  },
-  {
     "id": "the-hobbit-2",
     "title": "The Hobbit",
     "author": "J.R.R. Tolkien",
@@ -265,10 +228,27 @@
     "description": "Bilbo Baggins is a comfortable and unambitious hobbit whose quiet life is disrupted when the wizard Gandalf and a company of thirteen dwarves arrive on his doorstep. They enlist him as a burglar on a dangerous quest to reclaim their stolen treasure from the fearsome dragon, Smaug the Magnificent. This classic adventure marks the beginning of one of the greatest fantasy journeys in literary history.",
     "color": "#8c6b96",
     "created_at": "04/10/2026",
-    "last_read_chapter": 1,
+    "last_read_chapter": 7,
     "last_chapter": 1,
     "chapters_count": 48,
     "total_words": 107250,
+    "enable_glossary": true,
+    "bookmark": null,
+    "bookmarks": [],
+    "last_read_at": "2026-10-03T21:20:46.585+00:00"
+  },
+  {
+    "id": "the-hobbit",
+    "title": "The Hobbit",
+    "author": "J. R. R. Tolkien",
+    "genre": "EPIC FANTASY",
+    "description": "Bilbo Baggins, a quiet and respectable hobbit, is unexpectedly swept into an epic quest by the wizard Gandalf and a company of thirteen dwarves. Their mission is to reclaim the lost Dwarf Kingdom of Erebor and its vast treasure from the clutches of the fearsome dragon, Smaug. Along this perilous journey, Bilbo discovers a depth of resourcefulness and courage he never knew he possessed.",
+    "color": "#647b9a",
+    "created_at": "04/10/2026",
+    "last_read_chapter": 1,
+    "last_chapter": 1,
+    "chapters_count": 32,
+    "total_words": 98266,
     "enable_glossary": true
   }
 ]
