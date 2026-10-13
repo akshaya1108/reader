@@ -52,6 +52,8 @@ function isChineseNovel(title = '', genre = '') {
 async function callGeminiDirect(prompt) {
   for (const model of GEMINI_MODELS) {
     try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4500);
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
       const res = await fetch(url, {
         method: 'POST',
@@ -61,8 +63,10 @@ async function callGeminiDirect(prompt) {
           generationConfig: {
             responseMimeType: 'application/json'
           }
-        })
+        }),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
 
       if (res.ok) {
         const json = await res.json();
@@ -694,14 +698,19 @@ export const api = {
       };
     }
 
-    // 2. If online and local Flask backend is reachable, try server endpoint
-    if (this.isOnline()) {
+    // 2. If online and NOT on static GitHub Pages, try local Flask backend
+    const isGitHub = typeof window !== 'undefined' && (window.location.hostname.includes('github.io') || window.location.protocol === 'file:');
+    if (!isGitHub && this.isOnline()) {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
         const res = await fetch(`/api/books/${encodeURIComponent(targetBookId)}/lookup-character`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: cleanName, add })
+          body: JSON.stringify({ name: cleanName, add }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
         if (res.ok) {
           const data = await res.json();
           if (data && data.character) {
@@ -710,7 +719,7 @@ export const api = {
           return data;
         }
       } catch (_) {
-        // Backend not on same origin (e.g. GitHub Pages) - proceed to direct Gemini fallback
+        // Backend not on same origin or timed out - proceed to direct Gemini fallback
       }
     }
 
