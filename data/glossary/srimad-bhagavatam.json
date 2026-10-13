@@ -15,6 +15,68 @@
     "sect_or_affiliation": "Yadu Dynasty",
     "affiliation": "Yadu Dynasty",
     "summary": "The Supreme Personality of Godhead and primary focus of the Srimad Bhagavatam, known for His divine pastimes in Vrindavan, Mathura, and Dvaraka.",
-    "updated_at": "2026-10-03T22:52:05.978299+00:00"
+    "updated_at": "2026-10-13T15:12:16.503895+00:00"
+  },
+  {
+    "id": "brahm",
+    "name": "Brahmā",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Vidhi",
+      "Svayambhū",
+      "Pitāmaha"
+    ],
+    "sect_or_affiliation": "The Trimurti",
+    "affiliation": "The Trimurti",
+    "summary": "Brahmā is the primary deity of creation within the universal cosmic order responsible for engineering the manifest material cosmos.",
+    "updated_at": "2026-10-13T15:38:40.339690+00:00"
+  },
+  {
+    "id": "vyasadeva",
+    "name": "Vyasadeva",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Vyāsa",
+      "Krishna Dvaipayana",
+      "Veda Vyasa",
+      "Bādarāyaṇa",
+      "vyasadeva"
+    ],
+    "affiliation": "Vedic Sage / Literary Incarnation",
+    "sect_or_affiliation": "Vedic Sage / Literary Incarnation",
+    "summary": "The revered sage and compiler of the Vedas who authored the Mahabharata, Puranas, and the Srimad Bhagavatam.",
+    "mentions": 0
+  },
+  {
+    "id": "naimisaranya",
+    "name": "Naimiṣāraṇya",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Naimisha Forest",
+      "Naimisharanya",
+      "Naimiṣāraṇya"
+    ],
+    "affiliation": "Sacred Forest",
+    "sect_or_affiliation": "Sacred Forest",
+    "summary": "A holy, auspicious forest where thousands of sages gathered under Shaunaka Rishi to hear the recitation of the Srimad Bhagavatam.",
+    "mentions": 0
+  },
+  {
+    "id": "sukadeva-gosvami",
+    "name": "Śukadeva Gosvāmī",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sukadeva",
+      "Śuka",
+      "Shuka"
+    ],
+    "affiliation": "Sage",
+    "sect_or_affiliation": "Sage",
+    "summary": "The exalted self-realized sage and son of Vyasadeva who originally recited the Srimad Bhagavatam to King Parikshit.",
+    "mentions": 0
   }
 ]

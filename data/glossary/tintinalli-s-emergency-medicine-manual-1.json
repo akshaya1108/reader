@@ -1,0 +1,16 @@
+[
+  {
+    "id": "end-tidal-co2",
+    "name": "End-tidal CO2",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "EtCO2",
+      "end-tidal carbon dioxide"
+    ],
+    "sect_or_affiliation": "Emergency Medicine",
+    "affiliation": "Emergency Medicine",
+    "summary": "End-tidal CO2 refers to the partial pressure or maximal concentration of carbon dioxide exhaled at the end of a breath, serving as a vital monitoring parameter in emergency airway management and resuscitation.",
+    "updated_at": "2026-10-13T08:23:49.583343+00:00"
+  }
+]
