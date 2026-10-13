@@ -285,10 +285,11 @@
     "description": "A comprehensive, portable guide providing essential clinical information for the acute care setting. It covers key diagnostic and therapeutic considerations across the full spectrum of emergency medicine.",
     "color": "#c4884d",
     "created_at": "13/10/2026",
-    "last_read_chapter": 1,
+    "last_read_chapter": 7,
     "last_chapter": 1,
     "chapters_count": 218,
     "total_words": 216333,
-    "enable_glossary": true
+    "enable_glossary": true,
+    "last_read_at": "2026-10-13T05:58:47.908Z"
   }
 ]
