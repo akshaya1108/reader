@@ -27,13 +27,12 @@ const KNOWN_CLUSTERS = [
 ];
 
 const GEMINI_API_KEY = (typeof localStorage !== 'undefined' && localStorage.getItem('xianxia_gemini_api_key')) ||
-  atob('QVEuQWI4Uk42Sk11R1p3VHgzRTVWa3hwdlZMRlBhU0xzWk1zcEZldXlfSHR4aDZCei1xZWc=');
+  atob('QVEuQWI4Uk42SU5QdEVtdjRFOTF1aHY5MzhyTGVCM1VkamJRRWpuTlNBQS0ySzk1WGlzdnc=');
 const GEMINI_MODELS = [
-  'gemini-3.8-flash',
   'gemini-3.6-flash',
-  'gemini-flash-latest',
   'gemini-3.5-flash',
-  'gemini-3.5-flash-lite'
+  'gemini-3.8-flash',
+  'gemini-flash-latest'
 ];
 
 function isChineseNovel(title = '', genre = '') {
