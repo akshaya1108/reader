@@ -278,17 +278,18 @@ def lookup_single_entity(query: str, novel_title: str, genre: str = "") -> Tuple
 
 {f"Wiki Text:\n{wiki_text[:8000]}" if wiki_text else ""}
 
-Analyze the term "{q_clean}" in "{novel_title}":
-1. Canonical Verification:
-   - Is "{q_clean}" a recognized, canonical named entity in "{novel_title}"? If it is a generic word, minor unnamed background element, or not in the novel, return an empty array: []
+Analyze the term "{q_clean}" in "{novel_title}" (or its broader literary, fantasy, mythological, or Vedic lore):
+1. Canonical & Lore Recognition:
+   - Identify "{q_clean}". This includes characters, deities, sages, mythological beings, races/creatures (e.g. "elven" -> Elves, "dwarven" -> Dwarves), sacred sites, forests, hills, cities, realms (e.g. "Ravenhill", "Naimiṣāraṇya", "Cloud Recesses"), weapons/items, clans/sects, or spiritual/philosophical concepts.
+   - If "{q_clean}" is an adjective, plural, or variant form (e.g. "elven", "dwarven", "orcs"), resolve it to the underlying canon entity (e.g. "Elves", category "Race / Creature") and ALWAYS include "{q_clean}" in the 'aliases' array.
+   - Even if "{q_clean}" is a secondary entity, minor sage, or regional landmark, provide a helpful entry instead of returning empty.
+   - Only return [] if "{q_clean}" is a generic grammar word with zero lore relevance (e.g. "the", "with", "walked").
 2. Primary Character Moniker Consolidation:
-   - If "{q_clean}" is a courtesy name, birth name, title, epithet, or moniker of an established primary character (e.g. "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji; "San Lang" is Hua Cheng):
-     Set 'name' to the character's primary canonical name (e.g. "Wei Wuxian") and include "{q_clean}" in 'aliases'.
+   - If "{q_clean}" is a courtesy name, birth name, title, epithet, or moniker of an established primary character (e.g. "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji; "San Lang" is Hua Cheng; "Vyasa" is Krishna Dvaipayana Vyasadeva):
+     Set 'name' to the character's primary canonical name and include "{q_clean}" in 'aliases'.
 3. Distinct Races, Creatures, Weapons, Items, Clans, Locations, or Concepts:
-   - If "{q_clean}" is a race/creature (e.g. "Spiritual Beast", "Fox Spirit", "Demonic Beast"), weapon/item (e.g. "Transportation Talisman", "Zidian", "Chenqing"), clan/sect (e.g. "Gusu Lan Clan"), location (e.g. "Cloud Recesses"), or cultivation concept (e.g. "Golden Core"):
-     Set 'name' to the recognized standard English/Pinyin name (e.g. "{q_clean}").
-     Set 'category' to EXACTLY ONE OF:
-       "Character", "Race / Creature", "Weapon / Item", "Clan / Sect", "Location / Realm", "Concept / Lore".
+   - Set 'category' to EXACTLY ONE OF:
+     "Character", "Race / Creature", "Weapon / Item", "Clan / Sect", "Location / Realm", "Concept / Lore".
 4. Extract:
    - 'name': Standard name
    - 'category': One of the 6 canonical categories above
@@ -304,7 +305,7 @@ Return a valid JSON array with 1 object (or [] if not canon):
 [
   {{
     "name": "Standard Name",
-    "category": "Weapon / Item",
+    "category": "Character",
     {pinyin_schema}
     "aliases": ["Alias 1", "{q_clean}"],
     "sect_or_affiliation": "Affiliation or Clan",
@@ -314,7 +315,7 @@ Return a valid JSON array with 1 object (or [] if not canon):
 Only return valid JSON array.
 """
 
-    models_to_try = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.5-flash", "gemini-3.5-flash-lite"]
+    models_to_try = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3.6-flash", "gemini-flash-latest"]
     last_err = None
 
     for model_name in models_to_try:
@@ -664,7 +665,7 @@ Return a valid JSON array of objects:
 Only return valid JSON array.
 """
 
-    models_to_try = ["gemini-3.6-flash", "gemini-flash-latest", "gemini-3.5-flash", "gemini-3.5-flash-lite"]
+    models_to_try = ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-3.6-flash", "gemini-flash-latest"]
     last_err = None
 
     for model_name in models_to_try:

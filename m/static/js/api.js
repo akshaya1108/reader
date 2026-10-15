@@ -26,13 +26,28 @@ const KNOWN_CLUSTERS = [
   ['the-fellowship-of-the-ring', 'the-two-towers', 'the-return-of-the-king']
 ];
 
-const GEMINI_API_KEY = (typeof localStorage !== 'undefined' && localStorage.getItem('xianxia_gemini_api_key')) ||
-  atob('QVEuQWI4Uk42SU5QdEVtdjRFOTF1aHY5MzhyTGVCM1VkamJRRWpuTlNBQS0ySzk1WGlzdnc=');
+function getEffectiveGeminiApiKey() {
+  const DEFAULT_KEY = atob('QVEuQWI4Uk42SU5QdEVtdjRFOTF1aHY5MzhyTGVCM1VkamJRRWpuTlNBQS0ySzk1WGlzdnc=');
+  if (typeof localStorage === 'undefined') return DEFAULT_KEY;
+  const stored = localStorage.getItem('xianxia_gemini_api_key');
+  if (!stored) return DEFAULT_KEY;
+  const trimmed = stored.trim();
+  const deadKeys = [
+    atob('QVEuQWI4Uk42Sk11R1p3VHgzRTVWa3hwdlZMRlBhU0xzWk1zcEZldXlfSHR4aDZCei1xZWc='),
+    atob('QVEuQWI4Uk42Sk11R1p3VHgzRTVWa3hwdlZMRlBhU0xzWk1zcEZldXktSHR4aDZCei1xZWc=')
+  ];
+  if (deadKeys.includes(trimmed)) {
+    try { localStorage.removeItem('xianxia_gemini_api_key'); } catch (_) {}
+    return DEFAULT_KEY;
+  }
+  return trimmed || DEFAULT_KEY;
+}
+
 const GEMINI_MODELS = [
-  'gemini-3.6-flash',
   'gemini-3.5-flash',
-  'gemini-3.8-flash',
-  'gemini-flash-latest'
+  'gemini-3.1-flash-lite',
+  'gemini-3.1-flash-lite-preview',
+  'gemini-3.6-flash'
 ];
 
 function isChineseNovel(title = '', genre = '') {
@@ -50,11 +65,12 @@ function isChineseNovel(title = '', genre = '') {
 }
 
 async function callGeminiDirect(prompt) {
+  const apiKey = getEffectiveGeminiApiKey();
   for (const model of GEMINI_MODELS) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 4500);
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`;
+      const timeoutId = setTimeout(() => controller.abort(), 8500);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
       const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -72,14 +88,26 @@ async function callGeminiDirect(prompt) {
         const json = await res.json();
         const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
         if (text) {
-          const clean = text.replace(/```json/g, '').replace(/```/g, '').trim();
-          const parsed = JSON.parse(clean);
-          if (Array.isArray(parsed) || (parsed && typeof parsed === 'object')) {
-            return Array.isArray(parsed) ? parsed : [parsed];
+          let clean = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+          try {
+            const parsed = JSON.parse(clean);
+            if (Array.isArray(parsed) || (parsed && typeof parsed === 'object')) {
+              return Array.isArray(parsed) ? parsed : [parsed];
+            }
+          } catch (_) {
+            const m = clean.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
+            if (m) {
+              try {
+                const parsed = JSON.parse(m[0]);
+                if (Array.isArray(parsed) || (parsed && typeof parsed === 'object')) {
+                  return Array.isArray(parsed) ? parsed : [parsed];
+                }
+              } catch (_) {}
+            }
           }
         }
-      } else if (res.status === 503 || res.status === 429) {
-        console.warn(`Gemini model ${model} busy (${res.status}). Trying fallback model...`);
+      } else if (res.status === 503 || res.status === 429 || res.status === 404 || res.status === 400) {
+        console.warn(`Gemini model ${model} responded with ${res.status}. Trying next model...`);
         continue;
       }
     } catch (err) {
@@ -731,35 +759,40 @@ export const api = {
         const bookTitle = book ? (book.title || book.id) : targetBookId;
         const genre = book ? (book.genre || '') : '';
         const isChinese = isChineseNovel(bookTitle, genre);
-
         const prompt = `
-You are an expert canon scholar for the novel "${bookTitle}".
-The reader is reading "${bookTitle}" and wants to identify the term "${cleanName}".
+You are an expert canon scholar and lore archivist for "${bookTitle}".
+The reader is reading "${bookTitle}" and wants to add the term "${cleanName}" to their glossary.
 ${isChinese
   ? 'This is a Chinese Xianxia/Wuxia/Danmei novel. You may extract Chinese characters, Hanzi, and Pinyin.'
   : 'CRITICAL DIRECTIVE: "' + bookTitle + '" is NOT a Chinese novel. Do NOT generate Chinese characters or pinyin. Set "pinyin_or_chinese" to "".'}
 
-Analyze "${cleanName}" in "${bookTitle}":
-1. Canonical Verification: Is "${cleanName}" a recognized, canonical entity in "${bookTitle}"? If it is a generic word, minor unnamed background element, or not in the novel, return an empty array: []
-2. Primary Character Moniker Consolidation: If "${cleanName}" is a courtesy name, birth name, title, epithet, or moniker of an established primary character (e.g. "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji): set 'name' to the character's primary canonical name and include "${cleanName}" in 'aliases'.
-3. Distinct Races, Creatures, Weapons, Items, Clans, Locations, or Concepts: If "${cleanName}" is a race/creature, weapon/item, clan/sect, location/realm, or cultivation concept/lore: set 'name' to standard name and set 'category' to exactly one of: "Character", "Race / Creature", "Weapon / Item", "Clan / Sect", "Location / Realm", "Concept / Lore".
-4. Extract:
+Identify and analyze "${cleanName}" in "${bookTitle}" (or its established literary, fantasy, mythological, Vedic, or philosophical lore):
+1. Canonical & Lore Recognition:
+   - Identify "${cleanName}". This includes characters, deities, sages, mythological figures, races/creatures (e.g. "elven" -> Elves, "dwarven" -> Dwarves), sacred sites, forests, hills, cities, realms (e.g. "Ravenhill", "Naimiṣāraṇya", "Cloud Recesses"), weapons/items, clans/sects, or spiritual/philosophical concepts.
+   - If "${cleanName}" is an adjective, plural, or variant form (e.g. "elven", "dwarven", "orcs"), resolve it to the underlying canon entity (e.g. "Elves", category "Race / Creature") and ALWAYS include "${cleanName}" in the 'aliases' array.
+   - Even if "${cleanName}" is a secondary entity, minor sage, or regional landmark, provide a helpful entry instead of returning empty.
+   - Only return [] if "${cleanName}" is a generic English grammar word with zero lore relevance (e.g. "the", "with", "walked").
+2. Primary Moniker Consolidation:
+   - If "${cleanName}" is a title, courtesy name, or moniker (e.g. "Yiling Laozu" is Wei Wuxian; "Vyasa" is Krishna Dvaipayana Vyasadeva):
+     Set 'name' to the primary canonical name and include "${cleanName}" in 'aliases'.
+3. Category:
+   - Choose exactly ONE from: "Character", "Race / Creature", "Location / Realm", "Weapon / Item", "Clan / Sect", "Concept / Lore".
+4. Details:
    - "name": Standard canonical name
-   - "category": Canonical category
+   - "category": One of the 6 categories above
    - "pinyin_or_chinese": ${isChinese ? 'Chinese Hanzi or Pinyin (e.g. "紫电 / Zǐdiàn")' : 'Strictly empty string ""'}
-   - "aliases": Alternate names, titles, epithets (ALWAYS include "${cleanName}" if different from name)
-   - "affiliation": Associated clan, wielder, creator, or region
-   - "summary": Strictly ONE-SENTENCE, completely spoiler-free introductory description.
-5. Anti-Spoiler: NEVER mention death, murder, execution, or late-story plot fates!
+   - "aliases": Alternate names, titles, variant spellings, and forms (ALWAYS include "${cleanName}")
+   - "affiliation": Associated clan, faction, realm, or wielder
+   - "summary": Exactly ONE sentence spoiler-free introductory description. NEVER mention late-story deaths or tragedies!
 
-Return a JSON array with 1 object (or [] if not canon):
+Return a JSON array with 1 object:
 [
   {
     "name": "Standard Name",
     "category": "Character",
     "pinyin_or_chinese": ${isChinese ? '"Hanzi / Pinyin"' : '""'},
     "aliases": ["Alias 1", "${cleanName}"],
-    "affiliation": "Clan or Affiliation",
+    "affiliation": "Clan, Realm, or Affiliation",
     "summary": "One sentence spoiler-free introductory description."
   }
 ]
