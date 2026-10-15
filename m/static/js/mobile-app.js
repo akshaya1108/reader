@@ -4,7 +4,7 @@
  * reliable paragraph bookmarking, and complete glossary management.
  */
 
-import { api } from './api.js';
+import { api } from './api.js?v=46';
 
 // --- Category Display Configuration ---
 const CATEGORIES = [

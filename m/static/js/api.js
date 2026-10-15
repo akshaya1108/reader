@@ -28,25 +28,21 @@ const KNOWN_CLUSTERS = [
 
 function getEffectiveGeminiApiKey() {
   const DEFAULT_KEY = atob('QVEuQWI4Uk42SU5QdEVtdjRFOTF1aHY5MzhyTGVCM1VkamJRRWpuTlNBQS0ySzk1WGlzdnc=');
-  if (typeof localStorage === 'undefined') return DEFAULT_KEY;
-  const stored = localStorage.getItem('xianxia_gemini_api_key');
-  if (!stored) return DEFAULT_KEY;
-  const trimmed = stored.trim();
-  const deadKeys = [
-    atob('QVEuQWI4Uk42Sk11R1p3VHgzRTVWa3hwdlZMRlBhU0xzWk1zcEZldXlfSHR4aDZCei1xZWc='),
-    atob('QVEuQWI4Uk42Sk11R1p3VHgzRTVWa3hwdlZMRlBhU0xzWk1zcEZldXktSHR4aDZCei1xZWc=')
-  ];
-  if (deadKeys.includes(trimmed)) {
-    try { localStorage.removeItem('xianxia_gemini_api_key'); } catch (_) {}
-    return DEFAULT_KEY;
+  if (typeof localStorage !== 'undefined') {
+    try {
+      const stored = localStorage.getItem('xianxia_gemini_api_key');
+      if (stored && stored.trim() !== DEFAULT_KEY) {
+        localStorage.removeItem('xianxia_gemini_api_key');
+      }
+    } catch (_) {}
   }
-  return trimmed || DEFAULT_KEY;
+  return DEFAULT_KEY;
 }
 
 const GEMINI_MODELS = [
-  'gemini-3.5-flash',
   'gemini-3.1-flash-lite',
   'gemini-3.1-flash-lite-preview',
+  'gemini-3.5-flash',
   'gemini-3.6-flash'
 ];
 
@@ -69,7 +65,7 @@ async function callGeminiDirect(prompt) {
   for (const model of GEMINI_MODELS) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8500);
+      const timeoutId = setTimeout(() => controller.abort(), 6500);
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
       const res = await fetch(url, {
         method: 'POST',
@@ -84,31 +80,29 @@ async function callGeminiDirect(prompt) {
       });
       clearTimeout(timeoutId);
 
-      if (res.ok) {
-        const json = await res.json();
-        const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (text) {
-          let clean = text.replace(/```json/gi, '').replace(/```/g, '').trim();
-          try {
-            const parsed = JSON.parse(clean);
-            if (Array.isArray(parsed) || (parsed && typeof parsed === 'object')) {
-              return Array.isArray(parsed) ? parsed : [parsed];
-            }
-          } catch (_) {
-            const m = clean.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
-            if (m) {
-              try {
-                const parsed = JSON.parse(m[0]);
-                if (Array.isArray(parsed) || (parsed && typeof parsed === 'object')) {
-                  return Array.isArray(parsed) ? parsed : [parsed];
-                }
-              } catch (_) {}
-            }
-          }
-        }
-      } else if (res.status === 503 || res.status === 429 || res.status === 404 || res.status === 400) {
+      if (!res.ok) {
         console.warn(`Gemini model ${model} responded with ${res.status}. Trying next model...`);
         continue;
+      }
+
+      const json = await res.json();
+      const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) {
+        let clean = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+        try {
+          const parsed = JSON.parse(clean);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (parsed && typeof parsed === 'object') return [parsed];
+        } catch (_) {
+          const m = clean.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
+          if (m) {
+            try {
+              const parsed = JSON.parse(m[0]);
+              if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+              if (parsed && typeof parsed === 'object') return [parsed];
+            } catch (_) {}
+          }
+        }
       }
     } catch (err) {
       console.warn(`Gemini model ${model} error:`, err);
@@ -741,10 +735,10 @@ export const api = {
         clearTimeout(timeoutId);
         if (res.ok) {
           const data = await res.json();
-          if (data && data.character) {
+          if (data && data.found && data.character) {
             await this.saveGlossaryEntry(targetBookId, data.character);
+            return data;
           }
-          return data;
         }
       } catch (_) {
         // Backend not on same origin or timed out - proceed to direct Gemini fallback

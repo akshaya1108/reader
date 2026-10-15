@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianxia-mobile-v45';
+const CACHE_NAME = 'xianxia-mobile-v46';
 const STATIC_ASSETS = [
   './',
   './manifest.json',
@@ -39,6 +39,20 @@ self.addEventListener('fetch', (event) => {
 
   // External APIs (Supabase) bypass the service worker completely
   if (url.hostname.includes('supabase.co')) {
+    return;
+  }
+
+  // Network-first for JavaScript files so bug fixes activate immediately online
+  if (url.pathname.endsWith('.js')) {
+    event.respondWith(
+      fetch(event.request).then((response) => {
+        if (response.ok) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      }).catch(() => caches.match(event.request))
+    );
     return;
   }
 
