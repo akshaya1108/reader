@@ -164,8 +164,11 @@
     "chapters_count": 361,
     "total_words": 584681,
     "enable_glossary": true,
-    "last_read_at": "2026-10-13T15:36:34.708Z",
-    "bookmark": null,
+    "last_read_at": "2026-10-13T16:09:56.856+00:00",
+    "bookmark": {
+      "chapter_number": 4,
+      "paragraph_index": 5
+    },
     "bookmarks": [
       {
         "id": "hl_1791024291074_t9pv4n",
@@ -208,15 +211,13 @@
     "description": "Bilbo Baggins, a quiet and comfortable hobbit, is unexpectedly swept into an epic quest by the wizard Gandalf and a company of thirteen dwarves. Together, they embark on a perilous journey to reclaim the Lonely Mountain and its stolen treasure from the fearsome dragon, Smaug. Along the way, Bilbo discovers his own courage and resourcefulness, stumbling upon a mysterious ring that will change the fate of Middle-earth forever.",
     "color": "#5c8672",
     "created_at": "04/10/2026",
-    "last_read_chapter": 7,
+    "last_read_chapter": 24,
     "last_chapter": 1,
     "chapters_count": 28,
     "total_words": 97923,
     "enable_glossary": true,
-    "last_read_at": "2026-10-13T15:32:51.527+00:00",
+    "last_read_at": "2026-10-13T16:14:09.674+00:00",
     "bookmark": {
-      "chapter_number": 7,
-      "paragraph_index": 45,
       "_shared_glossary_id": "the-two-towers"
     },
     "bookmarks": [
