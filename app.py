@@ -41,8 +41,8 @@ os.makedirs(TRASH_CHAPTERS_DIR, exist_ok=True)
 os.makedirs(TRASH_BOOKS_DIR, exist_ok=True)
 
 
-SUPABASE_URL = "https://giqhugtncggxansflxaz.supabase.co"
-SUPABASE_KEY = "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://bhpajsjpimiifmfiqybj.supabase.co")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_publishable_3AORVL5y3dIAqH_UbnfzVg_ruEGFr5O")
 
 def delete_glossary_from_supabase_sync(book_id, char_id=None, char_name=None):
     try:
@@ -666,9 +666,6 @@ def load_glossary(book_id, sync_remote=True):
                     aliases.append(pinyin)
                 entry["aliases"] = aliases
     return data
-
-SUPABASE_URL = "https://giqhugtncggxansflxaz.supabase.co"
-SUPABASE_KEY = "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ"
 
 def push_glossary_to_supabase_async(book_id, entries):
     import threading
