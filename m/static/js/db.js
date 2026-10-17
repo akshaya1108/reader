@@ -4,7 +4,7 @@
  * 100% offline-capable on iOS Safari and modern browsers.
  */
 
-const DB_NAME = 'XianxiaReaderDB';
+const DB_NAME = 'XianxiaReaderDB_Staging';
 const DB_VERSION = 1;
 
 class OfflineDB {
