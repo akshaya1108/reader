@@ -173,7 +173,7 @@ Return a JSON array of objects with the exact schema:
 Only return valid JSON array, no extra commentary or markdown backticks.
 """
 
-    models_to_try = ["gemini-3.1-flash-lite", "gemini-3.1-flash-lite-preview", "gemini-3.5-flash", "gemini-3.6-flash"]
+    models_to_try = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.6-flash"]
     extracted = None
 
     for model_name in models_to_try:
@@ -329,7 +329,7 @@ Return ONLY a valid JSON object with the following fields:
 }}
 """
 
-    models_to_try = ["gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-flash-latest"]
+    models_to_try = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.6-flash"]
     for model_name in models_to_try:
         try:
             from google.genai import types

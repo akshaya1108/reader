@@ -315,7 +315,7 @@ Return a valid JSON array with 1 object (or [] if not canon):
 Only return valid JSON array.
 """
 
-    models_to_try = ["gemini-3.1-flash-lite", "gemini-3.1-flash-lite-preview", "gemini-3.5-flash", "gemini-3.6-flash"]
+    models_to_try = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.6-flash"]
     last_err = None
 
     for model_name in models_to_try:
@@ -665,7 +665,7 @@ Return a valid JSON array of objects:
 Only return valid JSON array.
 """
 
-    models_to_try = ["gemini-3.1-flash-lite", "gemini-3.1-flash-lite-preview", "gemini-3.5-flash", "gemini-3.6-flash"]
+    models_to_try = ["gemini-3.8-flash", "gemini-3.5-flash", "gemini-3.6-flash"]
     last_err = None
 
     for model_name in models_to_try:

@@ -43,7 +43,7 @@ async function fetchWithTimeout(url, options = {}, timeoutMs = 2500) {
 }
 
 function getEffectiveGeminiApiKey() {
-  const DEFAULT_KEY = atob('QVEuQWI4Uk42SU5QdEVtdjRFOTF1aHY5MzhyTGVCM1VkamJRRWpuTlNBQS0ySzk1WGlzdnc=');
+  const DEFAULT_KEY = atob('QVEuQWI4Uk42SjZ1UllwT0lSQmkxWVd6eXBKeFktLVAySVl2MW1oQTFoVTdxQTJOeXNDYVE=');
   if (typeof localStorage !== 'undefined') {
     try {
       const stored = localStorage.getItem('xianxia_gemini_api_key');
@@ -56,8 +56,7 @@ function getEffectiveGeminiApiKey() {
 }
 
 const GEMINI_MODELS = [
-  'gemini-3.1-flash-lite',
-  'gemini-3.1-flash-lite-preview',
+  'gemini-3.8-flash',
   'gemini-3.5-flash',
   'gemini-3.6-flash'
 ];
