@@ -1,4 +1,4 @@
-const CACHE_NAME = 'xianxia-mobile-v50';
+const CACHE_NAME = 'xianxia-mobile-v51';
 const STATIC_ASSETS = [
   './',
   './manifest.json',

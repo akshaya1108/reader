@@ -1139,6 +1139,7 @@ function renderReaderText(rawHtml) {
 
   container.innerHTML = temp.innerHTML;
   applyHighlightsToReader(container);
+  applyBookmarkToReader(container);
 
   // Click on reader image to view full-resolution in a new tab
   container.querySelectorAll('img').forEach(img => {
@@ -1149,6 +1150,30 @@ function renderReaderText(rawHtml) {
       }
     });
   });
+}
+
+function applyBookmarkToReader(container) {
+  if (!container || !state.currentBook) return;
+  let bm = state.currentBook.bookmark;
+  if (!bm) {
+    try {
+      const stored = localStorage.getItem(`xianxia_bookmark_${state.activeBookId}`);
+      if (stored) {
+        bm = JSON.parse(stored);
+        state.currentBook.bookmark = bm;
+      }
+    } catch (_) {}
+  }
+  if (bm && Number(bm.chapter_number) === Number(state.activeChapterNum) && typeof bm.paragraph_index === 'number') {
+    const targetP = container.querySelector(`p[data-p-idx="${bm.paragraph_index}"]`) ||
+                    container.querySelectorAll('p')[bm.paragraph_index];
+    if (targetP) {
+      container.querySelectorAll('p.bookmarked-line').forEach(el => {
+        if (el !== targetP) el.classList.remove('bookmarked-line');
+      });
+      targetP.classList.add('bookmarked-line');
+    }
+  }
 }
 
 // --- Bookmark Handling (Silent without popup pill as requested) ---

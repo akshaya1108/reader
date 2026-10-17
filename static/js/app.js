@@ -566,10 +566,22 @@ function setupDesktopSyncPopover() {
         lastSync = new Date();
         updateDisplay();
         if (!silent) showToast('Synced with Supabase successfully.');
-        await loadBooks();
+        
+        // Refresh books metadata silently in-place without resetting active book, page, or view
+        try {
+          const bRes = await fetch('/api/books');
+          if (bRes.ok) {
+            const updatedBooks = await bRes.json();
+            updatedBooks.forEach((b, idx) => {
+              if (b._orderIndex === undefined) b._orderIndex = idx;
+            });
+            state.books = updatedBooks;
+            renderBooksList();
+            renderHomeBooksGrid();
+          }
+        } catch (_) {}
+
         if (state.activeBookId) {
-          await loadChapters(state.activeBookId);
-          await loadGlossary(state.activeBookId);
           const currentBook = state.books.find(b => b.id === state.activeBookId);
           if (currentBook) {
             const lastRead = currentBook.last_read_chapter || 1;
@@ -629,18 +641,29 @@ async function loadBooks() {
     renderHomeBooksGrid();
     
     if (state.books.length > 0) {
-      // Pick first book or persisted book
-      const lastBookId = localStorage.getItem('xianxia_last_book') || state.books[0].id;
-      const targetBook = state.books.find(b => b.id === lastBookId) || state.books[0];
-      await selectBook(targetBook.id);
-    }
-    
-    const wasReaderOpen = localStorage.getItem('xianxia_reader_open') === 'true';
-    const savedView = localStorage.getItem('xianxia_current_view');
-    if (wasReaderOpen || savedView === 'book') {
-      showBookView();
-    } else {
-      showHomeView();
+      if (state.activeBookId && state.books.some(b => b.id === state.activeBookId)) {
+        // Book already active: preserve user navigation, view, and pagination
+        const currentBook = state.books.find(b => b.id === state.activeBookId);
+        updateBookmarkButton();
+        if (elements.btnContinueReading && currentBook) {
+          const lastRead = currentBook.last_read_chapter || 1;
+          elements.btnContinueReading.innerHTML = `${ICONS.book} <span>Continue (Ch ${lastRead})</span>`;
+          elements.btnContinueReading.onclick = () => openReader(lastRead);
+        }
+      } else {
+        // Initial load: pick first book or persisted book
+        const lastBookId = localStorage.getItem('xianxia_last_book') || state.books[0].id;
+        const targetBook = state.books.find(b => b.id === lastBookId) || state.books[0];
+        await selectBook(targetBook.id);
+        
+        const wasReaderOpen = localStorage.getItem('xianxia_reader_open') === 'true';
+        const savedView = localStorage.getItem('xianxia_current_view');
+        if (wasReaderOpen || savedView === 'book') {
+          showBookView();
+        } else {
+          showHomeView();
+        }
+      }
     }
   } catch (err) {
     console.error('Error loading books:', err);
@@ -1819,6 +1842,18 @@ function renderReaderContent(rawHtml) {
   // Attach Click Events to all .char-tag elements if glossary is enabled
   if (isGlossaryEnabled) {
     setupCharacterClickListeners();
+  }
+
+  // Re-apply active bookmark line if current chapter contains the bookmark
+  const bookmark = getBookBookmark(state.activeBookId);
+  if (bookmark && state.activeChapter && Number(bookmark.chapter_number) === Number(state.activeChapter.chapter_number)) {
+    const targetBlock = blocks[bookmark.paragraph_index];
+    if (targetBlock) {
+      elements.readerContentBody.querySelectorAll('.bookmarked-line').forEach(el => {
+        if (el !== targetBlock) el.classList.remove('bookmarked-line');
+      });
+      targetBlock.classList.add('bookmarked-line');
+    }
   }
 }
 
