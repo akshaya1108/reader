@@ -33,6 +33,8 @@ TRASH_CHAPTERS_DIR = os.path.join(TRASH_DIR, "chapters")
 TRASH_BOOKS_DIR = os.path.join(TRASH_DIR, "books")
 MOBILE_DIR = os.path.join(BASE_DIR, "m")
 MOBILE_STATIC_DIR = os.path.join(MOBILE_DIR, "static")
+PREVIEW_DIR = os.path.join(BASE_DIR, "preview")
+PREVIEW_STATIC_DIR = os.path.join(PREVIEW_DIR, "static")
 
 os.makedirs(DATA_DIR, exist_ok=True)
 os.makedirs(GLOSSARY_DIR, exist_ok=True)
@@ -89,6 +91,27 @@ def save_sync_meta(meta):
             json.dump(meta, f, indent=2, ensure_ascii=False)
     except Exception as e:
         print(f"Notice saving sync meta: {e}")
+
+def patch_book_progress_to_supabase_async(book_id, ch_num, now_iso=None, bookmark=None):
+    import threading
+    def _run():
+        try:
+            import requests
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "Content-Type": "application/json"
+            }
+            body = {
+                "last_read_chapter": ch_num,
+                "last_read_at": now_iso or datetime.datetime.now().isoformat()
+            }
+            if bookmark is not None:
+                body["bookmark"] = bookmark
+            requests.patch(f"{SUPABASE_URL}/rest/v1/books?id=eq.{book_id}", headers=headers, json=body, timeout=4)
+        except Exception:
+            pass
+    threading.Thread(target=_run, daemon=True).start()
 
 def push_books_to_supabase_async(books):
     import threading
@@ -319,7 +342,7 @@ def load_books():
                 pass
         return []
 
-def save_books(books):
+def save_books(books, push_remote=True):
     if not isinstance(books, list):
         return
     bak_file = f"{BOOKS_FILE}.bak"
@@ -347,7 +370,8 @@ def save_books(books):
             pass
 
     os.replace(tmp_file, BOOKS_FILE)
-    push_books_to_supabase_async(books)
+    if push_remote:
+        push_books_to_supabase_async(books)
 
 try:
     push_books_to_supabase_async(load_books())
@@ -510,78 +534,19 @@ def load_glossary(book_id, sync_remote=True):
                             pass
 
             if successful_remote_query:
-                # 1. Filter out remote entries that match tombstones (prevent resurrection)
+                # 1. Filter out remote entries that match tombstones (prevent resurrection of explicitly deleted terms)
                 valid_remote = []
                 for rentry in remote_entries:
                     rid = rentry.get("id") or slugify(rentry.get("name", ""))
                     rslug = slugify(rentry.get("name", ""))
                     rname_low = rentry.get("name", "").strip().lower()
                     if rid in tombstones or rslug in tombstones or rname_low in tombstones:
-                        # Entry was marked deleted, ensure Supabase drops it
-                        try:
-                            for tid in cluster_bids:
-                                requests.delete(
-                                    f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{rid}",
-                                    headers=headers,
-                                    timeout=2
-                                )
-                        except Exception:
-                            pass
-                    else:
-                        valid_remote.append(rentry)
+                        continue
+                    valid_remote.append(rentry)
                 remote_entries = valid_remote
 
-                # 2. Reconcile deletions that occurred remotely (e.g. on mobile phone)
-                cluster_prev_synced = set()
-                for tid in cluster_bids:
-                    cluster_prev_synced.update(last_synced.get(tid, []))
-
-                remote_id_set = {r.get("id") for r in remote_entries if r.get("id")}
-                remote_slug_set = {slugify(r.get("name", "")) for r in remote_entries if r.get("name")}
-                remote_name_set = {r.get("name", "").strip().lower() for r in remote_entries if r.get("name")}
-
+                # 2. Merge active remote entries into data (additive and timestamp-based updates)
                 changed = False
-                if cluster_prev_synced and len(remote_entries) > 0:
-                    pruned_data = []
-                    candidates_to_prune = []
-                    for item in data:
-                        iid = item.get("id") or slugify(item.get("name", ""))
-                        islug = slugify(item.get("name", ""))
-                        iname_low = item.get("name", "").strip().lower()
-
-                        was_synced = (iid in cluster_prev_synced or islug in cluster_prev_synced or iname_low in cluster_prev_synced)
-                        in_remote = (iid in remote_id_set or islug in remote_slug_set or iname_low in remote_name_set)
-                        in_tombstones = (iid in tombstones or islug in tombstones or iname_low in tombstones)
-
-                        if in_tombstones or (was_synced and not in_remote):
-                            candidates_to_prune.append(item)
-                        else:
-                            pruned_data.append(item)
-
-                    if len(candidates_to_prune) > max(3, len(data) * 0.3):
-                        print(f"[Safety Warning] Aborting mass-prune of {len(candidates_to_prune)}/{len(data)} glossary items for {canonical_id}.")
-                        pruned_data = data
-                    else:
-                        for item in candidates_to_prune:
-                            iid = item.get("id") or slugify(item.get("name", ""))
-                            islug = slugify(item.get("name", ""))
-                            iname_low = item.get("name", "").strip().lower()
-                            tombstones[iid] = now.isoformat()
-                            if islug:
-                                tombstones[islug] = now.isoformat()
-                            if iname_low:
-                                tombstones[iname_low] = now.isoformat()
-                            for tid in cluster_bids:
-                                try:
-                                    requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{iid}", headers=headers, timeout=2)
-                                    if islug and islug != iid:
-                                        requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{islug}", headers=headers, timeout=2)
-                                except Exception:
-                                    pass
-                            changed = True
-                    data = pruned_data
-
-                # 3. Merge active remote entries into data
                 local_by_name = {c.get("name", "").lower().strip(): c for c in data if c.get("name")}
                 local_by_id = {c.get("id"): c for c in data if c.get("id")}
 
@@ -937,6 +902,22 @@ def pwa_manifest():
 def pwa_sw():
     return send_from_directory(MOBILE_DIR, "sw.js", mimetype="application/javascript")
 
+@app.route("/preview/")
+def preview_index():
+    return send_from_directory(PREVIEW_DIR, "index.html")
+
+@app.route("/preview/static/<path:filename>")
+def preview_static(filename):
+    return send_from_directory(PREVIEW_STATIC_DIR, filename)
+
+@app.route("/preview/manifest.json")
+def preview_manifest():
+    return send_from_directory(PREVIEW_DIR, "manifest.json", mimetype="application/manifest+json")
+
+@app.route("/preview/sw.js")
+def preview_sw():
+    return send_from_directory(PREVIEW_DIR, "sw.js", mimetype="application/javascript")
+
 
 @app.route("/api/status")
 def status():
@@ -1050,59 +1031,58 @@ def sync_supabase_endpoint():
 # Books CRUD
 @app.route("/api/books", methods=["GET"])
 def list_books():
-    # If requested with ?sync=1, pull latest reading progress from Supabase first
-    if request.args.get("sync") == "1":
-        try:
-            headers = {
-                "apikey": SUPABASE_KEY,
-                "Authorization": f"Bearer {SUPABASE_KEY}"
-            }
-            res_b = requests.get(
-                f"{SUPABASE_URL}/rest/v1/books?select=id,last_read_chapter,last_read_at,bookmark,bookmarks",
-                headers=headers,
-                timeout=2.0
-            )
-            if res_b.ok:
-                remote_books = res_b.json()
-                local_books = load_books()
-                changed = False
-                bmap = {rb["id"]: rb for rb in remote_books if rb.get("id")}
-                for lb in local_books:
-                    rb = bmap.get(lb["id"])
-                    if rb:
-                        r_at = rb.get("last_read_at") or ""
-                        l_at = lb.get("last_read_at") or ""
-                        r_bm = rb.get("bookmark")
-                        l_bm = lb.get("bookmark")
+    # Always pull latest reading progress from Supabase if newer (with 1.5s fast timeout)
+    try:
+        headers = {
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        }
+        res_b = requests.get(
+            f"{SUPABASE_URL}/rest/v1/books?select=id,last_read_chapter,last_read_at,bookmark,bookmarks",
+            headers=headers,
+            timeout=1.5
+        )
+        if res_b.ok:
+            remote_books = res_b.json()
+            local_books = load_books()
+            changed = False
+            bmap = {rb["id"]: rb for rb in remote_books if rb.get("id")}
+            for lb in local_books:
+                rb = bmap.get(lb["id"])
+                if rb:
+                    r_at = rb.get("last_read_at") or ""
+                    l_at = lb.get("last_read_at") or ""
+                    r_bm = rb.get("bookmark")
+                    l_bm = lb.get("bookmark")
 
-                        r_bm_clean = {k: v for k, v in r_bm.items() if not k.startswith("_")} if isinstance(r_bm, dict) else r_bm
-                        l_bm_clean = {k: v for k, v in l_bm.items() if not k.startswith("_")} if isinstance(l_bm, dict) else l_bm
+                    r_bm_clean = {k: v for k, v in r_bm.items() if not k.startswith("_")} if isinstance(r_bm, dict) else r_bm
+                    l_bm_clean = {k: v for k, v in l_bm.items() if not k.startswith("_")} if isinstance(l_bm, dict) else l_bm
 
-                        should_adopt = False
-                        if r_at and (not l_at or r_at >= l_at):
-                            should_adopt = True
-                        elif r_bm_clean != l_bm_clean and r_at:
-                            should_adopt = True
+                    should_adopt = False
+                    if r_at and (not l_at or r_at >= l_at):
+                        should_adopt = True
+                    elif r_bm_clean != l_bm_clean and r_at:
+                        should_adopt = True
 
-                        if should_adopt:
-                            if rb.get("last_read_chapter"):
-                                lb["last_read_chapter"] = rb["last_read_chapter"]
-                            if r_bm is not None:
-                                new_bm = dict(r_bm) if isinstance(r_bm, dict) else {}
-                                if lb.get("shared_glossary_id"):
-                                    new_bm["_shared_glossary_id"] = lb["shared_glossary_id"]
-                                lb["bookmark"] = new_bm if ("chapter_number" in new_bm or "_shared_glossary_id" in new_bm) else None
+                    if should_adopt:
+                        if rb.get("last_read_chapter"):
+                            lb["last_read_chapter"] = rb["last_read_chapter"]
+                        if r_bm is not None:
+                            new_bm = dict(r_bm) if isinstance(r_bm, dict) else {}
+                            if lb.get("shared_glossary_id"):
+                                new_bm["_shared_glossary_id"] = lb["shared_glossary_id"]
+                            lb["bookmark"] = new_bm if ("chapter_number" in new_bm or "_shared_glossary_id" in new_bm) else None
+                        else:
+                            if lb.get("shared_glossary_id"):
+                                lb["bookmark"] = {"_shared_glossary_id": lb["shared_glossary_id"]}
                             else:
-                                if lb.get("shared_glossary_id"):
-                                    lb["bookmark"] = {"_shared_glossary_id": lb["shared_glossary_id"]}
-                                else:
-                                    lb["bookmark"] = None
-                            lb["last_read_at"] = r_at or datetime.datetime.now().isoformat()
-                            changed = True
-                if changed:
-                    save_books(local_books)
-        except Exception:
-            pass
+                                lb["bookmark"] = None
+                        lb["last_read_at"] = r_at or datetime.datetime.now().isoformat()
+                        changed = True
+            if changed:
+                save_books(local_books, push_remote=False)
+    except Exception:
+        pass
 
     books = load_books()
     # Enrich with chapter counts and total words
@@ -2023,13 +2003,15 @@ def get_chapter(book_id, ch_num):
         modified = False
         for b in books:
             if b.get("id") == book_id:
+                now_iso = datetime.datetime.now().isoformat()
                 b["last_read_chapter"] = ch_num
-                b["last_read_at"] = datetime.datetime.now().isoformat()
+                b["last_read_at"] = now_iso
                 modified = True
+                patch_book_progress_to_supabase_async(book_id, ch_num, now_iso, b.get("bookmark"))
                 break
         if modified:
-            save_books(books)
-    except Exception as e:
+            save_books(books, push_remote=False)
+    except Exception:
         pass
 
     with open(filepath, "r", encoding="utf-8") as f:

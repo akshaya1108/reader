@@ -22,9 +22,6 @@ const UPSERT_HEADERS = {
 
 let lastSyncTimestamp = new Date();
 
-const KNOWN_CLUSTERS = [
-  ['the-fellowship-of-the-ring', 'the-two-towers', 'the-return-of-the-king']
-];
 
 async function fetchWithTimeout(url, options = {}, timeoutMs = 2500) {
   const controller = new AbortController();
@@ -57,9 +54,10 @@ function getEffectiveGeminiApiKey() {
 
 const GEMINI_MODELS = [
   'gemini-3.1-flash-lite',
-  'gemini-3.1-flash-lite-preview',
+  'gemini-3.5-flash-lite',
   'gemini-3.5-flash',
-  'gemini-3.6-flash'
+  'gemini-3.6-flash',
+  'gemini-flash-latest'
 ];
 
 function isChineseNovel(title = '', genre = '') {
@@ -81,7 +79,7 @@ async function callGeminiDirect(prompt) {
   for (const model of GEMINI_MODELS) {
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 6500);
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
       const res = await fetch(url, {
         method: 'POST',
@@ -89,7 +87,9 @@ async function callGeminiDirect(prompt) {
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
-            responseMimeType: 'application/json'
+            responseMimeType: 'application/json',
+            maxOutputTokens: 250,
+            temperature: 0.1
           }
         }),
         signal: controller.signal
@@ -289,15 +289,7 @@ export const api = {
           const books = await res.json();
           // Normalize fields for frontend compatibility
           const normalized = books.map(b => {
-            let sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
-            if (!sharedId) {
-              for (const cl of KNOWN_CLUSTERS) {
-                if (cl.includes(b.id)) {
-                  sharedId = 'the-two-towers';
-                  break;
-                }
-              }
-            }
+            const sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
             return {
               ...b,
               cover: b.cover_image || b.cover || '',
@@ -324,15 +316,7 @@ export const api = {
     // Offline / network failure fallback
     const localBooks = await offlineDB.getBooks();
     return localBooks.map(b => {
-      let sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
-      if (!sharedId) {
-        for (const cl of KNOWN_CLUSTERS) {
-          if (cl.includes(b.id)) {
-            sharedId = 'the-two-towers';
-            break;
-          }
-        }
-      }
+      const sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
       return {
         ...b,
         cover: b.cover_image || b.cover || '',
@@ -535,9 +519,6 @@ export const api = {
   },
 
   async getGlossaryCanonicalId(bookId) {
-    for (const cl of KNOWN_CLUSTERS) {
-      if (cl.includes(bookId)) return 'the-two-towers';
-    }
     try {
       const books = await this.getBooks();
       const targetBook = books.find(b => b.id === bookId);
@@ -773,44 +754,24 @@ export const api = {
         const bookTitle = book ? (book.title || book.id) : targetBookId;
         const genre = book ? (book.genre || '') : '';
         const isChinese = isChineseNovel(bookTitle, genre);
-        const prompt = `
-You are an expert canon scholar and lore archivist for "${bookTitle}".
-The reader is reading "${bookTitle}" and wants to add the term "${cleanName}" to their glossary.
-${isChinese
-  ? 'This is a Chinese Xianxia/Wuxia/Danmei novel. You may extract Chinese characters, Hanzi, and Pinyin.'
-  : 'CRITICAL DIRECTIVE: "' + bookTitle + '" is NOT a Chinese novel. Do NOT generate Chinese characters or pinyin. Set "pinyin_or_chinese" to "".'}
-
-Identify and analyze "${cleanName}" in "${bookTitle}" (or its established literary, fantasy, mythological, Vedic, or philosophical lore):
-1. Canonical & Lore Recognition:
-   - Identify "${cleanName}". This includes characters, deities, sages, mythological figures, races/creatures (e.g. "elven" -> Elves, "dwarven" -> Dwarves), sacred sites, forests, hills, cities, realms (e.g. "Ravenhill", "Naimiṣāraṇya", "Cloud Recesses"), weapons/items, clans/sects, or spiritual/philosophical concepts.
-   - If "${cleanName}" is an adjective, plural, or variant form (e.g. "elven", "dwarven", "orcs"), resolve it to the underlying canon entity (e.g. "Elves", category "Race / Creature") and ALWAYS include "${cleanName}" in the 'aliases' array.
-   - Even if "${cleanName}" is a secondary entity, minor sage, or regional landmark, provide a helpful entry instead of returning empty.
-   - Only return [] if "${cleanName}" is a generic English grammar word with zero lore relevance (e.g. "the", "with", "walked").
-2. Primary Moniker Consolidation:
-   - If "${cleanName}" is a title, courtesy name, or moniker (e.g. "Yiling Laozu" is Wei Wuxian; "Vyasa" is Krishna Dvaipayana Vyasadeva):
-     Set 'name' to the primary canonical name and include "${cleanName}" in 'aliases'.
-3. Category:
-   - Choose exactly ONE from: "Character", "Race / Creature", "Location / Realm", "Weapon / Item", "Clan / Sect", "Concept / Lore".
-4. Details:
-   - "name": Standard canonical name
-   - "category": One of the 6 categories above
-   - "pinyin_or_chinese": ${isChinese ? 'Chinese Hanzi or Pinyin (e.g. "紫电 / Zǐdiàn")' : 'Strictly empty string ""'}
-   - "aliases": Alternate names, titles, variant spellings, and forms (ALWAYS include "${cleanName}")
-   - "affiliation": Associated clan, faction, realm, or wielder
-   - "summary": Exactly ONE sentence spoiler-free introductory description. NEVER mention late-story deaths or tragedies!
+        const prompt = `You are a canon lore expert for "${bookTitle}".
+Identify the term "${cleanName}" in the novel (or its broader fantasy, mythological, Vedic, or literary lore).
+If "${cleanName}" is an adjective, plural, or variant (e.g. "elven" -> Elves, "dwarven" -> Dwarves, "orcs" -> Orcs), resolve to canonical entity and keep "${cleanName}" in aliases.
+If "${cleanName}" is a title, moniker, or courtesy name (e.g. "Yiling Laozu" -> Wei Wuxian, "Vyasa" -> Krishna Dvaipayana Vyasadeva), resolve to primary canonical name and keep "${cleanName}" in aliases.
+Category must be exactly one of: "Character", "Race / Creature", "Location / Realm", "Weapon / Item", "Clan / Sect", "Concept / Lore".
+Summary must be exactly ONE concise spoiler-free sentence.
 
 Return a JSON array with 1 object:
 [
   {
-    "name": "Standard Name",
+    "name": "Standard Canonical Name",
     "category": "Character",
     "pinyin_or_chinese": ${isChinese ? '"Hanzi / Pinyin"' : '""'},
-    "aliases": ["Alias 1", "${cleanName}"],
+    "aliases": ["${cleanName}"],
     "affiliation": "Clan, Realm, or Affiliation",
-    "summary": "One sentence spoiler-free introductory description."
+    "summary": "One concise spoiler-free sentence introductory description."
   }
-]
-`;
+]`;
 
         const dataArr = await callGeminiDirect(prompt);
         if (Array.isArray(dataArr) && dataArr.length > 0) {

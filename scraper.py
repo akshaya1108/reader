@@ -255,67 +255,29 @@ def lookup_single_entity(query: str, novel_title: str, genre: str = "") -> Tuple
         return [], "Generic common word; not an official novel entity."
 
     is_chinese = is_chinese_novel(novel_title, genre)
+    py_rule = '"pinyin_or_chinese": "Hanzi / Pinyin",' if is_chinese else '"pinyin_or_chinese": "",'
+    py_desc = 'Chinese Hanzi or Pinyin (e.g. "紫电 / Zǐdiàn")' if is_chinese else 'Strictly empty string ""'
 
-    # Fetch wiki article if exists
-    wiki_text = ""
-    fandom_url = guess_fandom_url(novel_title, character_name=q_clean)
-    if fandom_url:
-        wiki_text, _, _ = fetch_fandom_via_api(fandom_url)
+    prompt = f"""You are a canon lore expert for "{novel_title}".
+Identify the term "{q_clean}" in the novel (or its broader fantasy, mythological, Vedic, or literary lore).
+If "{q_clean}" is an adjective, plural, or variant (e.g. "elven" -> Elves, "dwarven" -> Dwarves, "orcs" -> Orcs), resolve to canonical entity and keep "{q_clean}" in aliases.
+If "{q_clean}" is a title, moniker, or courtesy name (e.g. "Yiling Laozu" -> Wei Wuxian, "Vyasa" -> Krishna Dvaipayana Vyasadeva), resolve to primary canonical name and keep "{q_clean}" in aliases.
+Category must be exactly one of: "Character", "Race / Creature", "Location / Realm", "Weapon / Item", "Clan / Sect", "Concept / Lore".
+Summary must be exactly ONE concise spoiler-free sentence.
 
-    if is_chinese:
-        intro_desc = f'You are an expert canon scholar for translated Xianxia, Wuxia, and Danmei literature.\nThe user is reading "{novel_title}" and wants to identify the term "{q_clean}".'
-        pinyin_rule = "- 'pinyin_or_chinese': Chinese Hanzi or Pinyin (e.g. \"传送符\" or \"Chuánsòng Fú\")"
-        aliases_rule = f'- \'aliases\': Alternate names, pinyin, and translations (ALWAYS include "{q_clean}" if different from name)'
-        pinyin_schema = '"pinyin_or_chinese": "Hanzi / Pinyin",'
-    else:
-        intro_desc = f'You are an expert canon scholar for the novel "{novel_title}".\nThe user is reading "{novel_title}" and wants to identify the term "{q_clean}".\nCRITICAL DIRECTIVE: "{novel_title}" is NOT a Chinese, Xianxia, or Danmei novel. Under NO circumstances should you produce any Chinese characters, Hanzi, or Pinyin romanizations.'
-        pinyin_rule = "- 'pinyin_or_chinese': Strictly empty string \"\". Do NOT generate Chinese characters or pinyin for non-Chinese works."
-        aliases_rule = f'- \'aliases\': Alternate in-universe names, titles, and epithets (ALWAYS include "{q_clean}" if different from name). Do NOT include any Chinese or pinyin translations.'
-        pinyin_schema = '"pinyin_or_chinese": "",'
-
-    prompt = f"""
-{intro_desc}
-
-{f"Wiki Text:\n{wiki_text[:8000]}" if wiki_text else ""}
-
-Analyze the term "{q_clean}" in "{novel_title}" (or its broader literary, fantasy, mythological, or Vedic lore):
-1. Canonical & Lore Recognition:
-   - Identify "{q_clean}". This includes characters, deities, sages, mythological beings, races/creatures (e.g. "elven" -> Elves, "dwarven" -> Dwarves), sacred sites, forests, hills, cities, realms (e.g. "Ravenhill", "Naimiṣāraṇya", "Cloud Recesses"), weapons/items, clans/sects, or spiritual/philosophical concepts.
-   - If "{q_clean}" is an adjective, plural, or variant form (e.g. "elven", "dwarven", "orcs"), resolve it to the underlying canon entity (e.g. "Elves", category "Race / Creature") and ALWAYS include "{q_clean}" in the 'aliases' array.
-   - Even if "{q_clean}" is a secondary entity, minor sage, or regional landmark, provide a helpful entry instead of returning empty.
-   - Only return [] if "{q_clean}" is a generic grammar word with zero lore relevance (e.g. "the", "with", "walked").
-2. Primary Character Moniker Consolidation:
-   - If "{q_clean}" is a courtesy name, birth name, title, epithet, or moniker of an established primary character (e.g. "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji; "San Lang" is Hua Cheng; "Vyasa" is Krishna Dvaipayana Vyasadeva):
-     Set 'name' to the character's primary canonical name and include "{q_clean}" in 'aliases'.
-3. Distinct Races, Creatures, Weapons, Items, Clans, Locations, or Concepts:
-   - Set 'category' to EXACTLY ONE OF:
-     "Character", "Race / Creature", "Weapon / Item", "Clan / Sect", "Location / Realm", "Concept / Lore".
-4. Extract:
-   - 'name': Standard name
-   - 'category': One of the 6 canonical categories above
-   {pinyin_rule}
-   {aliases_rule}
-   - 'sect_or_affiliation': Associated clan, wielder, creator, or region
-   - 'summary': Strictly ONE-SENTENCE, completely spoiler-free introductory description.
-5. Critical Anti-Spoiler Rules:
-   - NEVER mention death, murder, execution, or late-story plot fates!
-   - Describe ONLY what/who it is when introduced.
-
-Return a valid JSON array with 1 object (or [] if not canon):
+Return a JSON array with 1 object:
 [
   {{
-    "name": "Standard Name",
+    "name": "Standard Canonical Name",
     "category": "Character",
-    {pinyin_schema}
-    "aliases": ["Alias 1", "{q_clean}"],
-    "sect_or_affiliation": "Affiliation or Clan",
-    "summary": "One sentence spoiler-free introductory description."
+    {py_rule}
+    "aliases": ["{q_clean}"],
+    "affiliation": "Clan, Realm, or Affiliation",
+    "summary": "One concise spoiler-free sentence introductory description."
   }}
-]
-Only return valid JSON array.
-"""
+]"""
 
-    models_to_try = ["gemini-3.1-flash-lite", "gemini-3.1-flash-lite-preview", "gemini-3.5-flash", "gemini-3.6-flash"]
+    models_to_try = ["gemini-3.1-flash-lite", "gemini-3.5-flash-lite", "gemini-3.5-flash", "gemini-3.6-flash"]
     last_err = None
 
     for model_name in models_to_try:
@@ -325,7 +287,9 @@ Only return valid JSON array.
                 model=model_name,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    response_mime_type="application/json"
+                    response_mime_type="application/json",
+                    max_output_tokens=250,
+                    temperature=0.1
                 )
             )
             content = response.text.strip()
