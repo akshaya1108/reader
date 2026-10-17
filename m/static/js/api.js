@@ -26,6 +26,22 @@ const KNOWN_CLUSTERS = [
   ['the-fellowship-of-the-ring', 'the-two-towers', 'the-return-of-the-king']
 ];
 
+async function fetchWithTimeout(url, options = {}, timeoutMs = 2500) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const res = await fetch(url, {
+      ...options,
+      signal: options.signal || controller.signal
+    });
+    clearTimeout(timer);
+    return res;
+  } catch (err) {
+    clearTimeout(timer);
+    throw err;
+  }
+}
+
 function getEffectiveGeminiApiKey() {
   const DEFAULT_KEY = atob('QVEuQWI4Uk42SU5QdEVtdjRFOTF1aHY5MzhyTGVCM1VkamJRRWpuTlNBQS0ySzk1WGlzdnc=');
   if (typeof localStorage !== 'undefined') {
@@ -265,10 +281,10 @@ export const api = {
   async getBooks() {
     if (this.isOnline()) {
       try {
-        const res = await fetch(`${SUPABASE_URL}/rest/v1/books?select=*&order=title.asc`, {
+        const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/books?select=*&order=title.asc`, {
           headers: HEADERS,
           cache: 'no-store'
-        });
+        }, 2500);
         if (res.ok) {
           const books = await res.json();
           // Normalize fields for frontend compatibility
@@ -301,7 +317,7 @@ export const api = {
           return normalized;
         }
       } catch (e) {
-        console.warn('Network error loading books from cloud, falling back to local DB:', e);
+        console.warn('Cloud books fetch timeout or network error, immediately using local cache:', e);
       }
     }
 
@@ -437,9 +453,10 @@ export const api = {
     // 1. If online, fetch fresh list from cloud or local server first
     if (this.isOnline()) {
       try {
-        const res = await fetch(
+        const res = await fetchWithTimeout(
           `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&select=chapter_number,title,word_count&order=chapter_number.asc`,
-          { headers: HEADERS, cache: 'no-store' }
+          { headers: HEADERS, cache: 'no-store' },
+          2500
         );
         if (res.ok) {
           const list = await res.json();
@@ -449,7 +466,7 @@ export const api = {
           return list;
         }
       } catch (e) {
-        console.warn('Network error loading chapters list from cloud:', e);
+        console.warn('Network timeout or error loading chapters list from cloud:', e);
       }
     }
 
@@ -470,9 +487,10 @@ export const api = {
     // 2. Delete from Supabase if online
     if (this.isOnline()) {
       try {
-        await fetch(
+        await fetchWithTimeout(
           `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&chapter_number=eq.${num}`,
-          { method: 'DELETE', headers: HEADERS }
+          { method: 'DELETE', headers: HEADERS },
+          3000
         );
         lastSyncTimestamp = new Date();
       } catch (e) {
@@ -488,9 +506,10 @@ export const api = {
     // 1. If online, fetch fresh chapter from cloud or local server first so chapter edits reflect
     if (this.isOnline()) {
       try {
-        const res = await fetch(
+        const res = await fetchWithTimeout(
           `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&chapter_number=eq.${num}&select=*`,
-          { headers: HEADERS, cache: 'no-store' }
+          { headers: HEADERS, cache: 'no-store' },
+          3000
         );
         if (res.ok) {
           const rows = await res.json();
@@ -502,7 +521,7 @@ export const api = {
           }
         }
       } catch (e) {
-        console.warn(`Failed to fetch chapter ${num} from cloud:`, e);
+        console.warn(`Cloud fetch chapter ${num} timed out or failed, falling back to offline cache:`, e);
       }
     }
 
@@ -533,9 +552,10 @@ export const api = {
 
     if (this.isOnline()) {
       try {
-        const res = await fetch(
+        const res = await fetchWithTimeout(
           `${SUPABASE_URL}/rest/v1/glossary?book_id=eq.${encodeURIComponent(targetId)}&select=*&order=name.asc`,
-          { headers: HEADERS, cache: 'no-store' }
+          { headers: HEADERS, cache: 'no-store' },
+          2500
         );
         if (res.ok) {
           const entries = await res.json();
@@ -1176,10 +1196,10 @@ Return a JSON array with 1 object:
     }
 
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/books?select=id&limit=1`, {
+      const res = await fetchWithTimeout(`${SUPABASE_URL}/rest/v1/books?select=id&limit=1`, {
         headers: HEADERS,
         cache: 'no-store'
-      });
+      }, 3000);
       const cloudOk = res.ok;
 
       // Flush sync queue in background
@@ -1194,8 +1214,8 @@ Return a JSON array with 1 object:
     } catch (e) {
       return {
         online: false,
-        cloudStatus: 'Connection Error',
-        geminiStatus: 'Unavailable',
+        cloudStatus: 'Connection Timeout (Local mode active)',
+        geminiStatus: 'Unavailable Offline',
         lastSync: lastSyncTimestamp
       };
     }

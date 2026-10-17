@@ -4,7 +4,7 @@ import re
 import datetime
 import html
 import urllib.parse
-from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory, redirect
 from dotenv import load_dotenv
 import requests
 import threading
@@ -133,8 +133,24 @@ def push_books_to_supabase_async(books):
                 }
                 payload.append(row)
             if payload:
-                res = requests.post(url, headers=headers, json=payload, timeout=6)
-                print(f"Supabase books push status: {res.status_code}")
+                batch_ok = False
+                try:
+                    res = requests.post(url, headers=headers, json=payload, timeout=15)
+                    if res.status_code in (200, 201):
+                        print(f"Supabase books batch push status: {res.status_code} ({len(payload)} books synced)")
+                        batch_ok = True
+                    else:
+                        print(f"Supabase books batch notice: {res.status_code} - {res.text[:120]}")
+                except Exception as ex:
+                    print(f"Supabase books batch push timed out or error: {ex}, attempting individual push...")
+
+                if not batch_ok:
+                    for row in payload:
+                        try:
+                            r = requests.post(url, headers=headers, json=[row], timeout=8)
+                            print(f"Supabase individual book push '{row['id']}': {r.status_code}")
+                        except Exception as e_ind:
+                            print(f"Supabase individual book push notice for '{row['id']}': {e_ind}")
         except Exception as e:
             print(f"Background Supabase books push notice: {e}")
     threading.Thread(target=_run, daemon=True).start()
