@@ -424,14 +424,15 @@
     "category": "Location / Realm",
     "pinyin_or_chinese": "",
     "aliases": [
-      "The Shire"
+      "The Shire",
+      "Country Round"
     ],
     "affiliation": "Hobbits",
     "sect_or_affiliation": "Hobbits",
     "summary": "The Shire is the peaceful, rural homeland of the hobbits, located in the northwestern region of Middle-earth.",
     "mentions": 311,
     "created_at": "2026-10-02T13:06:25.294057+00:00",
-    "updated_at": "2026-10-13T15:11:49.903777+00:00"
+    "updated_at": "2026-10-15T13:40:23.194+00:00"
   },
   {
     "book_id": "test-5",
@@ -1205,12 +1206,13 @@
     "category": "Location / Realm",
     "pinyin_or_chinese": "",
     "aliases": [
-      "Lake-town"
+      "Lake-town",
+      "Long Lake"
     ],
     "affiliation": "Men of Lake-town, Rhovanion",
     "sect_or_affiliation": "Men of Lake-town, Rhovanion",
     "summary": "Also known as Lake-town, it is a settlement of Men built entirely upon wooden pilings over the waters of the Long Lake south of the Lonely Mountain.",
-    "updated_at": "2026-10-13T15:11:50.329358+00:00"
+    "updated_at": "2026-10-15T13:41:51.506+00:00"
   },
   {
     "id": "took-family",
@@ -1650,7 +1652,8 @@
     "affiliation": "Erebor / Lonely Mountain",
     "sect_or_affiliation": "Erebor / Lonely Mountain",
     "summary": "An elevated post and watchtower on the south-western spur of the Lonely Mountain, traditionally used by the Dwarves and their ravens.",
-    "mentions": 0
+    "mentions": 0,
+    "updated_at": "2026-10-13T16:18:45.39177+00:00"
   },
   {
     "id": "smaug",
@@ -1665,6 +1668,35 @@
     "affiliation": "Dragons of Middle-earth",
     "sect_or_affiliation": "Dragons of Middle-earth",
     "summary": "The fearsome and greedy fire-drake of the North who sacked the Dwarf-kingdom of Erebor and claimed its hoarded treasure.",
-    "mentions": 0
+    "mentions": 0,
+    "updated_at": "2026-10-13T15:57:17.884+00:00"
+  },
+  {
+    "id": "thror",
+    "name": "Thror",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "King under the Mountain",
+      "Thror"
+    ],
+    "affiliation": "House of Durin",
+    "sect_or_affiliation": "House of Durin",
+    "summary": "Thror was a King of the Dwarves who ruled over the Lonely Mountain before it was overtaken by a great dragon.",
+    "updated_at": "2026-10-15T13:36:51.702+00:00"
+  },
+  {
+    "id": "withered-heath",
+    "name": "Withered Heath",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "The Withered Heath",
+      "Withered Heath"
+    ],
+    "affiliation": "Ered Mithrin",
+    "sect_or_affiliation": "Ered Mithrin",
+    "summary": "The Withered Heath is a desolate and barren region situated north of the Grey Mountains, known as the breeding ground for the dragons of Middle-earth.",
+    "updated_at": "2026-10-15T13:37:19.468+00:00"
   }
 ]

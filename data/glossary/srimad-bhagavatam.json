@@ -8,14 +8,12 @@
       "Kṛṣṇa",
       "Govinda",
       "Gopala",
-      "Vasudeva",
-      "Mukunda",
-      "Vāsudeva"
+      "Mukunda"
     ],
     "sect_or_affiliation": "Yadu Dynasty",
     "affiliation": "Yadu Dynasty",
     "summary": "The Supreme Personality of Godhead and primary focus of the Srimad Bhagavatam, known for His divine pastimes in Vrindavan, Mathura, and Dvaraka.",
-    "updated_at": "2026-10-13T15:12:16.503895+00:00"
+    "updated_at": "2026-10-15T15:31:28.962+00:00"
   },
   {
     "id": "brahm",
@@ -33,23 +31,6 @@
     "updated_at": "2026-10-13T15:38:40.339690+00:00"
   },
   {
-    "id": "vyasadeva",
-    "name": "Vyasadeva",
-    "category": "Character",
-    "pinyin_or_chinese": "",
-    "aliases": [
-      "Vyāsa",
-      "Krishna Dvaipayana",
-      "Veda Vyasa",
-      "Bādarāyaṇa",
-      "vyasadeva"
-    ],
-    "affiliation": "Vedic Sage / Literary Incarnation",
-    "sect_or_affiliation": "Vedic Sage / Literary Incarnation",
-    "summary": "The revered sage and compiler of the Vedas who authored the Mahabharata, Puranas, and the Srimad Bhagavatam.",
-    "mentions": 0
-  },
-  {
     "id": "naimisaranya",
     "name": "Naimiṣāraṇya",
     "category": "Location / Realm",
@@ -62,7 +43,8 @@
     "affiliation": "Sacred Forest",
     "sect_or_affiliation": "Sacred Forest",
     "summary": "A holy, auspicious forest where thousands of sages gathered under Shaunaka Rishi to hear the recitation of the Srimad Bhagavatam.",
-    "mentions": 0
+    "mentions": 0,
+    "updated_at": "2026-10-13T16:18:40.521811+00:00"
   },
   {
     "id": "sukadeva-gosvami",
@@ -77,6 +59,202 @@
     "affiliation": "Sage",
     "sect_or_affiliation": "Sage",
     "summary": "The exalted self-realized sage and son of Vyasadeva who originally recited the Srimad Bhagavatam to King Parikshit.",
-    "mentions": 0
+    "mentions": 0,
+    "updated_at": "2026-10-15T13:11:35.879+00:00"
+  },
+  {
+    "id": "vishnu",
+    "name": "Vishnu",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Viṣṇu",
+      "Lord Vishnu",
+      "Narayana",
+      "Hari",
+      "Purushottama",
+      "Vāsudeva"
+    ],
+    "affiliation": "Vaikuntha",
+    "sect_or_affiliation": "Vaikuntha",
+    "summary": "The Supreme Being and preserver of the universe, who incarnates in various forms throughout cosmic history to re-establish righteousness and protect His devotees.",
+    "updated_at": "2026-10-15T15:36:11.604+00:00"
+  },
+  {
+    "id": "aunaka",
+    "name": "Śaunaka",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Saunaka",
+      "Shaunaka",
+      "Śaunaka Ṛṣi",
+      "Saunaka Rishi"
+    ],
+    "affiliation": "Sages of Naimiṣāraṇya",
+    "sect_or_affiliation": "Sages of Naimiṣāraṇya",
+    "summary": "A venerable sage and the leader of the assembly of rishis at Naimiṣāraṇya whose profound philosophical inquiries to Sūta Gosvāmī frame the narration of the Srimad Bhagavatam.",
+    "updated_at": "2026-10-15T13:12:33.174+00:00"
+  },
+  {
+    "id": "s-ta-gosv-m",
+    "name": "Sūta Gosvāmī",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ugraśravas",
+      "Ugraśravas Sūta",
+      "Sūta"
+    ],
+    "affiliation": "Sages of Naimiṣāraṇya",
+    "sect_or_affiliation": "Sages of Naimiṣāraṇya",
+    "summary": "A venerated sage and disciple of Śukadeva Gosvāmī who narrates the sacred discourses of the Srimad Bhagavatam to the assembly of sages gathered in the forest of Naimiṣāraṇya.",
+    "updated_at": "2026-10-15T13:13:16.033+00:00"
+  },
+  {
+    "id": "krishna-dvaip-yana-vy-sa",
+    "name": "Vyāsadeva",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Veda Vyāsa",
+      "Bādarāyaṇi",
+      "Vyāsadeva",
+      "Krishna Dvaipāyana"
+    ],
+    "affiliation": "Vedic Sages",
+    "sect_or_affiliation": "Vedic Sages",
+    "summary": "He is the empowered literary incarnation of the Supreme Lord who compiled the Vedas and authored the Srimad Bhagavatam to bestow ultimate spiritual knowledge upon humanity.",
+    "updated_at": "2026-10-15T13:17:53.173+00:00"
+  },
+  {
+    "id": "kali-yuga",
+    "name": "Kali-yuga",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "age of Kali",
+      "The Iron Age",
+      "The Age of Quarrel and Hypocrisy",
+      "Age of Quarrel"
+    ],
+    "affiliation": "Vedic Cosmological Time Cycles",
+    "sect_or_affiliation": "Vedic Cosmological Time Cycles",
+    "summary": "The fourth and final era in the cycle of yugas characterized by a spiritual decline, moral degradation, and the dominance of materialistic pursuits.",
+    "updated_at": "2026-10-15T13:18:35.782+00:00"
+  },
+  {
+    "id": "devaki",
+    "name": "Devaki",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Devakī"
+    ],
+    "affiliation": "Yadu Dynasty / Mathura",
+    "sect_or_affiliation": "Yadu Dynasty / Mathura",
+    "summary": "Devaki is a princess of the Bhoja dynasty, the wife of Vasudeva, and the biological mother of Lord Krishna.",
+    "updated_at": "2026-10-15T15:25:00.942+00:00"
+  },
+  {
+    "id": "vasudeva",
+    "name": "Vasudeva",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Anakadundubhi"
+    ],
+    "affiliation": "Yadu Dynasty / Vrishni Clan",
+    "sect_or_affiliation": "Yadu Dynasty / Vrishni Clan",
+    "summary": "Vasudeva is a virtuous prince of the Yadava dynasty, the husband of Devaki, and the biological father of Lord Krishna.",
+    "updated_at": "2026-10-15T15:27:15.219+00:00"
+  },
+  {
+    "id": "suta-gosvami",
+    "name": "Suta Gosvami",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ugrasrava",
+      "Suta"
+    ],
+    "affiliation": "Sages of Naimiṣāraṇya",
+    "sect_or_affiliation": "Sages of Naimiṣāraṇya",
+    "summary": "He is the celebrated orator and disciple of Vyasadeva who narrates the Srimad Bhagavatam to the sages gathered in the forest of Naimiṣāraṇya.",
+    "updated_at": "2026-10-15T15:51:44.91+00:00"
+  },
+  {
+    "id": "nara-narayana",
+    "name": "Nara-Narayana",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Nara-Nārāyaṇa",
+      "Twin Sages",
+      "Incarnations of the Supreme Lord"
+    ],
+    "affiliation": "Badarikashrama",
+    "sect_or_affiliation": "Badarikashrama",
+    "summary": "Nara and Narayana are the twin-sage incarnations of the Supreme Lord who perform eternal penance in the sacred forest of Badarikashrama for the welfare of all living beings.",
+    "updated_at": "2026-10-15T15:53:24.219+00:00"
+  },
+  {
+    "id": "sarasvati",
+    "name": "Sarasvati",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sarasvatī",
+      "Goddess of Knowledge",
+      "Vak",
+      "Sharada"
+    ],
+    "affiliation": "Vedic Pantheon",
+    "sect_or_affiliation": "Vedic Pantheon",
+    "summary": "Sarasvati is the divine goddess of wisdom, learning, music, and the arts, often invoked as the source of inspiration for Vedic scholars and musicians.",
+    "updated_at": "2026-10-15T15:54:07.582+00:00"
+  },
+  {
+    "id": "vi-vaksena",
+    "name": "Viṣvaksena",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Viṣvaksena",
+      "Commander of the Vaikuṇṭha Army"
+    ],
+    "affiliation": "Vaikuṇṭha",
+    "sect_or_affiliation": "Vaikuṇṭha",
+    "summary": "Viṣvaksena is the commander-in-chief of the forces of Lord Viṣṇu in the spiritual realm of Vaikuṇṭha, serving as the divine overseer and executor of the Lord's will.",
+    "updated_at": "2026-10-16T06:13:44.95+00:00"
+  },
+  {
+    "id": "karma",
+    "name": "Karma",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Karman",
+      "fruitive activities",
+      "karma"
+    ],
+    "affiliation": "Vedic philosophy",
+    "sect_or_affiliation": "Vedic philosophy",
+    "summary": "Any physical or mental action (especially materially motivated or \"fruitive\" labor), as well as the universal law of cause and effect where the reactions to those actions bind one to future conditions in the material world.",
+    "updated_at": "2026-10-17T17:14:55.309+00:00"
+  },
+  {
+    "id": "bh-gavata",
+    "name": "Bhāgavata",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Bhagavata",
+      "bhāgavata"
+    ],
+    "affiliation": "Vaishnavism",
+    "sect_or_affiliation": "Vaishnavism",
+    "summary": "A term referring to both the devotee of the Supreme Personality of Godhead and the sacred scriptures, such as the Srimad Bhagavatam, which detail the pastimes and glories of the Divine.",
+    "updated_at": "2026-10-17T16:56:51.065+00:00"
   }
 ]
