@@ -456,14 +456,15 @@ export const api = {
         const res = await fetchWithTimeout(
           `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&select=chapter_number,title,word_count&order=chapter_number.asc`,
           { headers: HEADERS, cache: 'no-store' },
-          2500
+          8000
         );
         if (res.ok) {
           const list = await res.json();
-          // Prune any deleted chapters from local IndexedDB
-          await offlineDB.reconcileChaptersList(bookId, list);
-          lastSyncTimestamp = new Date();
-          return list;
+          if (list && list.length > 0) {
+            await offlineDB.reconcileChaptersList(bookId, list);
+            lastSyncTimestamp = new Date();
+            return list;
+          }
         }
       } catch (e) {
         console.warn('Network timeout or error loading chapters list from cloud:', e);
@@ -474,6 +475,25 @@ export const api = {
     const localChapters = await offlineDB.getChaptersList(bookId);
     if (localChapters && localChapters.length > 0) {
       return localChapters;
+    }
+
+    // 3. Reliable retry fetch from Supabase if not cached locally
+    if (this.isOnline()) {
+      try {
+        const retryRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&select=chapter_number,title,word_count&order=chapter_number.asc`,
+          { headers: HEADERS, cache: 'no-store' }
+        );
+        if (retryRes.ok) {
+          const retryList = await retryRes.json();
+          if (retryList && retryList.length > 0) {
+            await offlineDB.reconcileChaptersList(bookId, retryList);
+            return retryList;
+          }
+        }
+      } catch (retryErr) {
+        console.warn('Retry loading chapters failed:', retryErr);
+      }
     }
 
     return [];
@@ -509,7 +529,7 @@ export const api = {
         const res = await fetchWithTimeout(
           `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&chapter_number=eq.${num}&select=*`,
           { headers: HEADERS, cache: 'no-store' },
-          3000
+          8000
         );
         if (res.ok) {
           const rows = await res.json();
@@ -531,7 +551,27 @@ export const api = {
       return cached;
     }
 
-    throw new Error(`Chapter ${num} not available offline. Please connect to download.`);
+    // 3. Reliable retry fetch from Supabase if not in local cache
+    if (this.isOnline()) {
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/chapters?book_id=eq.${encodeURIComponent(bookId)}&chapter_number=eq.${num}&select=*`,
+          { headers: HEADERS, cache: 'no-store' }
+        );
+        if (res.ok) {
+          const rows = await res.json();
+          if (rows && rows.length > 0) {
+            const ch = rows[0];
+            await offlineDB.saveChapters(bookId, [ch]);
+            return ch;
+          }
+        }
+      } catch (e) {
+        console.warn('Retry fetching chapter failed:', e);
+      }
+    }
+
+    throw new Error(`Chapter ${num} not available. Please check your connection.`);
   },
 
   async getGlossaryCanonicalId(bookId) {

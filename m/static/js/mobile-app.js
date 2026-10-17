@@ -661,7 +661,20 @@ function renderChaptersList(chaptersToRender) {
   }
 
   if (chaptersToRender.length === 0) {
-    container.innerHTML = '<div style="padding: 28px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">No matching chapters found.</div>';
+    container.innerHTML = `
+      <div style="padding: 28px; text-align: center; color: var(--text-muted); font-size: 0.85rem;">
+        No chapters loaded yet.
+        <div style="margin-top: 12px;">
+          <button type="button" class="btn-pill" id="btn-retry-load-chapters" style="padding: 6px 16px; font-size: 0.8rem; cursor: pointer;">Retry Loading</button>
+        </div>
+      </div>
+    `;
+    const btnRetry = document.getElementById('btn-retry-load-chapters');
+    if (btnRetry) {
+      btnRetry.addEventListener('click', () => {
+        if (state.activeBookId) loadBook(state.activeBookId);
+      });
+    }
     return;
   }
 
@@ -3634,42 +3647,13 @@ async function initApp() {
   setupSearch();
   setupConnectionStatusModal();
 
-  // Stale-While-Revalidate: Instant render from IndexedDB cache (< 15ms)
-  try {
-    const cachedBooks = await offlineDB.getBooks();
-    if (cachedBooks && cachedBooks.length > 0) {
-      const normalized = cachedBooks.map((b, idx) => {
-        const sharedId = b.shared_glossary_id || (b.bookmark && b.bookmark._shared_glossary_id) || null;
-        return {
-          ...b,
-          _orderIndex: b._orderIndex !== undefined ? b._orderIndex : idx,
-          cover: b.cover_image || b.cover || '',
-          chapters_count: b.total_chapters || b.chapters_count || 0,
-          total_words: b.word_count || b.total_words || 0,
-          shared_glossary_id: sharedId
-        };
-      });
-      state.books = normalized;
-      renderLibrary();
-    }
-  } catch (e) {
-    console.warn('Cache warm-up notice:', e);
-  }
-
   try {
     const books = await api.getBooks();
     books.forEach((b, idx) => {
       if (b._orderIndex === undefined) b._orderIndex = idx;
     });
     state.books = books;
-    if (state.activeView === 'library') {
-      renderLibrary();
-    } else if (state.activeBookId) {
-      const updated = state.books.find(b => b.id === state.activeBookId);
-      if (updated) state.currentBook = updated;
-      if (state.activeView === 'book') renderBookOverview();
-      if (state.activeView === 'glossary') renderGlossaryShelves();
-    }
+    renderLibrary();
 
     // Re-sync with Mac edits when returning to the phone screen
     document.addEventListener('visibilitychange', async () => {
