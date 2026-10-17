@@ -19,3 +19,6 @@ scratch_chrome/
 
 # System logs
 *.log
+
+# Staging test storage
+data_staging/

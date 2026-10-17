@@ -24,7 +24,7 @@ load_dotenv()
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, "data")
+DATA_DIR = os.environ.get("DATA_DIR", os.path.join(BASE_DIR, "data"))
 BOOKS_FILE = os.path.join(DATA_DIR, "books.json")
 GLOSSARY_DIR = os.path.join(DATA_DIR, "glossary")
 CHAPTERS_DIR = os.path.join(DATA_DIR, "chapters")
@@ -41,8 +41,8 @@ os.makedirs(TRASH_CHAPTERS_DIR, exist_ok=True)
 os.makedirs(TRASH_BOOKS_DIR, exist_ok=True)
 
 
-SUPABASE_URL = "https://giqhugtncggxansflxaz.supabase.co"
-SUPABASE_KEY = "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "https://giqhugtncggxansflxaz.supabase.co")
+SUPABASE_KEY = os.environ.get("SUPABASE_KEY", "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ")
 
 def delete_glossary_from_supabase_sync(book_id, char_id=None, char_name=None):
     try:
@@ -703,9 +703,6 @@ def load_glossary(book_id, sync_remote=True):
                     aliases.append(pinyin)
                 entry["aliases"] = aliases
     return data
-
-SUPABASE_URL = "https://giqhugtncggxansflxaz.supabase.co"
-SUPABASE_KEY = "sb_publishable_qfLGtg3uwojI-ITrA_t2ig_Wc-MpjuJ"
 
 def push_glossary_to_supabase_async(book_id, entries):
     import threading
