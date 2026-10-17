@@ -7,11 +7,319 @@
     "aliases": [
       "Vyasa",
       "Badarayana",
-      "Veda Vyasa"
+      "Veda Vyasa",
+      "Dvaipayana"
     ],
     "affiliation": "Vedic Sages",
     "sect_or_affiliation": "Vedic Sages",
     "summary": "He is the legendary sage and primary compiler of the Vedic scriptures who serves as the narrator and central figure in the composition of the Srimad Bhagavata.",
-    "updated_at": "2026-10-17T18:41:25.26+00:00"
+    "updated_at": "2026-10-17T20:26:58.74+00:00"
+  },
+  {
+    "id": "sukadeva-goswami",
+    "name": "Sukadeva Goswami",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Sri Suka",
+      "Suka",
+      "Sukadeva"
+    ],
+    "affiliation": "Vedic Sages",
+    "sect_or_affiliation": "Vedic Sages",
+    "summary": "Sukadeva Goswami is the illustrious and realized sage who narrates the Srimad Bhagavatam to King Pariksit, delivering profound spiritual wisdom and the glories of the Supreme Lord.",
+    "updated_at": "2026-10-17T19:28:13.951+00:00"
+  },
+  {
+    "id": "karanodakasayi-vishnu",
+    "name": "Vishnu",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Mahavishnu",
+      "Maha-Visnu",
+      "The Supreme Lord of Creation",
+      "Karanodakasayi Vishnu",
+      "Sri Hari",
+      "Hari"
+    ],
+    "affiliation": "Vaikuntha",
+    "sect_or_affiliation": "Vaikuntha",
+    "summary": "Mahavishnu is the plenary expansion of the Supreme Lord who lies within the Causal Ocean and exhales the innumerable universes during the process of cosmic manifestation.",
+    "updated_at": "2026-10-17T20:16:02.353+00:00"
+  },
+  {
+    "id": "naimisaranya",
+    "name": "Naimisaranya",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Naimisa Forest"
+    ],
+    "affiliation": "Vedic Sages",
+    "sect_or_affiliation": "Vedic Sages",
+    "summary": "An ancient and sacred forest where great sages, led by Shaunaka Rishi, gathered to perform long-term sacrifices and hear the recitation of the Puranas.",
+    "updated_at": "2026-10-17T19:36:50.902+00:00"
+  },
+  {
+    "id": "saunaka-rishi",
+    "name": "Saunaka Rishi",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Saunaka Rsi",
+      "Saunaka"
+    ],
+    "affiliation": "Naimisaranya Sages",
+    "sect_or_affiliation": "Naimisaranya Sages",
+    "summary": "He is the chief of the sages assembled in the forest of Naimisaranya who inquires about the Supreme Truth from Suta Gosvami.",
+    "updated_at": "2026-10-17T19:37:09.143+00:00"
+  },
+  {
+    "id": "brahma-satra",
+    "name": "Brahma-satra",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Brahma satra",
+      "Brahmasatra"
+    ],
+    "affiliation": "Vedic tradition",
+    "sect_or_affiliation": "Vedic tradition",
+    "summary": "A Brahma-satra refers to a prolonged 1000 year sacrificial gathering or assembly of sages dedicated to the attainment of spiritual knowledge and the welfare of the world.",
+    "updated_at": "2026-10-17T20:15:40.716+00:00"
+  },
+  {
+    "id": "suta-goswami",
+    "name": "Suta Goswami",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ugrasrava",
+      "Suta"
+    ],
+    "affiliation": "Naimisaranya",
+    "sect_or_affiliation": "Naimisaranya",
+    "summary": "A learned orator and disciple of Vyasadeva who narrates the Puranic scriptures to the assembled sages in the forest of Naimisaranya.",
+    "updated_at": "2026-10-17T19:39:49.216+00:00"
+  },
+  {
+    "id": "kali-yuga",
+    "name": "Kali-yuga",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "age of Kali",
+      "The Iron Age",
+      "The Age of Quarrel"
+    ],
+    "affiliation": "Vedic Cosmological Cycles",
+    "sect_or_affiliation": "Vedic Cosmological Cycles",
+    "summary": "The fourth and final epoch in the cycle of yugas, characterized by a decline in spiritual knowledge, virtue, and righteousness.",
+    "updated_at": "2026-10-17T19:40:38.055+00:00"
+  },
+  {
+    "id": "vasudeva",
+    "name": "Vasudeva",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Anakadundubhi"
+    ],
+    "affiliation": "Yadu Dynasty",
+    "sect_or_affiliation": "Yadu Dynasty",
+    "summary": "Vasudeva is the noble prince of the Yadu dynasty and the father of Lord Krishna, known for his unwavering adherence to righteousness and truth.",
+    "updated_at": "2026-10-17T19:48:31.392+00:00"
+  },
+  {
+    "id": "devaki",
+    "name": "Devaki",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [],
+    "affiliation": "Yadu Dynasty",
+    "sect_or_affiliation": "Yadu Dynasty",
+    "summary": "Devaki is the wife of Vasudeva and the mother of Lord Krishna, revered as a pivotal figure in the Bhagavata Purana for her divine role in the Lord's manifestation.",
+    "updated_at": "2026-10-17T19:48:47.523+00:00"
+  },
+  {
+    "id": "ganges",
+    "name": "Ganges",
+    "category": "Location / Realm",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ganga",
+      "Bhagirathi",
+      "Jahnavi",
+      "Suradhuni"
+    ],
+    "affiliation": "Bharata-varsha",
+    "sect_or_affiliation": "Bharata-varsha",
+    "summary": "The sacred river flowing from the lotus feet of Lord Vishnu, revered for its purifying spiritual power and its role in sanctifying the terrestrial realm.",
+    "updated_at": "2026-10-17T20:01:12.816+00:00"
+  },
+  {
+    "id": "kalas",
+    "name": "Kalas",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Kala"
+    ],
+    "affiliation": "Vedic Philosophy",
+    "sect_or_affiliation": "Vedic Philosophy",
+    "summary": "Kalas refer to the sixteen fractional manifestations or divine potencies of the Supreme Personality of Godhead, representing His transcendental qualities and energies.",
+    "updated_at": "2026-10-17T20:02:04.266+00:00"
+  },
+  {
+    "id": "brahma",
+    "name": "Brahma",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lord Brahma",
+      "Pitamaha",
+      "Hiranyagarbha"
+    ],
+    "affiliation": "Trimurti",
+    "sect_or_affiliation": "Trimurti",
+    "summary": "Brahma is the secondary creator of the universe within the cosmic order, tasked by the Supreme Lord with the manifestation of the material world and its living beings.",
+    "updated_at": "2026-10-17T20:02:30.066+00:00"
+  },
+  {
+    "id": "shiva",
+    "name": "Shiva",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Maheswara",
+      "Lord Shiva",
+      "Mahadeva",
+      "Shambhu"
+    ],
+    "affiliation": "Trimurti",
+    "sect_or_affiliation": "Trimurti",
+    "summary": "Lord Shiva, the supreme deity responsible for the dissolution of the universe within the Vedic cosmology described in the Srimad Bhagavata.",
+    "updated_at": "2026-10-17T20:03:05.906+00:00"
+  },
+  {
+    "id": "lilavatara",
+    "name": "Lilavatara",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Lilavataras",
+      "Pastimes of the Lord",
+      "Divine Pastime Incarnations"
+    ],
+    "affiliation": "Vishnu",
+    "sect_or_affiliation": "Vishnu",
+    "summary": "These are the various forms assumed by the Supreme Lord specifically to perform transcendental pastimes within the material world for the pleasure of His devotees and the maintenance of cosmic order.",
+    "updated_at": "2026-10-17T20:04:22.674+00:00"
+  },
+  {
+    "id": "rama",
+    "name": "Rama",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Ramachandra",
+      "Maryada Purushottama"
+    ],
+    "affiliation": "Ikshvaku Dynasty",
+    "sect_or_affiliation": "Ikshvaku Dynasty",
+    "summary": "Rama is the seventh avatar of Lord Vishnu, known as the ideal man and king who upholds righteousness and moral law.",
+    "updated_at": "2026-10-17T20:05:45.492+00:00"
+  },
+  {
+    "id": "krishna",
+    "name": "Krishna",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Govinda",
+      "Madhava",
+      "Kesava",
+      "Sri Krishna"
+    ],
+    "affiliation": "Yadu Dynasty",
+    "sect_or_affiliation": "Yadu Dynasty",
+    "summary": "The eighth Avatara of Lord Vishnu who descends into the material world to protect the righteous and restore cosmic order.",
+    "updated_at": "2026-10-17T20:13:39.304+00:00"
+  },
+  {
+    "id": "dharma",
+    "name": "Dharma",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Righteousness",
+      "Duty",
+      "Universal Order"
+    ],
+    "affiliation": "Vedic Tradition",
+    "sect_or_affiliation": "Vedic Tradition",
+    "summary": "Dharma refers to the eternal, universal laws of duty, righteousness, and order that sustain the cosmos and guide the moral conduct of all living beings.",
+    "updated_at": "2026-10-17T20:16:42.09+00:00"
+  },
+  {
+    "id": "romaharshana-suta",
+    "name": "Romaharshana Suta",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Romaharshana",
+      "Suta",
+      "Ugrashrava"
+    ],
+    "affiliation": "Disciples of Veda Vyasa",
+    "sect_or_affiliation": "Disciples of Veda Vyasa",
+    "summary": "A learned disciple of Veda Vyasa who is renowned for his expertise in reciting the Puranas and serves as the primary narrator for the assembly of sages at Naimisharanya.",
+    "updated_at": "2026-10-17T20:18:18.974+00:00"
+  },
+  {
+    "id": "samsara",
+    "name": "Samsara",
+    "category": "Concept / Lore",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Cycle of birth and death",
+      "Transmigration"
+    ],
+    "affiliation": "Vedic philosophy",
+    "sect_or_affiliation": "Vedic philosophy",
+    "summary": "Samsara refers to the continuous cycle of birth, death, and rebirth within the material world which the soul undergoes until attaining spiritual liberation.",
+    "updated_at": "2026-10-17T20:28:06.783+00:00"
+  },
+  {
+    "id": "nara-narayana-rsi",
+    "name": "Nara-Narayana Rsi",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Nara-Narayana",
+      "The Twin Sages",
+      "Avatar of Vishnu"
+    ],
+    "affiliation": "Badarikashrama",
+    "sect_or_affiliation": "Badarikashrama",
+    "summary": "Nara and Narayana are the twin incarnations of the Supreme Personality of Godhead who reside in Badarikashrama performing severe penances for the benefit of all living entities.",
+    "updated_at": "2026-10-17T20:29:32.998+00:00"
+  },
+  {
+    "id": "sarasvati",
+    "name": "Sarasvati",
+    "category": "Character",
+    "pinyin_or_chinese": "",
+    "aliases": [
+      "Goddess of Knowledge",
+      "Vani",
+      "Vac",
+      "Saraswati"
+    ],
+    "affiliation": "Devas",
+    "sect_or_affiliation": "Devas",
+    "summary": "Sarasvati is the Vedic goddess of knowledge, music, arts, wisdom, and learning, often venerated as the consort of Lord Brahma.",
+    "updated_at": "2026-10-17T20:30:05.822+00:00"
   }
 ]

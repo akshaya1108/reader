@@ -90,6 +90,27 @@ def save_sync_meta(meta):
     except Exception as e:
         print(f"Notice saving sync meta: {e}")
 
+def patch_book_progress_to_supabase_async(book_id, ch_num, now_iso, bookmark=None):
+    import threading
+    def _run():
+        try:
+            url = f"{SUPABASE_URL}/rest/v1/books?id=eq.{book_id}"
+            headers = {
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "Content-Type": "application/json"
+            }
+            body = {
+                "last_read_chapter": ch_num,
+                "last_read_at": now_iso
+            }
+            if bookmark is not None:
+                body["bookmark"] = bookmark
+            requests.patch(url, headers=headers, json=body, timeout=5)
+        except Exception:
+            pass
+    threading.Thread(target=_run, daemon=True).start()
+
 def push_books_to_supabase_async(books):
     import threading
     def _run():
@@ -319,7 +340,7 @@ def load_books():
                 pass
         return []
 
-def save_books(books):
+def save_books(books, push_remote=True):
     if not isinstance(books, list):
         return
     bak_file = f"{BOOKS_FILE}.bak"
@@ -347,7 +368,8 @@ def save_books(books):
             pass
 
     os.replace(tmp_file, BOOKS_FILE)
-    push_books_to_supabase_async(books)
+    if push_remote:
+        push_books_to_supabase_async(books)
 
 try:
     push_books_to_supabase_async(load_books())
@@ -510,78 +532,19 @@ def load_glossary(book_id, sync_remote=True):
                             pass
 
             if successful_remote_query:
-                # 1. Filter out remote entries that match tombstones (prevent resurrection)
+                # 1. Filter out remote entries that match tombstones (prevent resurrection of explicitly deleted terms)
                 valid_remote = []
                 for rentry in remote_entries:
                     rid = rentry.get("id") or slugify(rentry.get("name", ""))
                     rslug = slugify(rentry.get("name", ""))
                     rname_low = rentry.get("name", "").strip().lower()
                     if rid in tombstones or rslug in tombstones or rname_low in tombstones:
-                        # Entry was marked deleted, ensure Supabase drops it
-                        try:
-                            for tid in cluster_bids:
-                                requests.delete(
-                                    f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{rid}",
-                                    headers=headers,
-                                    timeout=2
-                                )
-                        except Exception:
-                            pass
-                    else:
-                        valid_remote.append(rentry)
+                        continue
+                    valid_remote.append(rentry)
                 remote_entries = valid_remote
 
-                # 2. Reconcile deletions that occurred remotely (e.g. on mobile phone)
-                cluster_prev_synced = set()
-                for tid in cluster_bids:
-                    cluster_prev_synced.update(last_synced.get(tid, []))
-
-                remote_id_set = {r.get("id") for r in remote_entries if r.get("id")}
-                remote_slug_set = {slugify(r.get("name", "")) for r in remote_entries if r.get("name")}
-                remote_name_set = {r.get("name", "").strip().lower() for r in remote_entries if r.get("name")}
-
+                # 2. Merge active remote entries into data (additive and timestamp-based updates)
                 changed = False
-                if cluster_prev_synced and len(remote_entries) > 0:
-                    pruned_data = []
-                    candidates_to_prune = []
-                    for item in data:
-                        iid = item.get("id") or slugify(item.get("name", ""))
-                        islug = slugify(item.get("name", ""))
-                        iname_low = item.get("name", "").strip().lower()
-
-                        was_synced = (iid in cluster_prev_synced or islug in cluster_prev_synced or iname_low in cluster_prev_synced)
-                        in_remote = (iid in remote_id_set or islug in remote_slug_set or iname_low in remote_name_set)
-                        in_tombstones = (iid in tombstones or islug in tombstones or iname_low in tombstones)
-
-                        if in_tombstones or (was_synced and not in_remote):
-                            candidates_to_prune.append(item)
-                        else:
-                            pruned_data.append(item)
-
-                    if len(candidates_to_prune) > max(3, len(data) * 0.3):
-                        print(f"[Safety Warning] Aborting mass-prune of {len(candidates_to_prune)}/{len(data)} glossary items for {canonical_id}.")
-                        pruned_data = data
-                    else:
-                        for item in candidates_to_prune:
-                            iid = item.get("id") or slugify(item.get("name", ""))
-                            islug = slugify(item.get("name", ""))
-                            iname_low = item.get("name", "").strip().lower()
-                            tombstones[iid] = now.isoformat()
-                            if islug:
-                                tombstones[islug] = now.isoformat()
-                            if iname_low:
-                                tombstones[iname_low] = now.isoformat()
-                            for tid in cluster_bids:
-                                try:
-                                    requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{iid}", headers=headers, timeout=2)
-                                    if islug and islug != iid:
-                                        requests.delete(f"{SUPABASE_URL}/rest/v1/glossary?book_id=eq.{tid}&id=eq.{islug}", headers=headers, timeout=2)
-                                except Exception:
-                                    pass
-                            changed = True
-                    data = pruned_data
-
-                # 3. Merge active remote entries into data
                 local_by_name = {c.get("name", "").lower().strip(): c for c in data if c.get("name")}
                 local_by_id = {c.get("id"): c for c in data if c.get("id")}
 
@@ -2026,12 +1989,14 @@ def get_chapter(book_id, ch_num):
         modified = False
         for b in books:
             if b.get("id") == book_id:
+                now_iso = datetime.datetime.now().isoformat()
                 b["last_read_chapter"] = ch_num
-                b["last_read_at"] = datetime.datetime.now().isoformat()
+                b["last_read_at"] = now_iso
                 modified = True
+                patch_book_progress_to_supabase_async(book_id, ch_num, now_iso, b.get("bookmark"))
                 break
         if modified:
-            save_books(books)
+            save_books(books, push_remote=False)
     except Exception as e:
         pass
 
