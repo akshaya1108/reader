@@ -693,8 +693,7 @@ Rules:
    - 'name': Primary recognized English/Pinyin name (e.g. "Wei Wuxian", "Lan Wangji", "Jiang Cheng", "Jin Ling", "Nie Huaisang", "Wen Ning", "Lan Xichen", "Jiang Yanli").
    - 'category': "Character".
    - 'pinyin_or_chinese': Chinese Hanzi or Pinyin (e.g. "魏无羡").
-   - 'aliases': All common aliases, birth names, courtesy names (字), and clan titles (号) (e.g. ["Wei Ying", "Yiling Patriarch", "A-Xian"]).
-   - 'sect_or_affiliation': Their clan or faction (e.g. "Yunmeng Jiang Clan", "Gusu Lan Clan", "Lanling Jin Clan").
+   - 'aliases': All common individual aliases, birth names, courtesy names (字), and personal titles (号) (e.g. ["Wei Ying", "Yiling Patriarch", "A-Xian"]). Must be direct individual names only; NEVER include collective groups, sects, or orders!
    - 'summary': Strictly ONE SENTENCE, completely spoiler-free introductory description.
 2. CRITICAL ANTI-SPOILER RULES (MUST FOLLOW STRICTLY):
    - NEVER mention death, execution, murder, or whether a character is alive or dead!

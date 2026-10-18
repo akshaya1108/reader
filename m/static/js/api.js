@@ -974,17 +974,23 @@ Identify and analyze "${cleanName}" in "${bookTitle}" (or its established litera
    - If "${cleanName}" is an adjective, plural, or variant form (e.g. "elven", "dwarven", "orcs"), resolve it to the underlying canon entity (e.g. "Elves", category "Race / Creature") and ALWAYS include "${cleanName}" in the 'aliases' array.
    - Even if "${cleanName}" is a secondary entity, minor sage, or regional landmark, provide a helpful entry instead of returning empty.
    - Only return [] if "${cleanName}" is a generic English grammar word with zero lore relevance (e.g. "the", "with", "walked").
-2. Primary Moniker Consolidation:
-   - If "${cleanName}" is a title, courtesy name, or moniker (e.g. "Yiling Laozu" is Wei Wuxian; "Vyasa" is Krishna Dvaipayana Vyasadeva):
-     Set 'name' to the primary canonical name and include "${cleanName}" in 'aliases'.
+2. Primary Moniker Consolidation & Strict Aliases:
+   - "name": Set to the primary canonical name. If "${cleanName}" is a title, courtesy name, or moniker (e.g. "Yiling Laozu" is Wei Wuxian; "Vyasa" is Krishna Dvaipayana Vyasadeva), set 'name' to the primary canonical name and include "${cleanName}" in 'aliases'.
+   - CRITICAL STRICT ALIAS RULES:
+     * Aliases MUST be alternative direct, individual personal names, epithets, titles, or spelling variants for THIS SPECIFIC ENTITY alone (names that can substitute directly for this individual in a sentence).
+     * NEVER include collective group names, plural categories, orders, or groups that the entity is simply a member of!
+       - For individual sages/characters (e.g. "Sanaka"): DO NOT include collective group names like "Kumaras", "Four Kumaras", or "Catursana" in aliases! Put collective group names in "affiliation" instead.
+       - For "Lan Wangji": DO NOT include "Twin Jades" or "Lan Clan" in aliases! Put them in "affiliation".
+       - For "Legolas": DO NOT include "Fellowship" or "Elves" in aliases! Put them in "affiliation".
+     * NEVER put the entity's sect, clan, dynasty, realm, or species in aliases unless it is used as a direct individual epithet. Put them in "affiliation" instead.
 3. Category:
    - Choose exactly ONE from: "Character", "Race / Creature", "Location / Realm", "Weapon / Item", "Clan / Sect", "Concept / Lore".
 4. Details:
    - "name": Standard canonical name
    - "category": One of the 6 categories above
    - "pinyin_or_chinese": ${isChinese ? 'Chinese Hanzi or Pinyin (e.g. "紫电 / Zǐdiàn")' : 'Strictly empty string ""'}
-   - "aliases": Alternate names, titles, variant spellings, and forms (ALWAYS include "${cleanName}")
-   - "affiliation": Associated clan, faction, realm, or wielder
+   - "aliases": STRICTLY individual alternative names, titles, and variant spellings for this specific entity alone (always include "${cleanName}" if it is an individual moniker). NO collective groups, sects, or plural orders!
+   - "affiliation": Associated clan, collective group (e.g. "The Four Kumaras / Catuḥsana"), sect, faction, realm, or wielder
    - "summary": Exactly ONE sentence spoiler-free introductory description. NEVER mention late-story deaths or tragedies!
 
 Return a JSON array with 1 object:
