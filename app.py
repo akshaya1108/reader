@@ -2409,22 +2409,13 @@ def search_book(book_id):
 def strip_diacritics(s: str) -> str:
     if not s:
         return ""
+    # Map Sanskrit / IAST phonemes to English transliterations before decomposing diacritics
+    s = re.sub(r'[śṣŚṢ]', 'sh', s)
+    s = re.sub(r'[ñÑ]', 'n', s)
+    s = re.sub(r'[ṛṚṝṜ]', 'r', s)
     s = unicodedata.normalize('NFD', s)
     s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
-    s = s.replace('ś', 's').replace('Ś', 'S').replace('ṣ', 's').replace('Ṣ', 'S')
-    s = s.replace('ñ', 'n').replace('Ñ', 'N').replace('ṛ', 'r').replace('Ṛ', 'R')
     return s
-
-LORE_PREFIXES = r'^(sri|shri|shree|lord|lady|master|grandmaster|elder|sage|saint|king|queen|prince|princess|venerable|patriarch|deva|devi|bhagavan|bhagwan|maharishi|rishi|sect\s+leader|clan\s+leader)\s+'
-LORE_SUFFIXES = r'[\s-]+(jun|ji|ge|er|deva|devi|rsi)$'
-
-def strip_lore_titles(s: str) -> str:
-    if not s:
-        return ""
-    clean = strip_diacritics(s).strip()
-    clean = re.sub(LORE_PREFIXES, '', clean, flags=re.IGNORECASE).strip()
-    clean = re.sub(LORE_SUFFIXES, '', clean, flags=re.IGNORECASE).strip()
-    return clean
 
 def norm_alias(s: str) -> str:
     if not s:
@@ -2443,22 +2434,20 @@ def find_matching_glossary_entry(glossary: list, query_name: str, incoming_item:
     Finds if an entry already exists in the glossary by checking:
     1. Exact ID or slugified query name.
     2. Primary name (case, punctuation, and diacritic insensitive).
-    3. Title-stripped matching (e.g. "Sri Narayana" -> "Narayana" matches "Narayana").
-    4. Aliases of existing entries containing query_name.
-    5. Cross-alias and name overlap between incoming_item and existing entries.
-    6. Matching Chinese Hanzi or Pinyin.
+    3. Aliases of existing entries containing query_name.
+    4. Cross-alias and name overlap between incoming_item and existing entries.
+    5. Matching Chinese Hanzi or Pinyin.
+    Note: Heuristic title stripping is strictly avoided to prevent false matches between
+    surnames/clans and characters (e.g. 'Sect Leader Lan' vs 'Lan Clan').
     """
     if not glossary:
         return None
 
     q_norm = norm_alias(query_name)
     q_slug = slugify(query_name) if query_name else ""
-    q_stripped = strip_lore_titles(query_name)
-    q_stripped_norm = norm_alias(q_stripped)
 
     inc_name = incoming_item.get("name", "") if incoming_item else ""
     inc_norm = norm_alias(inc_name)
-    inc_stripped_norm = norm_alias(strip_lore_titles(inc_name))
     inc_slug = (incoming_item.get("id") or (slugify(inc_name) if inc_name else "")) if incoming_item else ""
     inc_aliases = [norm_alias(a) for a in incoming_item.get("aliases", []) if a and norm_alias(a) not in GENERIC_ALIAS_IGNORE] if incoming_item else []
     inc_hanzi = norm_alias(incoming_item.get("pinyin_or_chinese")) if incoming_item else ""
@@ -2471,19 +2460,13 @@ def find_matching_glossary_entry(glossary: list, query_name: str, incoming_item:
             e_id = entry.get("id", "")
             e_name = entry.get("name", "")
             e_norm = norm_alias(e_name)
-            e_stripped_norm = norm_alias(strip_lore_titles(e_name))
             e_aliases = [norm_alias(a) for a in entry.get("aliases", []) if a]
-            e_stripped_aliases = [norm_alias(strip_lore_titles(a)) for a in entry.get("aliases", []) if a]
 
-            if e_id and (e_id == q_slug or (q_stripped and e_id == slugify(q_stripped))):
+            if e_id and e_id == q_slug:
                 return entry
             if e_norm == q_norm:
                 return entry
-            if q_stripped_norm and len(q_stripped_norm) >= 3 and (e_norm == q_stripped_norm or e_stripped_norm == q_stripped_norm):
-                return entry
             if q_norm in e_aliases:
-                return entry
-            if q_stripped_norm and len(q_stripped_norm) >= 3 and (q_stripped_norm in e_aliases or q_stripped_norm in e_stripped_aliases):
                 return entry
 
     # Priority 2: Match with incoming_item details (resolved by AI/wiki)
@@ -2499,23 +2482,17 @@ def find_matching_glossary_entry(glossary: list, query_name: str, incoming_item:
             e_id = entry.get("id", "")
             e_name = entry.get("name", "")
             e_norm = norm_alias(e_name)
-            e_stripped_norm = norm_alias(strip_lore_titles(e_name))
             e_aliases = [norm_alias(a) for a in entry.get("aliases", []) if a]
-            e_stripped_aliases = [norm_alias(strip_lore_titles(a)) for a in entry.get("aliases", []) if a]
             e_hanzi = norm_alias(entry.get("pinyin_or_chinese"))
 
             if inc_slug and e_id == inc_slug:
                 return entry
             if inc_norm and (e_norm == inc_norm or inc_norm in e_aliases):
                 return entry
-            if inc_stripped_norm and len(inc_stripped_norm) >= 3 and (e_norm == inc_stripped_norm or e_stripped_norm == inc_stripped_norm or inc_stripped_norm in e_aliases):
-                return entry
             if e_norm and e_norm in inc_aliases:
                 return entry
-            if e_stripped_norm and len(e_stripped_norm) >= 3 and e_stripped_norm in inc_aliases:
-                return entry
             for a in inc_aliases:
-                if (a in e_aliases or a in e_stripped_aliases) and a not in GENERIC_ALIAS_IGNORE and len(a) >= 3:
+                if a in e_aliases and a not in GENERIC_ALIAS_IGNORE and len(a) >= 3:
                     return entry
             if inc_hanzi and e_hanzi and (inc_hanzi in e_hanzi or e_hanzi in inc_hanzi) and len(inc_hanzi) >= 2:
                 return entry

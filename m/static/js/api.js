@@ -96,64 +96,33 @@ function normalizeLoreKey(str) {
     .replace(/\s+/g, ' ');
 }
 
-function stripLoreTitles(str) {
-  if (!str || typeof str !== 'string') return '';
-  let s = str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[śṣ]/gi, 'sh')
-    .replace(/[ñ]/gi, 'n')
-    .replace(/[ṛṝ]/gi, 'r')
-    .trim();
-  const prefixRegex = /^(sri|shri|shree|lord|lady|master|grandmaster|elder|sage|saint|king|queen|prince|princess|venerable|patriarch|deva|devi|bhagavan|bhagwan|maharishi|rishi|sect\s+leader|clan\s+leader)\s+/i;
-  const suffixRegex = /[\s-]+(jun|ji|ge|er|deva|devi|rsi)$/i;
-  let stripped = s.replace(prefixRegex, '').trim();
-  stripped = stripped.replace(suffixRegex, '').trim();
-  return stripped;
-}
-
 function findMatchingGlossaryEntry(entries, queryName, incomingItem = null) {
   if (!Array.isArray(entries) || entries.length === 0) return null;
 
   const qRaw = (queryName || '').trim();
   const qNorm = normalizeLoreKey(qRaw);
-  const qStrippedNorm = normalizeLoreKey(stripLoreTitles(qRaw));
 
   const incName = incomingItem && incomingItem.name ? incomingItem.name.trim() : '';
   const incNorm = normalizeLoreKey(incName);
-  const incStrippedNorm = normalizeLoreKey(stripLoreTitles(incName));
   const incAliases = incomingItem && Array.isArray(incomingItem.aliases)
     ? incomingItem.aliases.map(a => normalizeLoreKey(a)).filter(a => a && a.length >= 2 && !GENERIC_LORE_TERMS.has(a))
     : [];
   const incCat = incomingItem && incomingItem.category ? incomingItem.category.trim().toLowerCase() : '';
 
-  // 1. Direct match with queryName
+  // 1. Direct match with queryName (exact or diacritic-normalized: e.g. "Viṣṇu" matches "Vishnu")
   if (qNorm && !GENERIC_LORE_TERMS.has(qNorm)) {
     for (const entry of entries) {
       if (!entry) continue;
       const eName = (entry.name || '').trim();
       const eNorm = normalizeLoreKey(eName);
-      const eStrippedNorm = normalizeLoreKey(stripLoreTitles(eName));
 
-      // Exact or diacritic-normalized primary name match
       if (eNorm === qNorm) return entry;
-
-      // Title-stripped primary name match
-      if (qStrippedNorm && qStrippedNorm.length >= 3 && (eNorm === qStrippedNorm || eStrippedNorm === qStrippedNorm)) {
-        return entry;
-      }
 
       // Check aliases of existing entry
       const eAliases = Array.isArray(entry.aliases) ? entry.aliases : [];
       for (const a of eAliases) {
         if (!a) continue;
-        const aNorm = normalizeLoreKey(a);
-        const aStrippedNorm = normalizeLoreKey(stripLoreTitles(a));
-
-        if (aNorm === qNorm) return entry;
-        if (qStrippedNorm && qStrippedNorm.length >= 3 && (aNorm === qStrippedNorm || aStrippedNorm === qStrippedNorm)) {
-          return entry;
-        }
+        if (normalizeLoreKey(a) === qNorm) return entry;
       }
 
       // Check pinyin or chinese
@@ -178,7 +147,6 @@ function findMatchingGlossaryEntry(entries, queryName, incomingItem = null) {
 
       const eName = (entry.name || '').trim();
       const eNorm = normalizeLoreKey(eName);
-      const eStrippedNorm = normalizeLoreKey(stripLoreTitles(eName));
       const eAliasesNorm = (Array.isArray(entry.aliases) ? entry.aliases : [])
         .map(a => normalizeLoreKey(a))
         .filter(a => a && a.length >= 2 && !GENERIC_LORE_TERMS.has(a));
@@ -187,15 +155,9 @@ function findMatchingGlossaryEntry(entries, queryName, incomingItem = null) {
       if (incNorm && (eNorm === incNorm || eAliasesNorm.includes(incNorm))) {
         return entry;
       }
-      if (incStrippedNorm && incStrippedNorm.length >= 3 && (eNorm === incStrippedNorm || eStrippedNorm === incStrippedNorm || eAliasesNorm.includes(incStrippedNorm))) {
-        return entry;
-      }
 
       // Existing name matches one of the AI incoming aliases
       if (eNorm && incAliases.includes(eNorm)) {
-        return entry;
-      }
-      if (eStrippedNorm && eStrippedNorm.length >= 3 && incAliases.includes(eStrippedNorm)) {
         return entry;
       }
 

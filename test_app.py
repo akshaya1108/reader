@@ -544,6 +544,71 @@ class TestXianxiaReader(unittest.TestCase):
         trashed_books = [d for d in os.listdir(TRASH_BOOKS_DIR) if d.endswith(f"_{book_id}")]
         self.assertTrue(len(trashed_books) >= 1)
 
+    def test_glossary_alias_merge_and_summary_preservation(self):
+        from app import find_matching_glossary_entry, merge_glossary_entry
+
+        sample_glossary = [
+            {
+                "id": "lan-wangji",
+                "name": "Lan Wangji",
+                "category": "Character",
+                "aliases": ["Lan Zhan", "Hanguang-jun"],
+                "summary": "Second Young Master of the Lan Clan."
+            },
+            {
+                "id": "lan-xichen",
+                "name": "Lan Xichen",
+                "category": "Character",
+                "aliases": ["Lan Huan", "Zewu-jun"],
+                "summary": "First Young Master of the Lan Clan."
+            },
+            {
+                "id": "gusu-lan-sect",
+                "name": "Gusu Lan Sect",
+                "category": "Clan / Sect",
+                "aliases": ["Lan Clan", "Lan Sect"],
+                "summary": "Prominent cultivation sect based in Cloud Recesses."
+            },
+            {
+                "id": "vishnu",
+                "name": "Vishnu",
+                "category": "Character",
+                "aliases": ["Narayana", "Hari"],
+                "summary": "The preserver deity in the Hindu trimurti."
+            }
+        ]
+
+        # 1. Exact and diacritic matching
+        match_vishnu = find_matching_glossary_entry(sample_glossary, "Viṣṇu")
+        self.assertIsNotNone(match_vishnu)
+        self.assertEqual(match_vishnu["id"], "vishnu")
+
+        match_narayana = find_matching_glossary_entry(sample_glossary, "Narayana")
+        self.assertIsNotNone(match_narayana)
+        self.assertEqual(match_narayana["id"], "vishnu")
+
+        # 2. Verify 'Sect Leader Lan' does NOT falsely match 'Lan Clan' locally
+        match_sect_leader = find_matching_glossary_entry(sample_glossary, "Sect Leader Lan")
+        self.assertIsNone(match_sect_leader)
+
+        # 3. AI resolves 'Sect Leader Lan' to Lan Xichen -> matches Lan Xichen properly
+        incoming_resolved = {
+            "name": "Lan Xichen",
+            "category": "Character",
+            "aliases": ["Lan Huan", "Zewu-jun", "Sect Leader Lan"],
+            "summary": "New AI-generated summary that should not replace existing summary."
+        }
+        match_resolved = find_matching_glossary_entry(sample_glossary, "Sect Leader Lan", incoming_item=incoming_resolved)
+        self.assertIsNotNone(match_resolved)
+        self.assertEqual(match_resolved["id"], "lan-xichen")
+
+        # 4. Merging preserves existing summary while adding new alias
+        merged = merge_glossary_entry(match_resolved, incoming_resolved, query_name="Sect Leader Lan")
+        self.assertEqual(merged["summary"], "First Young Master of the Lan Clan.")
+        self.assertIn("Sect Leader Lan", merged["aliases"])
+        self.assertIn("Lan Huan", merged["aliases"])
+        self.assertIn("Zewu-jun", merged["aliases"])
+
 if __name__ == '__main__':
     unittest.main()
 
