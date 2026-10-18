@@ -183,7 +183,8 @@ Only return valid JSON array, no extra commentary or markdown backticks.
                 model=model_name,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    response_mime_type="application/json"
+                    response_mime_type="application/json",
+                    thinking_config=types.ThinkingConfig(thinking_budget=0)
                 )
             )
             
@@ -336,7 +337,10 @@ Return ONLY a valid JSON object with the following fields:
             response = client.models.generate_content(
                 model=model_name,
                 contents=prompt,
-                config=types.GenerateContentConfig(response_mime_type="application/json")
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    thinking_config=types.ThinkingConfig(thinking_budget=0)
+                )
             )
             content = (response.text or "").strip()
             if content.startswith("```json"):

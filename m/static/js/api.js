@@ -261,7 +261,10 @@ async function callGeminiDirect(prompt) {
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
-            responseMimeType: 'application/json'
+            responseMimeType: 'application/json',
+            thinkingConfig: {
+              thinkingBudget: 0
+            }
           }
         }),
         signal: controller.signal

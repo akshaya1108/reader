@@ -349,7 +349,8 @@ Only return valid JSON array.
                 model=model_name,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    response_mime_type="application/json"
+                    response_mime_type="application/json",
+                    thinking_config=types.ThinkingConfig(thinking_budget=0)
                 )
             )
             content = response.text.strip()
@@ -725,7 +726,8 @@ Only return valid JSON array.
                 model=model_name,
                 contents=prompt,
                 config=types.GenerateContentConfig(
-                    response_mime_type="application/json"
+                    response_mime_type="application/json",
+                    thinking_config=types.ThinkingConfig(thinking_budget=0)
                 )
             )
             content = response.text.strip()
