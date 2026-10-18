@@ -113,6 +113,8 @@ def patch_book_progress_to_supabase_async(book_id, ch_num, now_iso, bookmark=Non
     threading.Thread(target=_run, daemon=True).start()
 
 def push_books_to_supabase_async(books):
+    if app.config.get("TESTING") or os.environ.get("TESTING") == "true":
+        return
     import threading
     def _run():
         try:
@@ -178,6 +180,8 @@ def push_books_to_supabase_async(books):
     threading.Thread(target=_run, daemon=True).start()
 
 def push_chapters_to_supabase_async(book_id):
+    if app.config.get("TESTING") or os.environ.get("TESTING") == "true":
+        return
     import threading
     def _run():
         max_attempts = 3
@@ -669,6 +673,8 @@ def load_glossary(book_id, sync_remote=True):
     return data
 
 def push_glossary_to_supabase_async(book_id, entries):
+    if app.config.get("TESTING") or os.environ.get("TESTING") == "true":
+        return
     import threading
     def _run():
         try:

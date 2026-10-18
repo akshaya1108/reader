@@ -6,6 +6,7 @@ from app import app, DATA_DIR, CHAPTERS_DIR, GLOSSARY_DIR, BOOKS_FILE
 
 class TestXianxiaReader(unittest.TestCase):
     def setUp(self):
+        app.config['TESTING'] = True
         self.client = app.test_client()
 
     def test_status(self):
