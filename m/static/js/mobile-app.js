@@ -117,6 +117,18 @@ function hideToast() {
   }
 }
 
+function formatModelTag(model) {
+  if (!model) return '';
+  const m = String(model).toLowerCase();
+  if (m === 'local') return '(Local)';
+  if (m.includes('3.8')) return '(3.8F)';
+  if (m.includes('3.5')) return '(3.5F)';
+  if (m.includes('3.6')) return '(3.6F)';
+  if (m.includes('flash')) return '(Flash)';
+  if (m.includes('pro')) return '(Pro)';
+  return `(${model})`;
+}
+
 function syncThemeMetaColor() {
   const meta = document.getElementById('meta-theme-color');
   if (!meta) return;
@@ -1348,16 +1360,19 @@ function setupReaderInteractions() {
           if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_CHECK;
           if (btnSelectionText) btnSelectionText.textContent = 'Added!';
 
+          const tag = formatModelTag(data.model_used);
+          const tagSuffix = tag ? ` ${tag}` : '';
+
           if (data.merged_into && data.merged_into.toLowerCase() !== word.toLowerCase()) {
             if (data.was_already_alias) {
-              showToast(`"${word}" is already in glossary under ${data.character.name}!`);
+              showToast(`"${word}" is already in glossary under ${data.character.name}!${tagSuffix}`);
             } else {
-              showToast(`Added "${word}" to ${data.merged_into}'s aliases in glossary!`);
+              showToast(`Added "${word}" to ${data.merged_into}'s aliases in glossary!${tagSuffix}`);
             }
           } else if (data.already_existed) {
-            showToast(`"${word}" is already in glossary!`);
+            showToast(`"${word}" is already in glossary!${tagSuffix}`);
           } else {
-            showToast(`Added "${data.character.name}" (${data.character.category || 'Entry'}) to glossary!`);
+            showToast(`Added "${data.character.name}" (${data.character.category || 'Entry'}) to glossary!${tagSuffix}`);
           }
 
           state.glossary = await api.getGlossary(state.activeBookId);
@@ -2690,12 +2705,15 @@ function setupEditLoreSheet() {
           }
           if (c.summary) document.getElementById('edit-lore-summary').value = c.summary;
 
+          const tag = formatModelTag(res.model_used);
+          const tagSuffix = tag ? ` ${tag}` : '';
+
           if (res.merged_into && res.merged_into.toLowerCase() !== name.toLowerCase()) {
-            showToast(`Linked to existing entry "${res.merged_into}"`);
+            showToast(`Linked to existing entry "${res.merged_into}"${tagSuffix}`);
           } else if (res.already_existed) {
-            showToast(`Loaded existing details for "${c.name}"`);
+            showToast(`Loaded existing details for "${c.name}"${tagSuffix}`);
           } else {
-            showToast(`Autofilled details for "${name}"`);
+            showToast(`Autofilled details for "${name}"${tagSuffix}`);
           }
         } else {
           showToast('No information found for this name');

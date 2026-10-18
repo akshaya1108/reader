@@ -273,6 +273,18 @@ function showToast(message, duration = 3200) {
   setTimeout(() => elements.toast.classList.remove('show'), duration);
 }
 
+function formatModelTag(model) {
+  if (!model) return '';
+  const m = String(model).toLowerCase();
+  if (m === 'local') return '(Local)';
+  if (m.includes('3.8')) return '(3.8F)';
+  if (m.includes('3.5')) return '(3.5F)';
+  if (m.includes('3.6')) return '(3.6F)';
+  if (m.includes('flash')) return '(Flash)';
+  if (m.includes('pro')) return '(Pro)';
+  return `(${model})`;
+}
+
 function escapeHtml(str) {
   if (str === null || str === undefined) return '';
   return String(str)
@@ -4254,12 +4266,15 @@ function setupEventListeners() {
           elements.btnSelectionAddGlossary.className = 'btn-selection-glossary success';
           elements.selectionBtnText.textContent = 'Added!';
 
+          const tag = formatModelTag(data.model_used);
+          const tagSuffix = tag ? ` ${tag}` : '';
+
           if (data.already_existed) {
-            showToast(`"${activeSelectedText}" is already in glossary under ${data.character.name}!`);
+            showToast(`"${activeSelectedText}" is already in glossary under ${data.character.name}!${tagSuffix}`);
           } else if (data.merged_into && data.merged_into.toLowerCase() !== activeSelectedText.toLowerCase()) {
-            showToast(`Added "${activeSelectedText}" to ${data.merged_into}'s aliases in glossary!`);
+            showToast(`Added "${activeSelectedText}" to ${data.merged_into}'s aliases in glossary!${tagSuffix}`);
           } else {
-            showToast(`Added "${data.character.name}" (${data.character.category || 'Entry'}) to glossary!`);
+            showToast(`Added "${data.character.name}" (${data.character.category || 'Entry'}) to glossary!${tagSuffix}`);
           }
 
           await loadGlossary(state.activeBookId);

@@ -237,19 +237,20 @@ async function callGeminiDirect(prompt) {
       const text = json?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (text) {
         let clean = text.replace(/```json/gi, '').replace(/```/g, '').trim();
+        let parsed = null;
         try {
-          const parsed = JSON.parse(clean);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-          if (parsed && typeof parsed === 'object') return [parsed];
+          parsed = JSON.parse(clean);
         } catch (_) {
           const m = clean.match(/(\[[\s\S]*\]|\{[\s\S]*\})/);
           if (m) {
             try {
-              const parsed = JSON.parse(m[0]);
-              if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-              if (parsed && typeof parsed === 'object') return [parsed];
+              parsed = JSON.parse(m[0]);
             } catch (_) {}
           }
+        }
+        if (parsed) {
+          const arr = Array.isArray(parsed) ? parsed : [parsed];
+          if (arr.length > 0) return { data: arr, model };
         }
       }
     } catch (err) {
@@ -890,7 +891,8 @@ export const api = {
           already_existed: true,
           was_already_alias: !addedNew,
           merged_into: existing.name,
-          character: existing
+          character: existing,
+          model_used: 'local'
         };
       }
       return {
@@ -900,7 +902,8 @@ export const api = {
         matched_as_alias: (existing.name || '').toLowerCase() !== cleanName.toLowerCase(),
         primary_name: existing.name,
         name: existing.name,
-        character: existing
+        character: existing,
+        model_used: 'local'
       };
     }
 
@@ -1006,7 +1009,9 @@ Return a JSON array with 1 object:
 ]
 `;
 
-        const dataArr = await callGeminiDirect(prompt);
+        const geminiRes = await callGeminiDirect(prompt);
+        const dataArr = geminiRes?.data || (Array.isArray(geminiRes) ? geminiRes : null);
+        const modelUsed = geminiRes?.model || 'gemini-3.8-flash';
         if (Array.isArray(dataArr) && dataArr.length > 0) {
           const raw = dataArr[0];
           const standardName = (raw.name || cleanName).trim();
@@ -1024,7 +1029,8 @@ Return a JSON array with 1 object:
                 character: matchInGlossary,
                 merged_into: matchInGlossary.name,
                 already_existed: true,
-                was_already_alias: !addedNew
+                was_already_alias: !addedNew,
+                model_used: modelUsed
               };
             }
 
@@ -1050,7 +1056,8 @@ Return a JSON array with 1 object:
             return {
               found: true,
               character: newChar,
-              already_existed: false
+              already_existed: false,
+              model_used: modelUsed
             };
           }
         }

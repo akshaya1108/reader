@@ -389,7 +389,8 @@ Only return valid JSON array.
                 "aliases": clean_aliases,
                 "sect_or_affiliation": item.get("sect_or_affiliation", ""),
                 "affiliation": item.get("sect_or_affiliation", ""),
-                "summary": item.get("summary", "")
+                "summary": item.get("summary", ""),
+                "model_used": model_name
             }
             clean_entry_for_novel(card, is_chinese=is_chinese)
             return [card], ""

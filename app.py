@@ -2814,13 +2814,15 @@ def lookup_character_endpoint(book_id):
                 "found": True,
                 "already_existed": True,
                 "character": existing,
+                "model_used": "local",
                 "glossary": glossary
             })
         return jsonify({
             "success": True,
             "found": True,
             "already_existed": True,
-            "character": existing
+            "character": existing,
+            "model_used": "local"
         })
 
     # STEP 2: Query Gemini / Wiki via isolated single-entity lookup
@@ -2831,6 +2833,7 @@ def lookup_character_endpoint(book_id):
 
     if scraped_chars:
         char = scraped_chars[0]
+        model_used = char.get("model_used", "gemini-3.8-flash")
         clean_entry_for_novel(char, is_chinese=is_chinese)
 
         # STEP 3: Check if the AI resolved this query to an existing character/item in the glossary
@@ -2844,13 +2847,15 @@ def lookup_character_endpoint(book_id):
                     "found": True,
                     "character": existing_resolved,
                     "merged_into": existing_resolved["name"],
+                    "model_used": model_used,
                     "glossary": glossary
                 })
             return jsonify({
                 "success": True,
                 "found": True,
                 "character": existing_resolved,
-                "merged_into": existing_resolved["name"]
+                "merged_into": existing_resolved["name"],
+                "model_used": model_used
             })
         else:
             # Truly new character/item/clan!
@@ -2865,9 +2870,10 @@ def lookup_character_endpoint(book_id):
                     "success": True,
                     "found": True,
                     "character": char,
+                    "model_used": model_used,
                     "glossary": glossary
                 })
-            return jsonify({"success": True, "found": True, "character": char})
+            return jsonify({"success": True, "found": True, "character": char, "model_used": model_used})
 
     return jsonify({"success": False, "found": False, "error": err_msg or "Unavailable in novel glossary"}), 200
 
