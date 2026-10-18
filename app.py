@@ -4,6 +4,7 @@ import re
 import datetime
 import html
 import urllib.parse
+import unicodedata
 from flask import Flask, request, jsonify, render_template, send_from_directory, redirect
 from dotenv import load_dotenv
 import requests
@@ -2405,10 +2406,31 @@ def search_book(book_id):
         "total_matches": len(glossary_matches) + total_chapter_matches
     })
 
+def strip_diacritics(s: str) -> str:
+    if not s:
+        return ""
+    s = unicodedata.normalize('NFD', s)
+    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+    s = s.replace('ś', 's').replace('Ś', 'S').replace('ṣ', 's').replace('Ṣ', 'S')
+    s = s.replace('ñ', 'n').replace('Ñ', 'N').replace('ṛ', 'r').replace('Ṛ', 'R')
+    return s
+
+LORE_PREFIXES = r'^(sri|shri|shree|lord|lady|master|grandmaster|elder|sage|saint|king|queen|prince|princess|venerable|patriarch|deva|devi|bhagavan|bhagwan|maharishi|rishi|sect\s+leader|clan\s+leader)\s+'
+LORE_SUFFIXES = r'[\s-]+(jun|ji|ge|er|deva|devi|rsi)$'
+
+def strip_lore_titles(s: str) -> str:
+    if not s:
+        return ""
+    clean = strip_diacritics(s).strip()
+    clean = re.sub(LORE_PREFIXES, '', clean, flags=re.IGNORECASE).strip()
+    clean = re.sub(LORE_SUFFIXES, '', clean, flags=re.IGNORECASE).strip()
+    return clean
+
 def norm_alias(s: str) -> str:
     if not s:
         return ""
-    return re.sub(r'[\s\-_’\'"]+', '', s).lower().strip()
+    s_clean = strip_diacritics(s)
+    return re.sub(r'[\s\-_’\'"]+', '', s_clean).lower().strip()
 
 GENERIC_ALIAS_IGNORE = {
     "location", "locations", "character", "characters", "weapon", "weapons",
@@ -2420,19 +2442,23 @@ def find_matching_glossary_entry(glossary: list, query_name: str, incoming_item:
     """
     Finds if an entry already exists in the glossary by checking:
     1. Exact ID or slugified query name.
-    2. Primary name (case and punctuation insensitive).
-    3. Aliases of existing entries containing query_name.
-    4. Cross-alias and name overlap between incoming_item and existing entries.
-    5. Matching Chinese Hanzi or Pinyin.
+    2. Primary name (case, punctuation, and diacritic insensitive).
+    3. Title-stripped matching (e.g. "Sri Narayana" -> "Narayana" matches "Narayana").
+    4. Aliases of existing entries containing query_name.
+    5. Cross-alias and name overlap between incoming_item and existing entries.
+    6. Matching Chinese Hanzi or Pinyin.
     """
     if not glossary:
         return None
 
     q_norm = norm_alias(query_name)
     q_slug = slugify(query_name) if query_name else ""
+    q_stripped = strip_lore_titles(query_name)
+    q_stripped_norm = norm_alias(q_stripped)
 
     inc_name = incoming_item.get("name", "") if incoming_item else ""
     inc_norm = norm_alias(inc_name)
+    inc_stripped_norm = norm_alias(strip_lore_titles(inc_name))
     inc_slug = (incoming_item.get("id") or (slugify(inc_name) if inc_name else "")) if incoming_item else ""
     inc_aliases = [norm_alias(a) for a in incoming_item.get("aliases", []) if a and norm_alias(a) not in GENERIC_ALIAS_IGNORE] if incoming_item else []
     inc_hanzi = norm_alias(incoming_item.get("pinyin_or_chinese")) if incoming_item else ""
@@ -2440,39 +2466,57 @@ def find_matching_glossary_entry(glossary: list, query_name: str, incoming_item:
     # Priority 1: Match with query_name directly (if not generic)
     if q_norm and q_norm not in GENERIC_ALIAS_IGNORE:
         for entry in glossary:
-            if entry.get("id") and entry.get("id") == q_slug:
-                return entry
-            if norm_alias(entry.get("name")) == q_norm:
-                return entry
+            if not entry:
+                continue
+            e_id = entry.get("id", "")
+            e_name = entry.get("name", "")
+            e_norm = norm_alias(e_name)
+            e_stripped_norm = norm_alias(strip_lore_titles(e_name))
             e_aliases = [norm_alias(a) for a in entry.get("aliases", []) if a]
+            e_stripped_aliases = [norm_alias(strip_lore_titles(a)) for a in entry.get("aliases", []) if a]
+
+            if e_id and (e_id == q_slug or (q_stripped and e_id == slugify(q_stripped))):
+                return entry
+            if e_norm == q_norm:
+                return entry
+            if q_stripped_norm and len(q_stripped_norm) >= 3 and (e_norm == q_stripped_norm or e_stripped_norm == q_stripped_norm):
+                return entry
             if q_norm in e_aliases:
+                return entry
+            if q_stripped_norm and len(q_stripped_norm) >= 3 and (q_stripped_norm in e_aliases or q_stripped_norm in e_stripped_aliases):
                 return entry
 
     # Priority 2: Match with incoming_item details (resolved by AI/wiki)
     if incoming_item:
         inc_cat = normalize_category(incoming_item.get("category")) if incoming_item.get("category") else ""
         for entry in glossary:
+            if not entry:
+                continue
             e_cat = normalize_category(entry.get("category")) if entry.get("category") else ""
-            # Cross-category matching is strictly forbidden
             if inc_cat and e_cat and inc_cat != e_cat:
                 continue
 
             e_id = entry.get("id", "")
-            e_norm = norm_alias(entry.get("name"))
+            e_name = entry.get("name", "")
+            e_norm = norm_alias(e_name)
+            e_stripped_norm = norm_alias(strip_lore_titles(e_name))
             e_aliases = [norm_alias(a) for a in entry.get("aliases", []) if a]
+            e_stripped_aliases = [norm_alias(strip_lore_titles(a)) for a in entry.get("aliases", []) if a]
             e_hanzi = norm_alias(entry.get("pinyin_or_chinese"))
 
             if inc_slug and e_id == inc_slug:
                 return entry
             if inc_norm and (e_norm == inc_norm or inc_norm in e_aliases):
                 return entry
+            if inc_stripped_norm and len(inc_stripped_norm) >= 3 and (e_norm == inc_stripped_norm or e_stripped_norm == inc_stripped_norm or inc_stripped_norm in e_aliases):
+                return entry
             if e_norm and e_norm in inc_aliases:
                 return entry
-            # Check overlap between incoming aliases and existing aliases (strictly non-generic)
+            if e_stripped_norm and len(e_stripped_norm) >= 3 and e_stripped_norm in inc_aliases:
+                return entry
             for a in inc_aliases:
-                if a in e_aliases and a not in GENERIC_ALIAS_IGNORE and len(a) >= 3:
+                if (a in e_aliases or a in e_stripped_aliases) and a not in GENERIC_ALIAS_IGNORE and len(a) >= 3:
                     return entry
-            # Check Hanzi / pinyin match if meaningful
             if inc_hanzi and e_hanzi and (inc_hanzi in e_hanzi or e_hanzi in inc_hanzi) and len(inc_hanzi) >= 2:
                 return entry
 
@@ -2815,10 +2859,10 @@ def lookup_character_endpoint(book_id):
         })
 
     # STEP 2: Query Gemini / Wiki via isolated single-entity lookup
-    scraped_chars, err_msg = lookup_single_entity(name, book_title, genre=genre)
+    scraped_chars, err_msg = lookup_single_entity(name, book_title, genre=genre, existing_glossary=glossary)
     if not scraped_chars and "generic" not in (err_msg or "").lower():
         raw_text, detected_cat, _ = scrape_fandom_data(name, book_title)
-        scraped_chars, err_msg = sanitize_wiki_data_with_gemini(raw_text, book_title, query=name, target_category=detected_cat, genre=genre)
+        scraped_chars, err_msg = sanitize_wiki_data_with_gemini(raw_text, book_title, query=name, target_category=detected_cat, genre=genre, existing_glossary=glossary)
 
     if scraped_chars:
         char = scraped_chars[0]

@@ -1348,10 +1348,14 @@ function setupReaderInteractions() {
           if (btnSelectionIcon) btnSelectionIcon.innerHTML = ICON_CHECK;
           if (btnSelectionText) btnSelectionText.textContent = 'Added!';
 
-          if (data.already_existed) {
-            showToast(`"${word}" is already in glossary under ${data.character.name}!`);
-          } else if (data.merged_into && data.merged_into.toLowerCase() !== word.toLowerCase()) {
-            showToast(`Added "${word}" to ${data.merged_into}'s aliases in glossary!`);
+          if (data.merged_into && data.merged_into.toLowerCase() !== word.toLowerCase()) {
+            if (data.was_already_alias) {
+              showToast(`"${word}" is already in glossary under ${data.character.name}!`);
+            } else {
+              showToast(`Added "${word}" to ${data.merged_into}'s aliases in glossary!`);
+            }
+          } else if (data.already_existed) {
+            showToast(`"${word}" is already in glossary!`);
           } else {
             showToast(`Added "${data.character.name}" (${data.character.category || 'Entry'}) to glossary!`);
           }
@@ -2666,10 +2670,16 @@ function setupEditLoreSheet() {
         const res = await api.lookupCharacter(state.activeBookId, name, false);
         if (res && res.character) {
           const c = res.character;
+          if (c.name && document.getElementById('edit-lore-name')) {
+            document.getElementById('edit-lore-name').value = c.name;
+          }
           if (c.category) document.getElementById('edit-lore-category').value = normalizeCategory(c.category);
           if (c.affiliation) document.getElementById('edit-lore-affiliation').value = c.affiliation;
 
           const aliasesArr = Array.isArray(c.aliases) ? [...c.aliases] : (c.aliases ? [c.aliases] : []);
+          if (name && !aliasesArr.includes(name) && name.toLowerCase() !== (c.name || '').toLowerCase()) {
+            aliasesArr.push(name);
+          }
           if (isCurrentBookChinese() && c.pinyin_or_chinese && !['n/a', 'none', 'null', (c.name || '').toLowerCase()].includes(c.pinyin_or_chinese.toLowerCase().trim()) && !aliasesArr.includes(c.pinyin_or_chinese)) {
             aliasesArr.unshift(c.pinyin_or_chinese);
           }
@@ -2679,7 +2689,14 @@ function setupEditLoreSheet() {
             document.getElementById('edit-lore-aliases').value = aliasesArr.join(', ');
           }
           if (c.summary) document.getElementById('edit-lore-summary').value = c.summary;
-          showToast(`Autofilled details for "${name}"`);
+
+          if (res.merged_into && res.merged_into.toLowerCase() !== name.toLowerCase()) {
+            showToast(`Linked to existing entry "${res.merged_into}"`);
+          } else if (res.already_existed) {
+            showToast(`Loaded existing details for "${c.name}"`);
+          } else {
+            showToast(`Autofilled details for "${name}"`);
+          }
         } else {
           showToast('No information found for this name');
         }

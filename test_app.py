@@ -106,6 +106,26 @@ class TestXianxiaReader(unittest.TestCase):
         self.assertIsNotNone(matched)
         self.assertEqual(matched["id"], "wei-wuxian")
 
+        # 1b. Test title-stripping and diacritics matching (e.g. Sri Narayana / Śrī Nārāyaṇa -> Vishnu)
+        mock_vedic_glossary = [
+            {
+                "id": "vishnu",
+                "name": "Vishnu",
+                "aliases": ["Viṣṇu", "Lord Vishnu", "Narayana", "Hari"],
+                "summary": "Preserver of cosmic order.",
+                "category": "Character"
+            }
+        ]
+        # Query with title prefix "Sri Narayana"
+        matched_narayana = find_matching_glossary_entry(mock_vedic_glossary, "Sri Narayana")
+        self.assertIsNotNone(matched_narayana)
+        self.assertEqual(matched_narayana["name"], "Vishnu")
+
+        # Query with Sanskrit diacritics "Śrī Nārāyaṇa"
+        matched_diacritic = find_matching_glossary_entry(mock_vedic_glossary, "Śrī Nārāyaṇa")
+        self.assertIsNotNone(matched_diacritic)
+        self.assertEqual(matched_diacritic["name"], "Vishnu")
+
         # 2. Test merging a new title "Yiling Laozu" into Wei Wuxian
         incoming_ai_data = {
             "name": "Wei Wuxian",

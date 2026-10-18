@@ -237,7 +237,7 @@ def scrape_fandom_character_list(url_or_title: str, novel_title: str = "") -> st
     raw_text, _, _ = scrape_fandom_data(url_or_title, novel_title)
     return raw_text
 
-def lookup_single_entity(query: str, novel_title: str, genre: str = "") -> Tuple[List[Dict[str, Any]], str]:
+def lookup_single_entity(query: str, novel_title: str, genre: str = "", existing_glossary: list = None) -> Tuple[List[Dict[str, Any]], str]:
     """
     Dedicated, isolated single-entity lookup for reader text selections and form auto-fill.
     Evaluates strictly THAT ONE TERM:
@@ -262,6 +262,29 @@ def lookup_single_entity(query: str, novel_title: str, genre: str = "") -> Tuple
     if fandom_url:
         wiki_text, _, _ = fetch_fandom_via_api(fandom_url)
 
+    existing_entities_text = ""
+    if existing_glossary:
+        names_list = []
+        for e in existing_glossary[:150]:
+            ename = e.get("name")
+            if ename:
+                ealiases = [a for a in e.get("aliases", []) if a and a.lower() != ename.lower()]
+                if ealiases:
+                    names_list.append(f"{ename} (aliases: {', '.join(ealiases[:4])})")
+                else:
+                    names_list.append(ename)
+        if names_list:
+            existing_entities_text = f"""
+EXISTING CANONICAL ENTRIES IN THIS GLOSSARY:
+{'; '.join(names_list)}
+
+CRITICAL DEDUPLICATION DIRECTIVE:
+The reader already has the entries listed above in their glossary.
+If "{q_clean}" is an alias, avatar, incarnation, title, courtesy name, alternate translation, or epithet of ANY entry listed above (for example: "Sri Narayana" is Vishnu; "Govinda" is Krishna; "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji):
+You MUST set 'name' to that EXACT canonical name from the list above, and include "{q_clean}" in the 'aliases' array!
+Do NOT create an isolated new duplicate entry!
+"""
+
     if is_chinese:
         intro_desc = f'You are an expert canon scholar for translated Xianxia, Wuxia, and Danmei literature.\nThe user is reading "{novel_title}" and wants to identify the term "{q_clean}".'
         pinyin_rule = "- 'pinyin_or_chinese': Chinese Hanzi or Pinyin (e.g. \"传送符\" or \"Chuánsòng Fú\")"
@@ -277,6 +300,7 @@ def lookup_single_entity(query: str, novel_title: str, genre: str = "") -> Tuple
 {intro_desc}
 
 {f"Wiki Text:\n{wiki_text[:8000]}" if wiki_text else ""}
+{existing_entities_text}
 
 Analyze the term "{q_clean}" in "{novel_title}" (or its broader literary, fantasy, mythological, or Vedic lore):
 1. Canonical & Lore Recognition:
@@ -374,7 +398,7 @@ Only return valid JSON array.
 
     return [], last_err or "Service temporarily busy"
 
-def sanitize_wiki_data_with_gemini(raw_text: str, novel_title: str, query: str = "", target_category: str = "", genre: str = "") -> Tuple[List[Dict[str, Any]], str]:
+def sanitize_wiki_data_with_gemini(raw_text: str, novel_title: str, query: str = "", target_category: str = "", genre: str = "", existing_glossary: list = None) -> Tuple[List[Dict[str, Any]], str]:
     """Uses Gemini to extract or generate spoiler-free 1-line glossary cards."""
     client = get_gemini_client()
     if not client:
@@ -384,6 +408,29 @@ def sanitize_wiki_data_with_gemini(raw_text: str, novel_title: str, query: str =
     non_chinese_note = ""
     if not is_chinese:
         non_chinese_note = f'\nCRITICAL DIRECTIVE: "{novel_title}" is NOT a Chinese, Xianxia, or Danmei novel. Under NO circumstances should you produce or invent Chinese characters, Hanzi, or Pinyin romanizations. Set "pinyin_or_chinese" to "". Do NOT include Chinese or pinyin translations in "aliases".'
+
+    existing_entities_text = ""
+    if existing_glossary:
+        names_list = []
+        for e in existing_glossary[:150]:
+            ename = e.get("name")
+            if ename:
+                ealiases = [a for a in e.get("aliases", []) if a and a.lower() != ename.lower()]
+                if ealiases:
+                    names_list.append(f"{ename} (aliases: {', '.join(ealiases[:4])})")
+                else:
+                    names_list.append(ename)
+        if names_list:
+            existing_entities_text = f"""
+EXISTING CANONICAL ENTRIES IN THIS GLOSSARY:
+{'; '.join(names_list)}
+
+CRITICAL DEDUPLICATION DIRECTIVE:
+The reader already has the entries listed above in their glossary.
+If "{query}" is an alias, avatar, incarnation, title, courtesy name, alternate translation, or epithet of ANY entry listed above:
+You MUST set 'name' to that EXACT canonical name from the list above, and include "{query}" in the 'aliases' array!
+Do NOT create an isolated new duplicate entry!
+"""
 
     is_character_lookup = bool(
         query and 
@@ -422,6 +469,7 @@ Wiki Text:
 \"\"\"
 {raw_text[:12000]}
 \"\"\"
+{existing_entities_text}
 
 Return a valid JSON array with 1 object:
 [
@@ -441,6 +489,8 @@ Only return valid JSON array.
 You are an authoritative scholar and canon fact-checker for translated Xianxia, Wuxia, and Danmei literature.
 The user is reading chapters in a book titled "{novel_title}".
 They want to verify and look up the entry "{query}".
+
+{existing_entities_text}
 
 CRITICAL CANONICAL INTEGRITY & TRANSLATION DIRECTIVES:
 1. TRANSLATION SYNONYMS & UNIVERSES:

@@ -75,6 +75,179 @@ function isChineseNovel(title = '', genre = '') {
   return /[\u4e00-\u9fff]/.test(title + genre);
 }
 
+const GENERIC_LORE_TERMS = new Set([
+  'location', 'locations', 'character', 'characters', 'weapon', 'weapons',
+  'item', 'items', 'clan', 'clans', 'sect', 'sects', 'concept', 'concepts',
+  'lore', 'cast', 'all', 'wiki', 'novel', 'realm', 'place', 'mountains', 'mountain',
+  'the', 'a', 'an', 'and', 'of', 'in', 'to', 'for', 'with', 'on', 'at', 'from', 'by'
+]);
+
+function normalizeLoreKey(str) {
+  if (!str || typeof str !== 'string') return '';
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[śṣ]/gi, 'sh')
+    .replace(/[ñ]/gi, 'n')
+    .replace(/[ṛṝ]/gi, 'r')
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, ' ')
+    .trim()
+    .replace(/\s+/g, ' ');
+}
+
+function stripLoreTitles(str) {
+  if (!str || typeof str !== 'string') return '';
+  let s = str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[śṣ]/gi, 'sh')
+    .replace(/[ñ]/gi, 'n')
+    .replace(/[ṛṝ]/gi, 'r')
+    .trim();
+  const prefixRegex = /^(sri|shri|shree|lord|lady|master|grandmaster|elder|sage|saint|king|queen|prince|princess|venerable|patriarch|deva|devi|bhagavan|bhagwan|maharishi|rishi|sect\s+leader|clan\s+leader)\s+/i;
+  const suffixRegex = /[\s-]+(jun|ji|ge|er|deva|devi|rsi)$/i;
+  let stripped = s.replace(prefixRegex, '').trim();
+  stripped = stripped.replace(suffixRegex, '').trim();
+  return stripped;
+}
+
+function findMatchingGlossaryEntry(entries, queryName, incomingItem = null) {
+  if (!Array.isArray(entries) || entries.length === 0) return null;
+
+  const qRaw = (queryName || '').trim();
+  const qNorm = normalizeLoreKey(qRaw);
+  const qStrippedNorm = normalizeLoreKey(stripLoreTitles(qRaw));
+
+  const incName = incomingItem && incomingItem.name ? incomingItem.name.trim() : '';
+  const incNorm = normalizeLoreKey(incName);
+  const incStrippedNorm = normalizeLoreKey(stripLoreTitles(incName));
+  const incAliases = incomingItem && Array.isArray(incomingItem.aliases)
+    ? incomingItem.aliases.map(a => normalizeLoreKey(a)).filter(a => a && a.length >= 2 && !GENERIC_LORE_TERMS.has(a))
+    : [];
+  const incCat = incomingItem && incomingItem.category ? incomingItem.category.trim().toLowerCase() : '';
+
+  // 1. Direct match with queryName
+  if (qNorm && !GENERIC_LORE_TERMS.has(qNorm)) {
+    for (const entry of entries) {
+      if (!entry) continue;
+      const eName = (entry.name || '').trim();
+      const eNorm = normalizeLoreKey(eName);
+      const eStrippedNorm = normalizeLoreKey(stripLoreTitles(eName));
+
+      // Exact or diacritic-normalized primary name match
+      if (eNorm === qNorm) return entry;
+
+      // Title-stripped primary name match
+      if (qStrippedNorm && qStrippedNorm.length >= 3 && (eNorm === qStrippedNorm || eStrippedNorm === qStrippedNorm)) {
+        return entry;
+      }
+
+      // Check aliases of existing entry
+      const eAliases = Array.isArray(entry.aliases) ? entry.aliases : [];
+      for (const a of eAliases) {
+        if (!a) continue;
+        const aNorm = normalizeLoreKey(a);
+        const aStrippedNorm = normalizeLoreKey(stripLoreTitles(a));
+
+        if (aNorm === qNorm) return entry;
+        if (qStrippedNorm && qStrippedNorm.length >= 3 && (aNorm === qStrippedNorm || aStrippedNorm === qStrippedNorm)) {
+          return entry;
+        }
+      }
+
+      // Check pinyin or chinese
+      if (entry.pinyin_or_chinese && normalizeLoreKey(entry.pinyin_or_chinese) === qNorm) {
+        return entry;
+      }
+    }
+  }
+
+  // 2. Incoming AI-resolved entity cross-matching
+  if (incomingItem) {
+    for (const entry of entries) {
+      if (!entry) continue;
+      const eCat = (entry.category || '').trim().toLowerCase();
+      if (incCat && eCat && incCat !== eCat) {
+        const isCompatible = (incCat.includes('character') && eCat.includes('character')) ||
+                             (incCat.includes('location') && eCat.includes('location')) ||
+                             (incCat.includes('weapon') && eCat.includes('weapon')) ||
+                             (incCat.includes('clan') && eCat.includes('clan'));
+        if (!isCompatible) continue;
+      }
+
+      const eName = (entry.name || '').trim();
+      const eNorm = normalizeLoreKey(eName);
+      const eStrippedNorm = normalizeLoreKey(stripLoreTitles(eName));
+      const eAliasesNorm = (Array.isArray(entry.aliases) ? entry.aliases : [])
+        .map(a => normalizeLoreKey(a))
+        .filter(a => a && a.length >= 2 && !GENERIC_LORE_TERMS.has(a));
+
+      // AI standard name matches existing primary name or aliases
+      if (incNorm && (eNorm === incNorm || eAliasesNorm.includes(incNorm))) {
+        return entry;
+      }
+      if (incStrippedNorm && incStrippedNorm.length >= 3 && (eNorm === incStrippedNorm || eStrippedNorm === incStrippedNorm || eAliasesNorm.includes(incStrippedNorm))) {
+        return entry;
+      }
+
+      // Existing name matches one of the AI incoming aliases
+      if (eNorm && incAliases.includes(eNorm)) {
+        return entry;
+      }
+      if (eStrippedNorm && eStrippedNorm.length >= 3 && incAliases.includes(eStrippedNorm)) {
+        return entry;
+      }
+
+      // Overlap between incoming aliases and existing aliases
+      for (const a of incAliases) {
+        if (eAliasesNorm.includes(a)) {
+          return entry;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+function mergeGlossaryAliases(existing, incomingAliases = [], queryName = '', isChinese = false) {
+  const currentAliases = Array.isArray(existing.aliases) ? [...existing.aliases] : [];
+  const primaryNorm = normalizeLoreKey(existing.name || '');
+  const seenNorm = new Set();
+
+  for (const a of currentAliases) {
+    if (a && typeof a === 'string') {
+      seenNorm.add(normalizeLoreKey(a));
+    }
+  }
+
+  const candidates = [];
+  if (queryName && queryName.trim()) candidates.push(queryName.trim());
+  if (Array.isArray(incomingAliases)) {
+    for (const a of incomingAliases) {
+      if (a && typeof a === 'string' && a.trim()) candidates.push(a.trim());
+    }
+  }
+
+  let addedAny = false;
+  for (const cand of candidates) {
+    const cNorm = normalizeLoreKey(cand);
+    if (!cNorm || GENERIC_LORE_TERMS.has(cNorm) || cNorm === primaryNorm) continue;
+    if (!isChinese && /[\u4e00-\u9fff]/.test(cand)) continue;
+    if (['n/a', 'none', 'null'].includes(cand.toLowerCase())) continue;
+
+    if (!seenNorm.has(cNorm)) {
+      seenNorm.add(cNorm);
+      currentAliases.push(cand);
+      addedAny = true;
+    }
+  }
+
+  existing.aliases = currentAliases;
+  return addedAny;
+}
+
 async function callGeminiDirect(prompt) {
   const apiKey = getEffectiveGeminiApiKey();
   for (const model of GEMINI_MODELS) {
@@ -741,29 +914,21 @@ export const api = {
     if (!cleanName) {
       return { found: false, message: 'Name is required' };
     }
-    const lowerName = cleanName.toLowerCase();
 
-    // 1. Check local / cached glossary first
+    // 1. Check local / cached glossary first with airtight smart matching
     const entries = await this.getGlossary(targetBookId);
-    const existing = entries.find(e =>
-      (e.name || '').toLowerCase() === lowerName ||
-      (Array.isArray(e.aliases) && e.aliases.some(a => (a || '').toLowerCase() === lowerName)) ||
-      (e.pinyin_or_chinese && e.pinyin_or_chinese.toLowerCase() === lowerName)
-    );
+    const existing = findMatchingGlossaryEntry(entries, cleanName);
 
     if (existing) {
       if (add) {
-        const isDiff = (existing.name || '').toLowerCase() !== lowerName;
-        if (isDiff) {
-          const arr = Array.isArray(existing.aliases) ? [...existing.aliases] : [];
-          if (!arr.some(a => (a || '').toLowerCase() === lowerName)) {
-            existing.aliases = [...arr, cleanName];
-            await this.saveGlossaryEntry(targetBookId, existing);
-          }
+        const addedNew = mergeGlossaryAliases(existing, [], cleanName, isChineseNovel());
+        if (addedNew) {
+          await this.saveGlossaryEntry(targetBookId, existing);
         }
         return {
           found: true,
           already_existed: true,
+          was_already_alias: !addedNew,
           merged_into: existing.name,
           character: existing
         };
@@ -771,8 +936,8 @@ export const api = {
       return {
         found: true,
         already_existed: true,
-        is_alias: (existing.name || '').toLowerCase() !== lowerName,
-        matched_as_alias: (existing.name || '').toLowerCase() !== lowerName,
+        is_alias: (existing.name || '').toLowerCase() !== cleanName.toLowerCase(),
+        matched_as_alias: (existing.name || '').toLowerCase() !== cleanName.toLowerCase(),
         primary_name: existing.name,
         name: existing.name,
         character: existing
@@ -812,12 +977,36 @@ export const api = {
         const bookTitle = book ? (book.title || book.id) : targetBookId;
         const genre = book ? (book.genre || '') : '';
         const isChinese = isChineseNovel(bookTitle, genre);
+
+        // Build compact list of existing canonical entities so Gemini knows what's already in the glossary
+        const existingEntitiesList = entries
+          .filter(e => e && e.name)
+          .slice(0, 150)
+          .map(e => {
+            const aliases = Array.isArray(e.aliases) && e.aliases.length > 0
+              ? ` (aliases: ${e.aliases.slice(0, 4).join(', ')})`
+              : '';
+            return `${e.name}${aliases}`;
+          })
+          .join('; ');
+
         const prompt = `
 You are an expert canon scholar and lore archivist for "${bookTitle}".
 The reader is reading "${bookTitle}" and wants to add the term "${cleanName}" to their glossary.
 ${isChinese
   ? 'This is a Chinese Xianxia/Wuxia/Danmei novel. You may extract Chinese characters, Hanzi, and Pinyin.'
   : 'CRITICAL DIRECTIVE: "' + bookTitle + '" is NOT a Chinese novel. Do NOT generate Chinese characters or pinyin. Set "pinyin_or_chinese" to "".'}
+
+${existingEntitiesList ? `
+EXISTING CANONICAL ENTRIES IN THIS GLOSSARY:
+${existingEntitiesList}
+
+CRITICAL DEDUPLICATION DIRECTIVE:
+The reader already has the canonical entries listed above in their glossary.
+Before creating a new entry, check if "${cleanName}" is an alias, avatar, incarnation, title, courtesy name, alternate translation, or epithet of ANY entry listed above (for example: "Sri Narayana" is Vishnu; "Govinda" is Krishna; "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji).
+If "${cleanName}" corresponds to or is an aspect/alias of an existing entry above, you MUST set "name" to that EXACT canonical name from the list above, and include "${cleanName}" in the 'aliases' array!
+Do NOT create an isolated new duplicate entry!
+` : ''}
 
 Identify and analyze "${cleanName}" in "${bookTitle}" (or its established literary, fantasy, mythological, Vedic, or philosophical lore):
 1. Canonical & Lore Recognition:
@@ -856,17 +1045,11 @@ Return a JSON array with 1 object:
           const raw = dataArr[0];
           const standardName = (raw.name || cleanName).trim();
           if (standardName) {
-            // Check if AI resolved term to an existing character in glossary
-            const matchInGlossary = entries.find(e =>
-              (e.name || '').toLowerCase() === standardName.toLowerCase() ||
-              (Array.isArray(e.aliases) && e.aliases.some(a => (a || '').toLowerCase() === standardName.toLowerCase()))
-            );
+            // Check if AI resolved term or its aliases to an existing character in glossary
+            const matchInGlossary = findMatchingGlossaryEntry(entries, cleanName, raw);
 
             if (matchInGlossary) {
-              const curAliases = Array.isArray(matchInGlossary.aliases) ? matchInGlossary.aliases : [];
-              if (!curAliases.some(a => (a || '').toLowerCase() === lowerName)) {
-                matchInGlossary.aliases = [...curAliases, cleanName];
-              }
+              const addedNew = mergeGlossaryAliases(matchInGlossary, raw.aliases, cleanName, isChinese);
               if (add) {
                 await this.saveGlossaryEntry(targetBookId, matchInGlossary);
               }
@@ -874,16 +1057,12 @@ Return a JSON array with 1 object:
                 found: true,
                 character: matchInGlossary,
                 merged_into: matchInGlossary.name,
-                already_existed: true
+                already_existed: true,
+                was_already_alias: !addedNew
               };
             }
 
             // Brand new character / entity
-            const newAliases = Array.isArray(raw.aliases) ? [...raw.aliases] : [];
-            if (!newAliases.some(a => (a || '').toLowerCase() === lowerName) && lowerName !== standardName.toLowerCase()) {
-              newAliases.push(cleanName);
-            }
-
             const cleanId = standardName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `entity-${Date.now()}`;
             const newChar = {
               id: cleanId,
@@ -892,10 +1071,11 @@ Return a JSON array with 1 object:
               affiliation: raw.affiliation || raw.sect_or_affiliation || '',
               sect_or_affiliation: raw.affiliation || raw.sect_or_affiliation || '',
               pinyin_or_chinese: isChinese ? (raw.pinyin_or_chinese || '') : '',
-              aliases: newAliases,
+              aliases: Array.isArray(raw.aliases) ? [...raw.aliases] : [],
               summary: raw.summary || '',
               mentions: 0
             };
+            mergeGlossaryAliases(newChar, raw.aliases, cleanName, isChinese);
 
             if (add) {
               await this.saveGlossaryEntry(targetBookId, newChar);
