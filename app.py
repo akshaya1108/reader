@@ -2406,22 +2406,10 @@ def search_book(book_id):
         "total_matches": len(glossary_matches) + total_chapter_matches
     })
 
-def strip_diacritics(s: str) -> str:
-    if not s:
-        return ""
-    # Map Sanskrit / IAST phonemes to English transliterations before decomposing diacritics
-    s = re.sub(r'[śṣŚṢ]', 'sh', s)
-    s = re.sub(r'[ñÑ]', 'n', s)
-    s = re.sub(r'[ṛṚṝṜ]', 'r', s)
-    s = unicodedata.normalize('NFD', s)
-    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
-    return s
-
 def norm_alias(s: str) -> str:
     if not s:
         return ""
-    s_clean = strip_diacritics(s)
-    return re.sub(r'[\s\-_’\'"]+', '', s_clean).lower().strip()
+    return re.sub(r'[\s\-_’\'"]+', ' ', s).lower().strip()
 
 GENERIC_ALIAS_IGNORE = {
     "location", "locations", "character", "characters", "weapon", "weapons",

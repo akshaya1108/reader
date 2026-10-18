@@ -573,41 +573,50 @@ class TestXianxiaReader(unittest.TestCase):
                 "id": "vishnu",
                 "name": "Vishnu",
                 "category": "Character",
-                "aliases": ["Narayana", "Hari"],
+                "aliases": ["Mahavishnu", "Hari", "Vāsudeva"],
                 "summary": "The preserver deity in the Hindu trimurti."
             }
         ]
 
-        # 1. Exact and diacritic matching
-        match_vishnu = find_matching_glossary_entry(sample_glossary, "Viṣṇu")
-        self.assertIsNotNone(match_vishnu)
-        self.assertEqual(match_vishnu["id"], "vishnu")
+        # 1. Exact case-insensitive matching works
+        match_wangji = find_matching_glossary_entry(sample_glossary, "lan wangji")
+        self.assertIsNotNone(match_wangji)
+        self.assertEqual(match_wangji["id"], "lan-wangji")
 
-        match_narayana = find_matching_glossary_entry(sample_glossary, "Narayana")
-        self.assertIsNotNone(match_narayana)
-        self.assertEqual(match_narayana["id"], "vishnu")
+        # 2. Diacritics are strictly preserved (Vasudeva [father] does NOT match Vāsudeva [Lord Vishnu])
+        match_vasudeva = find_matching_glossary_entry(sample_glossary, "Vasudeva")
+        self.assertIsNone(match_vasudeva)
 
-        # 2. Verify 'Sect Leader Lan' does NOT falsely match 'Lan Clan' locally
+        # 3. 'Sect Leader Lan' does NOT falsely match 'Lan Clan' locally
         match_sect_leader = find_matching_glossary_entry(sample_glossary, "Sect Leader Lan")
         self.assertIsNone(match_sect_leader)
 
-        # 3. AI resolves 'Sect Leader Lan' to Lan Xichen -> matches Lan Xichen properly
-        incoming_resolved = {
-            "name": "Lan Xichen",
+        # 4. Cross-alias deduplication: AI generates Narayana with alias 'Mahavishnu' -> matches existing Vishnu
+        incoming_narayana = {
+            "name": "Narayana",
             "category": "Character",
-            "aliases": ["Lan Huan", "Zewu-jun", "Sect Leader Lan"],
-            "summary": "New AI-generated summary that should not replace existing summary."
+            "aliases": ["Mahavishnu", "Hari", "Narayana"],
+            "summary": "AI summary for Narayana that should not overwrite Vishnu."
         }
-        match_resolved = find_matching_glossary_entry(sample_glossary, "Sect Leader Lan", incoming_item=incoming_resolved)
-        self.assertIsNotNone(match_resolved)
-        self.assertEqual(match_resolved["id"], "lan-xichen")
+        match_narayana = find_matching_glossary_entry(sample_glossary, "Narayana", incoming_item=incoming_narayana)
+        self.assertIsNotNone(match_narayana)
+        self.assertEqual(match_narayana["id"], "vishnu")
 
-        # 4. Merging preserves existing summary while adding new alias
-        merged = merge_glossary_entry(match_resolved, incoming_resolved, query_name="Sect Leader Lan")
-        self.assertEqual(merged["summary"], "First Young Master of the Lan Clan.")
-        self.assertIn("Sect Leader Lan", merged["aliases"])
-        self.assertIn("Lan Huan", merged["aliases"])
-        self.assertIn("Zewu-jun", merged["aliases"])
+        # Merging preserves existing summary while adding new alias 'Narayana'
+        merged_vishnu = merge_glossary_entry(match_narayana, incoming_narayana, query_name="Narayana")
+        self.assertEqual(merged_vishnu["summary"], "The preserver deity in the Hindu trimurti.")
+        self.assertIn("Narayana", merged_vishnu["aliases"])
+        self.assertIn("Mahavishnu", merged_vishnu["aliases"])
+
+        # 5. Distinct entities stay separate: AI generates Vasudeva (father) with alias 'Anakadundubhi' -> no match
+        incoming_vasudeva = {
+            "name": "Vasudeva",
+            "category": "Character",
+            "aliases": ["Anakadundubhi", "Vasudeva"],
+            "summary": "Father of Balarama and Krishna."
+        }
+        match_distinct = find_matching_glossary_entry(sample_glossary, "Vasudeva", incoming_item=incoming_vasudeva)
+        self.assertIsNone(match_distinct)
 
 if __name__ == '__main__':
     unittest.main()

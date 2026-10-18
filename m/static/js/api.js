@@ -85,16 +85,11 @@ const GENERIC_LORE_TERMS = new Set([
 function normalizeLoreKey(str) {
   if (!str || typeof str !== 'string') return '';
   return str
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[śṣ]/gi, 'sh')
-    .replace(/[ñ]/gi, 'n')
-    .replace(/[ṛṝ]/gi, 'r')
     .toLowerCase()
-    .replace(/[^a-z0-9]/g, ' ')
     .trim()
-    .replace(/\s+/g, ' ');
+    .replace(/[\s\-_'’"]+/g, ' ');
 }
+
 
 function findMatchingGlossaryEntry(entries, queryName, incomingItem = null) {
   if (!Array.isArray(entries) || entries.length === 0) return null;
