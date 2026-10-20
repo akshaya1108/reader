@@ -262,29 +262,6 @@ def lookup_single_entity(query: str, novel_title: str, genre: str = "", existing
     if fandom_url:
         wiki_text, _, _ = fetch_fandom_via_api(fandom_url)
 
-    existing_entities_text = ""
-    if existing_glossary:
-        names_list = []
-        for e in existing_glossary[:150]:
-            ename = e.get("name")
-            if ename:
-                ealiases = [a for a in e.get("aliases", []) if a and a.lower() != ename.lower()]
-                if ealiases:
-                    names_list.append(f"{ename} (aliases: {', '.join(ealiases[:4])})")
-                else:
-                    names_list.append(ename)
-        if names_list:
-            existing_entities_text = f"""
-EXISTING CANONICAL ENTRIES IN THIS GLOSSARY:
-{'; '.join(names_list)}
-
-CRITICAL DEDUPLICATION DIRECTIVE:
-The reader already has the entries listed above in their glossary.
-If "{q_clean}" is an alias, avatar, incarnation, title, courtesy name, alternate translation, or epithet of ANY entry listed above (for example: "Sri Narayana" is Vishnu; "Govinda" is Krishna; "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji):
-You MUST set 'name' to that EXACT canonical name from the list above, and include "{q_clean}" in the 'aliases' array!
-Do NOT create an isolated new duplicate entry!
-"""
-
     if is_chinese:
         intro_desc = f'You are an expert canon scholar for translated Xianxia, Wuxia, and Danmei literature.\nThe user is reading "{novel_title}" and wants to identify the term "{q_clean}".'
         pinyin_rule = "- 'pinyin_or_chinese': Chinese Hanzi or Pinyin (e.g. \"传送符\" or \"Chuánsòng Fú\")"
@@ -300,7 +277,6 @@ Do NOT create an isolated new duplicate entry!
 {intro_desc}
 
 {f"Wiki Text:\n{wiki_text[:8000]}" if wiki_text else ""}
-{existing_entities_text}
 
 Analyze the term "{q_clean}" in "{novel_title}" (or its broader literary, fantasy, mythological, or Vedic lore):
 1. Canonical & Lore Recognition:

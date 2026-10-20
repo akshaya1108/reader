@@ -941,35 +941,12 @@ export const api = {
         const genre = book ? (book.genre || '') : '';
         const isChinese = isChineseNovel(bookTitle, genre);
 
-        // Build compact list of existing canonical entities so Gemini knows what's already in the glossary
-        const existingEntitiesList = entries
-          .filter(e => e && e.name)
-          .slice(0, 150)
-          .map(e => {
-            const aliases = Array.isArray(e.aliases) && e.aliases.length > 0
-              ? ` (aliases: ${e.aliases.slice(0, 4).join(', ')})`
-              : '';
-            return `${e.name}${aliases}`;
-          })
-          .join('; ');
-
         const prompt = `
 You are an expert canon scholar and lore archivist for "${bookTitle}".
 The reader is reading "${bookTitle}" and wants to add the term "${cleanName}" to their glossary.
 ${isChinese
   ? 'This is a Chinese Xianxia/Wuxia/Danmei novel. You may extract Chinese characters, Hanzi, and Pinyin.'
   : 'CRITICAL DIRECTIVE: "' + bookTitle + '" is NOT a Chinese novel. Do NOT generate Chinese characters or pinyin. Set "pinyin_or_chinese" to "".'}
-
-${existingEntitiesList ? `
-EXISTING CANONICAL ENTRIES IN THIS GLOSSARY:
-${existingEntitiesList}
-
-CRITICAL DEDUPLICATION DIRECTIVE:
-The reader already has the canonical entries listed above in their glossary.
-Before creating a new entry, check if "${cleanName}" is an alias, avatar, incarnation, title, courtesy name, alternate translation, or epithet of ANY entry listed above (for example: "Sri Narayana" is Vishnu; "Govinda" is Krishna; "Yiling Laozu" is Wei Wuxian; "Hanguang-jun" is Lan Wangji).
-If "${cleanName}" corresponds to or is an aspect/alias of an existing entry above, you MUST set "name" to that EXACT canonical name from the list above, and include "${cleanName}" in the 'aliases' array!
-Do NOT create an isolated new duplicate entry!
-` : ''}
 
 Identify and analyze "${cleanName}" in "${bookTitle}" (or its established literary, fantasy, mythological, Vedic, or philosophical lore):
 1. Canonical & Lore Recognition:

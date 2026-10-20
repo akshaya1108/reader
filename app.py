@@ -248,6 +248,8 @@ def auto_heal_supabase_chapters_async():
     threading.Thread(target=_run, daemon=True).start()
 
 def delete_chapter_from_supabase_async(book_id, ch_num):
+    if app.config.get("TESTING"):
+        return
     import threading
     def _run():
         try:
@@ -2311,6 +2313,19 @@ def search_glossary_entries(glossary: list, query: str) -> list:
             matched_field = "sect"
 
         if matched_field:
+            if name.lower() == q_lower:
+                score = 0
+            elif name.lower().startswith(q_lower):
+                score = 1
+            elif matched_field == "name":
+                score = 2
+            elif matched_field == "alias":
+                score = 3
+            elif matched_field == "pinyin":
+                score = 4
+            else:
+                score = 5
+
             results.append({
                 "id": entry.get("id"),
                 "name": name,
@@ -2321,9 +2336,11 @@ def search_glossary_entries(glossary: list, query: str) -> list:
                 "sect_or_affiliation": sect,
                 "summary": summary,
                 "matched_field": matched_field,
-                "matched_alias": matched_alias
+                "matched_alias": matched_alias,
+                "_score": score
             })
 
+    results.sort(key=lambda x: x.pop("_score"))
     return results
 
 @app.route("/api/books/<book_id>/search", methods=["GET"])

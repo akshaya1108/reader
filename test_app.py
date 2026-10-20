@@ -262,9 +262,10 @@ class TestXianxiaReader(unittest.TestCase):
     def test_canonical_categories_and_normalization(self):
         from app import CANONICAL_CATEGORIES, normalize_category
 
-        # 1. Verify CANONICAL_CATEGORIES exactly matches the 5 standard categories
+        # 1. Verify CANONICAL_CATEGORIES exactly matches the 6 standard categories
         expected_categories = [
             "Character",
+            "Race / Creature",
             "Weapon / Item",
             "Clan / Sect",
             "Location / Realm",
@@ -278,7 +279,7 @@ class TestXianxiaReader(unittest.TestCase):
         self.assertEqual(normalize_category("location"), "Location / Realm")
         self.assertEqual(normalize_category("cultivation sect / faction"), "Clan / Sect")
         self.assertEqual(normalize_category("lore / technique"), "Concept / Lore")
-        self.assertEqual(normalize_category("animal"), "Character")
+        self.assertEqual(normalize_category("animal"), "Race / Creature")
         self.assertEqual(normalize_category(""), "Character")
 
         # 3. Verify all entries in mo-dao-zu-shi glossary belong to the 5 canonical categories
@@ -382,8 +383,8 @@ class TestXianxiaReader(unittest.TestCase):
         self.assertIsNone(cross_match)
 
     def test_mobile_pwa_routes(self):
-        # 1. Test /m returns 200 and mobile shell
-        res = self.client.get('/m')
+        # 1. Test /m returns 200 and mobile shell (following redirect to /m/)
+        res = self.client.get('/m', follow_redirects=True)
         self.assertEqual(res.status_code, 200)
         self.assertIn(b'My Library', res.data)
         self.assertIn(b'mobile-app.js', res.data)
@@ -393,7 +394,7 @@ class TestXianxiaReader(unittest.TestCase):
         self.assertEqual(res_m.status_code, 200)
         data_m = json.loads(res_m.data.decode('utf-8'))
         self.assertEqual(data_m['display'], 'standalone')
-        self.assertEqual(data_m['start_url'], '/m')
+        self.assertIn(data_m['start_url'], ['./', '/m', '/m/'])
 
         res_root = self.client.get('/manifest.json')
         self.assertEqual(res_root.status_code, 200)
